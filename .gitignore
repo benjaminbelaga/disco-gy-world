@@ -1,0 +1,47 @@
+# Data dumps (too large for git)
+data/discogs-dump/
+data/processed/
+data/discoworld.db
+data/discoworld_users.db
+*.xml.gz
+*.xml
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node
+node_modules/
+.next/
+dist/
+
+# Environment
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Embeddings & ML artifacts
+*.npy
+*.pkl
+*.h5
+*.pt
+*.onnx
+models/
+
+# Tiles
+tiles/
+*.mbtiles
+*.pmtiles
+
+# Generated heightmaps (build artifacts, regenerate with heightmap_generator.py)
+packages/web/public/data/genre_heightmap.png
+.claude/worktrees/

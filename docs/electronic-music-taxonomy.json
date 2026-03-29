@@ -1,0 +1,334 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Electronic music genre taxonomy — hierarchical knowledge base",
+    "created": "2026-03-15"
+  },
+
+  "genres": {
+    "techno": {
+      "origin": { "city": "Detroit", "country": "US", "decade": "1980s" },
+      "bpm": [120, 150], "mood": ["dark", "hypnotic", "industrial", "driving"],
+      "sounds": ["808/909 drums", "analog synths", "repetitive loops"],
+      "influenced_by": ["synth-pop", "electro", "funk", "krautrock"],
+      "sub": {
+        "acid_techno": { "origin": {"city": "London", "decade": "1990s"}, "bpm": [130, 145], "sounds": ["303 acid lines", "distortion"], "mood": ["aggressive", "raw"] },
+        "dub_techno": { "origin": {"city": "Berlin", "decade": "1990s"}, "bpm": [120, 130], "sounds": ["reverb", "delay", "chord washes"], "mood": ["meditative", "deep"] },
+        "minimal_techno": { "origin": {"city": "Berlin", "decade": "1990s"}, "bpm": [125, 135], "sounds": ["sparse percussion", "micro-loops"], "mood": ["hypnotic", "subtle"] },
+        "hard_techno": { "origin": {"city": "Frankfurt", "decade": "1990s"}, "bpm": [140, 160], "sounds": ["distorted kicks", "industrial noise"], "mood": ["aggressive", "intense"] },
+        "detroit_techno": { "origin": {"city": "Detroit", "decade": "1980s"}, "bpm": [125, 140], "sounds": ["strings", "pads", "futurist melodies"], "mood": ["soulful", "cosmic"] },
+        "industrial_techno": { "origin": {"city": "Birmingham", "decade": "2010s"}, "bpm": [130, 145], "sounds": ["metallic textures", "noise", "power electronics"], "mood": ["dark", "oppressive"] }
+      }
+    },
+
+    "house": {
+      "origin": { "city": "Chicago", "country": "US", "decade": "1980s" },
+      "bpm": [118, 135], "mood": ["uplifting", "groovy", "soulful"],
+      "sounds": ["4/4 kick", "hi-hats", "vocal samples", "piano stabs"],
+      "influenced_by": ["disco", "funk", "soul", "synth-pop"],
+      "sub": {
+        "deep_house": { "origin": {"city": "Chicago", "decade": "1980s"}, "bpm": [118, 128], "sounds": ["jazz chords", "warm pads", "sub bass"], "mood": ["mellow", "deep", "sensual"] },
+        "acid_house": { "origin": {"city": "Chicago", "decade": "1980s"}, "bpm": [120, 130], "sounds": ["303 bassline", "squelchy filter"], "mood": ["psychedelic", "raw"] },
+        "tech_house": { "origin": {"city": "London", "decade": "1990s"}, "bpm": [122, 132], "sounds": ["minimal percussion", "rolling basslines"], "mood": ["groovy", "functional"] },
+        "progressive_house": { "origin": {"city": "London", "decade": "1990s"}, "bpm": [124, 132], "sounds": ["long buildups", "layered synths", "atmospheric pads"], "mood": ["epic", "emotional"] },
+        "afro_house": { "origin": {"city": "Luanda/Johannesburg", "decade": "2010s"}, "bpm": [120, 128], "sounds": ["tribal percussion", "organic drums", "vocal chants"], "mood": ["spiritual", "rhythmic"] },
+        "microhouse": { "origin": {"city": "Cologne", "decade": "2000s"}, "bpm": [120, 130], "sounds": ["glitch", "micro-samples", "clicks"], "mood": ["playful", "cerebral"] },
+        "lo_fi_house": { "origin": {"city": "Internet", "decade": "2010s"}, "bpm": [115, 125], "sounds": ["tape hiss", "dusty samples", "VHS aesthetic"], "mood": ["nostalgic", "warm"] },
+        "electro_house": { "origin": {"city": "Various", "decade": "2000s"}, "bpm": [125, 135], "sounds": ["big saw leads", "sidechain compression", "drops"], "mood": ["energetic", "festival"] }
+      }
+    },
+
+    "trance": {
+      "origin": { "city": "Frankfurt", "country": "DE", "decade": "1990s" },
+      "bpm": [128, 150], "mood": ["euphoric", "hypnotic", "emotional"],
+      "sounds": ["arpeggiated synths", "long breakdowns", "supersaw leads", "pads"],
+      "influenced_by": ["techno", "synth-pop", "new_beat"],
+      "sub": {
+        "goa_trance": { "origin": {"city": "Goa", "decade": "1990s"}, "bpm": [135, 150], "sounds": ["organic textures", "acid lines", "ethnic samples"], "mood": ["psychedelic", "spiritual"] },
+        "psytrance": { "origin": {"city": "Israel/Goa", "decade": "1990s"}, "bpm": [140, 150], "sounds": ["twisted leads", "rolling bass", "fx layers"], "mood": ["intense", "psychedelic"] },
+        "uplifting_trance": { "origin": {"city": "Netherlands", "decade": "2000s"}, "bpm": [136, 142], "sounds": ["supersaw melodies", "big breakdowns", "piano"], "mood": ["euphoric", "anthemic"] },
+        "progressive_trance": { "origin": {"city": "Various", "decade": "2000s"}, "bpm": [128, 138], "sounds": ["layered textures", "subtle builds"], "mood": ["deep", "hypnotic"] }
+      }
+    },
+
+    "jungle_dnb": {
+      "origin": { "city": "London", "country": "UK", "decade": "1990s" },
+      "bpm": [160, 180], "mood": ["intense", "energetic", "dark"],
+      "sounds": ["breakbeats", "amen break", "sub bass", "ragga vocals"],
+      "influenced_by": ["hardcore_rave", "hip_hop", "dub", "reggae"],
+      "sub": {
+        "jungle": { "origin": {"city": "London", "decade": "1990s"}, "bpm": [155, 170], "sounds": ["chopped breaks", "ragga vocals", "heavy bass"], "mood": ["raw", "chaotic"] },
+        "liquid_dnb": { "origin": {"city": "London", "decade": "2000s"}, "bpm": [170, 178], "sounds": ["soulful vocals", "smooth synths", "rolling drums"], "mood": ["uplifting", "melodic"] },
+        "neurofunk": { "origin": {"city": "London", "decade": "2000s"}, "bpm": [170, 178], "sounds": ["complex bass design", "metallic textures"], "mood": ["dark", "technical"] },
+        "jump_up": { "origin": {"city": "London", "decade": "2000s"}, "bpm": [170, 178], "sounds": ["simple bass wobbles", "bouncy rhythms"], "mood": ["fun", "energetic"] }
+      }
+    },
+
+    "uk_garage": {
+      "origin": { "city": "London", "country": "UK", "decade": "1990s" },
+      "bpm": [130, 140], "mood": ["slick", "bouncy", "sophisticated"],
+      "sounds": ["shuffled beats", "pitched vocals", "2-step rhythm", "sub bass"],
+      "influenced_by": ["house", "jungle", "r_and_b"],
+      "sub": {
+        "2step": { "origin": {"city": "London", "decade": "1990s"}, "bpm": [130, 140], "sounds": ["skippy rhythms", "vocal chops"], "mood": ["smooth", "groovy"] },
+        "bassline": { "origin": {"city": "Sheffield", "decade": "2000s"}, "bpm": [135, 142], "sounds": ["heavy bass", "organ stabs", "MC vocals"], "mood": ["rowdy", "energetic"] },
+        "grime": { "origin": {"city": "London", "decade": "2000s"}, "bpm": [138, 142], "sounds": ["square wave bass", "clipped snares", "MC-driven"], "mood": ["aggressive", "raw"] }
+      }
+    },
+
+    "dubstep": {
+      "origin": { "city": "London", "country": "UK", "decade": "2000s" },
+      "bpm": [138, 142], "mood": ["dark", "heavy", "spacious"],
+      "sounds": ["half-time drums", "wobble bass", "sub bass", "reverb"],
+      "influenced_by": ["uk_garage", "dub", "jungle"],
+      "sub": {
+        "deep_dubstep": { "origin": {"city": "London", "decade": "2000s"}, "bpm": [138, 142], "sounds": ["sub pressure", "sparse percussion", "dub delays"], "mood": ["meditative", "dark"] },
+        "brostep": { "origin": {"city": "US", "decade": "2010s"}, "bpm": [140, 150], "sounds": ["aggressive wobbles", "mid-range screech", "drops"], "mood": ["aggressive", "festival"] },
+        "riddim": { "origin": {"city": "US", "decade": "2010s"}, "bpm": [140, 150], "sounds": ["repetitive bass patterns", "minimal arrangement"], "mood": ["heavy", "hypnotic"] }
+      }
+    },
+
+    "breakbeat": {
+      "origin": { "city": "London", "country": "UK", "decade": "1990s" },
+      "bpm": [125, 145], "mood": ["funky", "energetic"],
+      "sounds": ["broken beats", "sampled drums", "funk loops"],
+      "influenced_by": ["hip_hop", "house", "funk"],
+      "sub": {
+        "big_beat": { "origin": {"city": "Brighton", "decade": "1990s"}, "bpm": [120, 140], "sounds": ["rock guitars", "heavy breaks", "distortion"], "mood": ["fun", "rowdy"] },
+        "breakbeat_revival": { "origin": {"city": "London", "decade": "2020s"}, "bpm": [130, 145], "sounds": ["chopped breaks", "rave stabs", "acid"], "mood": ["nostalgic", "energetic"] },
+        "broken_beat": { "origin": {"city": "London", "decade": "2000s"}, "bpm": [120, 135], "sounds": ["syncopated drums", "jazz harmony", "afro rhythms"], "mood": ["sophisticated", "jazzy"] }
+      }
+    },
+
+    "electro": {
+      "origin": { "city": "New York/Detroit", "country": "US", "decade": "1980s" },
+      "bpm": [110, 140], "mood": ["robotic", "futuristic"],
+      "sounds": ["808 drums", "vocoder", "funk basslines"],
+      "influenced_by": ["funk", "synth-pop", "hip_hop"],
+      "sub": {
+        "electro_funk": { "origin": {"city": "New York", "decade": "1980s"}, "bpm": [110, 125], "sounds": ["talk box", "funk bass", "rap"], "mood": ["funky", "playful"] },
+        "electro_clash": { "origin": {"city": "New York", "decade": "2000s"}, "bpm": [120, 130], "sounds": ["raw synths", "punk attitude", "deadpan vocals"], "mood": ["ironic", "sleazy"] }
+      }
+    },
+
+    "ambient": {
+      "origin": { "city": "London", "country": "UK", "decade": "1970s" },
+      "bpm": [0, 100], "mood": ["contemplative", "ethereal", "peaceful"],
+      "sounds": ["pads", "field recordings", "generative textures", "reverb"],
+      "influenced_by": ["minimalism", "krautrock", "tape_music"],
+      "sub": {
+        "dark_ambient": { "origin": {"city": "Various", "decade": "1980s"}, "bpm": [0, 60], "sounds": ["drones", "noise textures", "unsettling pads"], "mood": ["ominous", "cinematic"] },
+        "ambient_techno": { "origin": {"city": "Various", "decade": "1990s"}, "bpm": [90, 120], "sounds": ["subtle beats", "washes", "delay chains"], "mood": ["introspective", "gentle"] },
+        "ambient_dub": { "origin": {"city": "Berlin", "decade": "1990s"}, "bpm": [80, 110], "sounds": ["dub echoes", "deep bass", "organic textures"], "mood": ["spacious", "warm"] }
+      }
+    },
+
+    "idm": {
+      "origin": { "city": "Sheffield/Cornwall", "country": "UK", "decade": "1990s" },
+      "bpm": [80, 160], "mood": ["cerebral", "experimental", "complex"],
+      "sounds": ["glitch", "complex time signatures", "granular synthesis"],
+      "influenced_by": ["techno", "ambient", "hip_hop"],
+      "sub": {
+        "glitch": { "origin": {"city": "Various", "decade": "2000s"}, "bpm": [90, 140], "sounds": ["digital artifacts", "micro-edits", "error sounds"], "mood": ["deconstructed", "clinical"] },
+        "deconstructed_club": { "origin": {"city": "Berlin/London", "decade": "2010s"}, "bpm": [80, 160], "sounds": ["distorted bass", "fragmented beats", "noise"], "mood": ["chaotic", "confrontational"] }
+      }
+    },
+
+    "ebm": {
+      "origin": { "city": "Brussels", "country": "BE", "decade": "1980s" },
+      "bpm": [110, 140], "mood": ["aggressive", "militant", "dark"],
+      "sounds": ["sequenced bass", "distorted vocals", "marching rhythms"],
+      "influenced_by": ["industrial", "synth-pop", "punk"],
+      "sub": {
+        "new_beat": { "origin": {"city": "Brussels", "decade": "1980s"}, "bpm": [95, 115], "sounds": ["slowed-down EBM", "acid bass", "hypnotic loops"], "mood": ["trippy", "dark"] },
+        "dark_electro": { "origin": {"city": "Germany", "decade": "1990s"}, "bpm": [120, 140], "sounds": ["harsh synths", "distortion", "whispered vocals"], "mood": ["sinister", "cold"] }
+      }
+    },
+
+    "gabber_hardcore": {
+      "origin": { "city": "Rotterdam", "country": "NL", "decade": "1990s" },
+      "bpm": [160, 200], "mood": ["extreme", "aggressive", "chaotic"],
+      "sounds": ["distorted kick", "hoover synths", "breakbeats"],
+      "influenced_by": ["techno", "new_beat", "industrial"],
+      "sub": {
+        "gabber": { "origin": {"city": "Rotterdam", "decade": "1990s"}, "bpm": [160, 190], "sounds": ["distorted 909 kick", "pitch screams"], "mood": ["manic", "aggressive"] },
+        "happy_hardcore": { "origin": {"city": "UK/NL", "decade": "1990s"}, "bpm": [165, 180], "sounds": ["pitched-up vocals", "piano riffs", "bouncy kicks"], "mood": ["euphoric", "manic"] },
+        "frenchcore": { "origin": {"city": "France", "decade": "2000s"}, "bpm": [190, 210], "sounds": ["rolling kicks", "acid lines"], "mood": ["relentless", "industrial"] }
+      }
+    },
+
+    "trip_hop": {
+      "origin": { "city": "Bristol", "country": "UK", "decade": "1990s" },
+      "bpm": [80, 110], "mood": ["cinematic", "melancholic", "nocturnal"],
+      "sounds": ["downtempo beats", "vinyl crackle", "film samples", "strings"],
+      "influenced_by": ["hip_hop", "dub", "soul", "ambient"],
+      "sub": {
+        "downtempo": { "origin": {"city": "Various", "decade": "1990s"}, "bpm": [80, 110], "sounds": ["slow grooves", "world music samples"], "mood": ["chill", "meditative"] }
+      }
+    },
+
+    "synth_pop": {
+      "origin": { "city": "Düsseldorf/Sheffield", "country": "DE/UK", "decade": "1970s" },
+      "bpm": [100, 135], "mood": ["cold", "romantic", "futuristic"],
+      "sounds": ["analog synths", "drum machines", "clean vocals", "arpeggios"],
+      "influenced_by": ["krautrock", "glam_rock", "disco"],
+      "sub": {
+        "synthwave": { "origin": {"city": "Internet/France", "decade": "2010s"}, "bpm": [80, 120], "sounds": ["retro synths", "80s aesthetics", "neon pads"], "mood": ["nostalgic", "cinematic"] },
+        "darksynth": { "origin": {"city": "Internet", "decade": "2010s"}, "bpm": [100, 130], "sounds": ["heavy distorted synths", "horror elements"], "mood": ["menacing", "intense"] },
+        "italo_disco": { "origin": {"city": "Milan", "decade": "1980s"}, "bpm": [115, 130], "sounds": ["arpeggio bass", "dramatic vocals", "LinnDrum"], "mood": ["romantic", "cheesy-euphoric"] }
+      }
+    },
+
+    "vaporwave": {
+      "origin": { "city": "Internet", "country": "Global", "decade": "2010s" },
+      "bpm": [60, 100], "mood": ["surreal", "nostalgic", "ironic"],
+      "sounds": ["slowed samples", "80s/90s muzak", "reverb", "chopped and screwed"],
+      "influenced_by": ["synth-pop", "smooth_jazz", "hip_hop"],
+      "sub": {
+        "future_funk": { "origin": {"city": "Internet", "decade": "2010s"}, "bpm": [110, 128], "sounds": ["disco samples", "sidechain", "Japanese city pop"], "mood": ["fun", "danceable"] },
+        "mallsoft": { "origin": {"city": "Internet", "decade": "2010s"}, "bpm": [50, 80], "sounds": ["echo-drenched muzak", "ambient hum"], "mood": ["eerie", "liminal"] }
+      }
+    },
+
+    "future_bass": {
+      "origin": { "city": "Internet/US", "country": "Global", "decade": "2010s" },
+      "bpm": [130, 170], "mood": ["colorful", "emotional", "energetic"],
+      "sounds": ["supersaws", "vocal chops", "lush chords", "trap hi-hats"],
+      "influenced_by": ["trap", "uk_garage", "synth-pop"],
+      "sub": {}
+    },
+
+    "trap_electronic": {
+      "origin": { "city": "US/Internet", "country": "US", "decade": "2010s" },
+      "bpm": [130, 170], "mood": ["heavy", "aggressive", "festival"],
+      "sounds": ["808 sub", "trap hi-hats", "brass stabs", "build-ups"],
+      "influenced_by": ["hip_hop", "dubstep", "edm"],
+      "sub": {}
+    },
+
+    "hyperpop": {
+      "origin": { "city": "Internet", "country": "Global", "decade": "2010s" },
+      "bpm": [140, 180], "mood": ["chaotic", "maximalist", "ironic"],
+      "sounds": ["pitch-shifted vocals", "distortion", "bubblegum bass", "Auto-Tune"],
+      "influenced_by": ["pop", "trap", "idm", "nightcore"],
+      "sub": {}
+    }
+  },
+
+  "neighbor_genres": {
+    "krautrock": {
+      "origin": {"city": "Düsseldorf/Munich", "country": "DE", "decade": "1970s"},
+      "bpm": [80, 130], "mood": ["hypnotic", "experimental", "motorik"],
+      "sounds": ["motorik beat", "analog synths", "tape loops", "repetition"],
+      "electronic_influence": ["techno", "synth-pop", "ambient"],
+      "key_acts_hint": "Kraftwerk, Tangerine Dream, Can, Neu!, Cluster"
+    },
+    "disco": {
+      "origin": {"city": "New York/Philadelphia", "country": "US", "decade": "1970s"},
+      "bpm": [110, 135], "mood": ["euphoric", "groovy", "glamorous"],
+      "sounds": ["strings", "4/4 kick", "hi-hats", "bass guitar", "horns"],
+      "electronic_influence": ["house", "italo_disco", "synth-pop"]
+    },
+    "funk": {
+      "origin": {"city": "Various US", "country": "US", "decade": "1960s"},
+      "bpm": [90, 120], "mood": ["groovy", "raw", "tight"],
+      "sounds": ["syncopated bass", "wah guitar", "horns", "breaks"],
+      "electronic_influence": ["house", "electro", "breakbeat", "techno"]
+    },
+    "soul_rnb": {
+      "origin": {"city": "Detroit/Memphis/Philadelphia", "country": "US", "decade": "1960s"},
+      "bpm": [80, 120], "sounds": ["vocals", "keys", "strings"],
+      "electronic_influence": ["deep_house", "uk_garage", "trip_hop"]
+    },
+    "dub": {
+      "origin": {"city": "Kingston", "country": "JM", "decade": "1960s"},
+      "bpm": [60, 90], "mood": ["spacious", "heavy", "psychedelic"],
+      "sounds": ["heavy bass", "delay", "reverb", "stripped drums"],
+      "electronic_influence": ["dub_techno", "dubstep", "jungle", "trip_hop"]
+    },
+    "dancehall": {
+      "origin": {"city": "Kingston", "country": "JM", "decade": "1980s"},
+      "bpm": [90, 110], "sounds": ["digital riddims", "toasting", "Casio synths"],
+      "electronic_influence": ["jungle", "grime", "uk_garage", "moombahton"]
+    },
+    "hip_hop": {
+      "origin": {"city": "New York", "country": "US", "decade": "1970s"},
+      "bpm": [80, 115], "sounds": ["sampled breaks", "808s", "turntablism"],
+      "electronic_influence": ["electro", "trip_hop", "breakbeat", "idm", "trap_electronic"]
+    },
+    "industrial": {
+      "origin": {"city": "Sheffield/Chicago", "country": "UK/US", "decade": "1970s"},
+      "bpm": [100, 140], "mood": ["abrasive", "confrontational"],
+      "sounds": ["metal percussion", "noise", "tape manipulation", "distortion"],
+      "electronic_influence": ["ebm", "industrial_techno", "gabber"]
+    },
+    "post_punk": {
+      "origin": {"city": "Manchester/London", "country": "UK", "decade": "1970s"},
+      "bpm": [100, 140], "sounds": ["angular guitars", "drum machines", "cold vocals"],
+      "electronic_influence": ["synth-pop", "ebm", "darkwave"]
+    },
+    "new_wave": {
+      "origin": {"city": "New York/London", "country": "US/UK", "decade": "1970s"},
+      "bpm": [110, 140], "sounds": ["synths + guitars", "pop melodies", "drum machines"],
+      "electronic_influence": ["synth-pop", "electro_clash"]
+    },
+    "noise": {
+      "origin": {"city": "Tokyo/New York", "country": "JP/US", "decade": "1980s"},
+      "bpm": [0, 0], "sounds": ["feedback", "distortion", "chaos"],
+      "electronic_influence": ["idm", "glitch", "industrial_techno"]
+    },
+    "drone": {
+      "origin": {"city": "Various", "decade": "1960s"},
+      "bpm": [0, 0], "sounds": ["sustained tones", "harmonics", "slow evolution"],
+      "electronic_influence": ["dark_ambient", "ambient"]
+    },
+    "shoegaze": {
+      "origin": {"city": "London/Thames Valley", "country": "UK", "decade": "1980s"},
+      "bpm": [90, 130], "sounds": ["wall of guitars", "reverb", "ethereal vocals"],
+      "electronic_influence": ["ambient", "idm", "lo_fi_house"]
+    },
+    "jazz": {
+      "origin": {"city": "New Orleans/New York", "country": "US", "decade": "1900s"},
+      "bpm": [60, 200], "sounds": ["improvisation", "complex harmony", "swing"],
+      "electronic_influence": ["broken_beat", "deep_house", "idm", "trip_hop"]
+    }
+  },
+
+  "geography_matrix": {
+    "Detroit": ["detroit_techno", "techno", "electro"],
+    "Chicago": ["house", "acid_house", "deep_house", "industrial"],
+    "Berlin": ["minimal_techno", "dub_techno", "techno", "deconstructed_club"],
+    "London": ["uk_garage", "dubstep", "jungle", "grime", "breakbeat", "trip_hop", "dnb"],
+    "Kingston": ["dub", "dancehall", "reggae"],
+    "New York": ["disco", "hip_hop", "electro", "new_wave", "house"],
+    "Amsterdam": ["trance", "gabber"],
+    "Rotterdam": ["gabber", "hardcore"],
+    "Brussels": ["ebm", "new_beat"],
+    "Sheffield": ["industrial", "synth-pop", "bleep_techno", "bassline"],
+    "Manchester": ["acid_house", "post_punk"],
+    "Düsseldorf": ["krautrock", "synth-pop"],
+    "Frankfurt": ["trance", "hard_techno"],
+    "Bristol": ["trip_hop", "dubstep"],
+    "Tokyo": ["noise", "ambient"],
+    "Goa": ["goa_trance", "psytrance"],
+    "Milan": ["italo_disco"],
+    "Cologne": ["microhouse", "minimal"],
+    "Johannesburg": ["afro_house"],
+    "Brighton": ["big_beat"],
+    "Glasgow": ["techno", "post_punk"],
+    "Paris": ["french_touch", "electro_house"],
+    "Tel_Aviv": ["psytrance", "minimal_techno"],
+    "Lisbon": ["techno", "deep_house"],
+    "Tbilisi": ["techno"]
+  },
+
+  "timeline": {
+    "1960s": ["dub", "funk", "soul_rnb"],
+    "1970s": ["krautrock", "disco", "synth-pop", "industrial", "hip_hop", "ambient", "post_punk"],
+    "1980s": ["house", "techno", "acid_house", "electro", "ebm", "new_beat", "italo_disco", "new_wave", "dancehall", "detroit_techno"],
+    "1990s": ["trance", "jungle", "dnb", "gabber", "idm", "trip_hop", "uk_garage", "minimal_techno", "dub_techno", "acid_techno", "goa_trance", "big_beat", "happy_hardcore", "hard_techno", "2step", "progressive_house"],
+    "2000s": ["dubstep", "microhouse", "electro_house", "electro_clash", "grime", "bassline", "broken_beat", "neurofunk", "frenchcore", "glitch", "deep_dubstep"],
+    "2010s": ["future_bass", "trap_electronic", "vaporwave", "deconstructed_club", "synthwave", "lo_fi_house", "afro_house", "hyperpop", "industrial_techno", "riddim"],
+    "2020s": ["breakbeat_revival", "hyperpop", "deconstructed_club"]
+  }
+}
