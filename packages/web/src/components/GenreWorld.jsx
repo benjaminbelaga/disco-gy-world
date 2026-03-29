@@ -26,15 +26,15 @@ function getInstanceColors(count) {
   return _instanceColors
 }
 
-// Ground plane with grid
+// Ground plane — dark reflective surface
 function Ground() {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]} receiveShadow>
-      <planeGeometry args={[200, 200]} />
+      <planeGeometry args={[300, 300]} />
       <meshStandardMaterial
-        color="#0a0a0e"
-        transparent
-        opacity={0.8}
+        color="#060610"
+        roughness={0.85}
+        metalness={0.15}
       />
     </mesh>
   )
