@@ -97,7 +97,7 @@
 - [x] Discogs community have/want enrichment via API (pipeline + rankings endpoint)
 
 ### Open Source Ecosystem
-- [x] RecordStoreAdapter plugin API (interface, registry, Discogs + YOYAKU adapters, docs)
+- [x] RecordStoreAdapter plugin API (interface, registry, Discogs adapter, docs)
 - [x] Community genre editing system (propose, vote, auto-approve/reject thresholds)
 - [x] MetaBrainz-style edit voting (3-vote threshold, duplicate prevention, closed-edit protection)
 - [ ] GitHub Sponsors / Open Collective

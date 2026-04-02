@@ -69,8 +69,8 @@ pip install fastapi uvicorn httpx requests pydantic
 cd ../..
 python3 -m uvicorn packages.api.main:app --port 8000
 
-# Optional: copy and fill env vars for Discogs features
-cp .env.example .env
+# Optional: set env vars for Discogs features (see packages/api/main.py for required variables)
+# DISCOGS_CONSUMER_KEY, DISCOGS_CONSUMER_SECRET, DISCOGS_TOKEN
 ```
 
 > **Note:** The 3D world loads from pre-built static JSON files in `packages/web/public/data/`. No database needed for basic exploration. The SQLite DB is only needed for search, recommendations, and collection features.
@@ -262,4 +262,4 @@ All contributions earn points on the [contributor leaderboard](docs/PLUGINS.md).
 
 ---
 
-Built by [Benjamin Belaga](https://github.com/benjaminbelaga) and contributors.
+Created by [Benjamin Belaga](https://github.com/benjaminbelaga), who runs [YOYAKU](https://yoyaku.io) records in Paris.

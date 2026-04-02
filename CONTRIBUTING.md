@@ -35,7 +35,7 @@ Build UI components, write shaders, improve 3D performance, design biome aesthet
 
 ```bash
 # Clone the repo
-git clone https://github.com/discoworld/discoworld.git
+git clone https://github.com/benjaminbelaga/discoworld.git
 cd discoworld
 
 # Frontend
@@ -61,7 +61,7 @@ python build_db.py
 
 ```bash
 # All tests (from repo root)
-cd ~/repos/discoworld
+cd discoworld
 
 # API tests (87 tests)
 python3 -m pytest packages/api/tests/ -v
@@ -204,4 +204,4 @@ This project follows the [Contributor Covenant Code of Conduct](https://www.cont
 
 ## Questions?
 
-Open a [Discussion](https://github.com/discoworld/discoworld/discussions) or file an Issue. We're happy to help you get started.
+Open a [Discussion](https://github.com/benjaminbelaga/discoworld/discussions) or file an Issue. We're happy to help you get started.
