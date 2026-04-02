@@ -1,0 +1,5 @@
+lxml
+psycopg2-binary
+tqdm
+noise
+scipy

@@ -1,0 +1,738 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Electronic music cities — coordinates, genres, and estimated release counts",
+    "source": "electronic-music-taxonomy.json geography_matrix + Discogs stats",
+    "created": "2026-03-16"
+  },
+  "cities": [
+    {
+      "id": "detroit",
+      "name": "Detroit",
+      "country": "US",
+      "lat": 42.3314,
+      "lng": -83.0458,
+      "genres": [
+        "detroit_techno",
+        "techno",
+        "electro"
+      ],
+      "release_count": 48800,
+      "scene_peak": "1980s",
+      "description": "Birthplace of techno — Belleville Three, Underground Resistance"
+    },
+    {
+      "id": "chicago",
+      "name": "Chicago",
+      "country": "US",
+      "lat": 41.8781,
+      "lng": -87.6298,
+      "genres": [
+        "house",
+        "acid_house",
+        "deep_house",
+        "industrial"
+      ],
+      "release_count": 70300,
+      "scene_peak": "1980s",
+      "description": "Birthplace of house music — Warehouse, Trax Records, DJ International"
+    },
+    {
+      "id": "berlin",
+      "name": "Berlin",
+      "country": "Germany",
+      "lat": 52.52,
+      "lng": 13.405,
+      "genres": [
+        "minimal_techno",
+        "dub_techno",
+        "techno",
+        "deconstructed_club"
+      ],
+      "release_count": 152100,
+      "scene_peak": "1990s",
+      "description": "Post-reunification techno capital — Tresor, Berghain, Hard Wax"
+    },
+    {
+      "id": "london",
+      "name": "London",
+      "country": "UK",
+      "lat": 51.5074,
+      "lng": -0.1278,
+      "genres": [
+        "uk_garage",
+        "dubstep",
+        "jungle",
+        "grime",
+        "breakbeat",
+        "trip_hop",
+        "dnb"
+      ],
+      "release_count": 262800,
+      "scene_peak": "1990s",
+      "description": "Multi-genre epicenter — pirate radio, Fabric, DMZ, FWD>>"
+    },
+    {
+      "id": "new_york",
+      "name": "New York",
+      "country": "US",
+      "lat": 40.7128,
+      "lng": -74.006,
+      "genres": [
+        "disco",
+        "hip_hop",
+        "electro",
+        "new_wave",
+        "house"
+      ],
+      "release_count": 193700,
+      "scene_peak": "1970s",
+      "description": "Disco, hip-hop, and electro origins — Studio 54, Paradise Garage, Loft"
+    },
+    {
+      "id": "amsterdam",
+      "name": "Amsterdam",
+      "country": "Netherlands",
+      "lat": 52.3676,
+      "lng": 4.9041,
+      "genres": [
+        "trance",
+        "gabber"
+      ],
+      "release_count": 66600,
+      "scene_peak": "1990s",
+      "description": "Trance headquarters — Armada, Black Hole, ADE festival"
+    },
+    {
+      "id": "rotterdam",
+      "name": "Rotterdam",
+      "country": "Netherlands",
+      "lat": 51.9244,
+      "lng": 4.4777,
+      "genres": [
+        "gabber",
+        "hardcore"
+      ],
+      "release_count": 27700,
+      "scene_peak": "1990s",
+      "description": "Gabber capital — Thunderdome, Rotterdam Terror Corps"
+    },
+    {
+      "id": "brussels",
+      "name": "Brussels",
+      "country": "Belgium",
+      "lat": 50.8503,
+      "lng": 4.3517,
+      "genres": [
+        "ebm",
+        "new_beat"
+      ],
+      "release_count": 25400,
+      "scene_peak": "1980s",
+      "description": "EBM and New Beat origins — Front 242, Boccaccio club"
+    },
+    {
+      "id": "sheffield",
+      "name": "Sheffield",
+      "country": "UK",
+      "lat": 53.3811,
+      "lng": -1.4701,
+      "genres": [
+        "industrial",
+        "synth_pop",
+        "bleep_techno",
+        "bassline"
+      ],
+      "release_count": 26300,
+      "scene_peak": "1980s",
+      "description": "Industrial and synth-pop crucible — Warp Records, Cabaret Voltaire"
+    },
+    {
+      "id": "manchester",
+      "name": "Manchester",
+      "country": "UK",
+      "lat": 53.4808,
+      "lng": -2.2426,
+      "genres": [
+        "acid_house",
+        "post_punk"
+      ],
+      "release_count": 35100,
+      "scene_peak": "1980s",
+      "description": "Madchester and acid house — Haçienda, Factory Records"
+    },
+    {
+      "id": "dusseldorf",
+      "name": "Düsseldorf",
+      "country": "Germany",
+      "lat": 51.2277,
+      "lng": 6.7735,
+      "genres": [
+        "krautrock",
+        "synth_pop"
+      ],
+      "release_count": 20500,
+      "scene_peak": "1970s",
+      "description": "Kraftwerk's home — electronic music ground zero"
+    },
+    {
+      "id": "frankfurt",
+      "name": "Frankfurt",
+      "country": "Germany",
+      "lat": 50.1109,
+      "lng": 8.6821,
+      "genres": [
+        "trance",
+        "hard_techno"
+      ],
+      "release_count": 35900,
+      "scene_peak": "1990s",
+      "description": "Trance epicenter — Sven Väth, Dorian Gray, Omen"
+    },
+    {
+      "id": "bristol",
+      "name": "Bristol",
+      "country": "UK",
+      "lat": 51.4545,
+      "lng": -2.5879,
+      "genres": [
+        "trip_hop",
+        "dubstep"
+      ],
+      "release_count": 14900,
+      "scene_peak": "1990s",
+      "description": "Trip-hop birthplace — Massive Attack, Portishead, Tricky"
+    },
+    {
+      "id": "tokyo",
+      "name": "Tokyo",
+      "country": "Japan",
+      "lat": 35.6762,
+      "lng": 139.6503,
+      "genres": [
+        "noise",
+        "ambient"
+      ],
+      "release_count": 49800,
+      "scene_peak": "1980s",
+      "description": "Noise and ambient innovations — Merzbow, Yellow Magic Orchestra"
+    },
+    {
+      "id": "goa",
+      "name": "Goa",
+      "country": "India",
+      "lat": 15.2993,
+      "lng": 74.124,
+      "genres": [
+        "goa_trance",
+        "psytrance"
+      ],
+      "release_count": 6500,
+      "scene_peak": "1990s",
+      "description": "Psychedelic trance origins — Anjuna beach parties"
+    },
+    {
+      "id": "milan",
+      "name": "Milan",
+      "country": "Italy",
+      "lat": 45.4642,
+      "lng": 9.19,
+      "genres": [
+        "italo_disco"
+      ],
+      "release_count": 48800,
+      "scene_peak": "1980s",
+      "description": "Italo disco capital — Giorgio Moroder, Discomagic Records"
+    },
+    {
+      "id": "cologne",
+      "name": "Cologne",
+      "country": "Germany",
+      "lat": 50.9375,
+      "lng": 6.9603,
+      "genres": [
+        "microhouse",
+        "minimal"
+      ],
+      "release_count": 21100,
+      "scene_peak": "2000s",
+      "description": "Minimal and microhouse — Kompakt Records, Studio 672"
+    },
+    {
+      "id": "johannesburg",
+      "name": "Johannesburg",
+      "country": "South Africa",
+      "lat": -26.2041,
+      "lng": 28.0473,
+      "genres": [
+        "afro_house"
+      ],
+      "release_count": 5100,
+      "scene_peak": "2010s",
+      "description": "Afro house and amapiano — Black Coffee, Watergate"
+    },
+    {
+      "id": "brighton",
+      "name": "Brighton",
+      "country": "UK",
+      "lat": 50.8225,
+      "lng": -0.1372,
+      "genres": [
+        "big_beat"
+      ],
+      "release_count": 21100,
+      "scene_peak": "1990s",
+      "description": "Big beat headquarters — Fatboy Slim, Skint Records"
+    },
+    {
+      "id": "glasgow",
+      "name": "Glasgow",
+      "country": "UK",
+      "lat": 55.8642,
+      "lng": -4.2518,
+      "genres": [
+        "techno",
+        "post_punk"
+      ],
+      "release_count": 17600,
+      "scene_peak": "1990s",
+      "description": "Scottish techno and post-punk — Soma, Sub Club, Optimo"
+    },
+    {
+      "id": "paris",
+      "name": "Paris",
+      "country": "France",
+      "lat": 48.8566,
+      "lng": 2.3522,
+      "genres": [
+        "french_touch",
+        "electro_house",
+        "house",
+        "techno",
+        "electronica",
+        "disco",
+        "synth_pop"
+      ],
+      "release_count": 64800,
+      "scene_peak": "1990s",
+      "description": "French touch — Daft Punk, Ed Banger, Roule, Kitsuné, Versatile",
+      "top_labels": [
+        { "name": "Ed Banger Records", "releases": 320 },
+        { "name": "Roule", "releases": 45 },
+        { "name": "Crydamoure", "releases": 52 },
+        { "name": "Versatile Records", "releases": 280 },
+        { "name": "Record Makers", "releases": 210 },
+        { "name": "Kitsuné", "releases": 380 },
+        { "name": "InFiné", "releases": 190 },
+        { "name": "Bromance Records", "releases": 85 }
+      ],
+      "label_count": 8
+    },
+    {
+      "id": "tel_aviv",
+      "name": "Tel Aviv",
+      "country": "Israel",
+      "lat": 32.0853,
+      "lng": 34.7818,
+      "genres": [
+        "psytrance",
+        "minimal_techno"
+      ],
+      "release_count": 8500,
+      "scene_peak": "2000s",
+      "description": "Psytrance and minimal techno — Infected Mushroom, The Block"
+    },
+    {
+      "id": "lisbon",
+      "name": "Lisbon",
+      "country": "Portugal",
+      "lat": 38.7223,
+      "lng": -9.1393,
+      "genres": [
+        "techno",
+        "deep_house"
+      ],
+      "release_count": 8000,
+      "scene_peak": "2010s",
+      "description": "Rising techno scene — Lux Frágil, Village Underground"
+    },
+    {
+      "id": "tbilisi",
+      "name": "Tbilisi",
+      "country": "Georgia",
+      "lat": 41.7151,
+      "lng": 44.8271,
+      "genres": [
+        "techno"
+      ],
+      "release_count": 1200,
+      "scene_peak": "2010s",
+      "description": "Techno as resistance — Bassiani, Café Gallery"
+    },
+    {
+      "id": "kingston",
+      "name": "Kingston",
+      "country": "Jamaica",
+      "lat": 18.0179,
+      "lng": -76.8099,
+      "genres": [
+        "dub",
+        "dancehall",
+        "reggae"
+      ],
+      "release_count": 18200,
+      "scene_peak": "1960s",
+      "description": "Dub and dancehall origins — King Tubby, Lee Scratch Perry"
+    },
+    {
+      "id": "ibiza",
+      "name": "Ibiza",
+      "country": "Spain",
+      "lat": 38.9067,
+      "lng": 1.4206,
+      "genres": [
+        "trance",
+        "house",
+        "balearic"
+      ],
+      "release_count": 12400,
+      "scene_peak": "1990s",
+      "description": "Balearic house and superclub culture — Amnesia, DC10, Space"
+    },
+    {
+      "id": "sao_paulo",
+      "name": "São Paulo",
+      "country": "Brazil",
+      "lat": -23.5505,
+      "lng": -46.6333,
+      "genres": [
+        "techno",
+        "house",
+        "baile_funk"
+      ],
+      "release_count": 12300,
+      "scene_peak": "2010s",
+      "description": "South America's electronic hub — D-Edge, Warung"
+    },
+    {
+      "id": "mexico_city",
+      "name": "Mexico City",
+      "country": "Mexico",
+      "lat": 19.4326,
+      "lng": -99.1332,
+      "genres": [
+        "techno",
+        "house"
+      ],
+      "release_count": 9700,
+      "scene_peak": "2010s",
+      "description": "Latin America's rising scene — NRMAL festival"
+    },
+    {
+      "id": "seoul",
+      "name": "Seoul",
+      "country": "South Korea",
+      "lat": 37.5665,
+      "lng": 126.978,
+      "genres": [
+        "techno",
+        "house"
+      ],
+      "release_count": 9900,
+      "scene_peak": "2010s",
+      "description": "Asia's growing club scene — Cakeshop, Faust"
+    },
+    {
+      "id": "melbourne",
+      "name": "Melbourne",
+      "country": "Australia",
+      "lat": -37.8136,
+      "lng": 144.9631,
+      "genres": [
+        "minimal_techno",
+        "house"
+      ],
+      "release_count": 25800,
+      "scene_peak": "2000s",
+      "description": "Australia's electronic capital — Revolver, Lounge"
+    },
+    {
+      "id": "mumbai",
+      "name": "Mumbai",
+      "country": "India",
+      "lat": 19.076,
+      "lng": 72.8777,
+      "genres": [
+        "house",
+        "techno"
+      ],
+      "release_count": 1800,
+      "scene_peak": "2010s",
+      "description": "India's electronic frontier — Magnetic Fields festival"
+    },
+    {
+      "id": "copenhagen",
+      "name": "Copenhagen",
+      "country": "Denmark",
+      "lat": 55.6761,
+      "lng": 12.5683,
+      "genres": [
+        "techno",
+        "house"
+      ],
+      "release_count": 7800,
+      "scene_peak": "2010s",
+      "description": "Nordic club culture — Culture Box, Strøm festival"
+    },
+    {
+      "id": "warsaw",
+      "name": "Warsaw",
+      "country": "Poland",
+      "lat": 52.2297,
+      "lng": 21.0122,
+      "genres": [
+        "techno",
+        "house"
+      ],
+      "release_count": 17200,
+      "scene_peak": "2010s",
+      "description": "Eastern European techno hub — Smolna, Jasna 1"
+    },
+    {
+      "id": "kyiv",
+      "name": "Kyiv",
+      "country": "Ukraine",
+      "lat": 50.4501,
+      "lng": 30.5234,
+      "genres": [
+        "techno",
+        "house"
+      ],
+      "release_count": 9300,
+      "scene_peak": "2010s",
+      "description": "Ukraine's rave culture — Closer, Rhythm Büro"
+    },
+    {
+      "id": "moscow",
+      "name": "Moscow",
+      "country": "Russia",
+      "lat": 55.7558,
+      "lng": 37.6173,
+      "genres": [
+        "techno",
+        "house",
+        "noise"
+      ],
+      "release_count": 46400,
+      "scene_peak": "2010s",
+      "description": "Russia's electronic capital — Arma17, Mutabor"
+    },
+    {
+      "id": "istanbul",
+      "name": "Istanbul",
+      "country": "Turkey",
+      "lat": 41.0082,
+      "lng": 28.9784,
+      "genres": [
+        "techno",
+        "ambient",
+        "psytrance",
+        "house"
+      ],
+      "release_count": 12000,
+      "scene_peak": "2010s",
+      "description": "Thriving techno and psychedelic scene — Klik Records, Tantana, Babylon venue"
+    },
+    {
+      "id": "beirut",
+      "name": "Beirut",
+      "country": "Lebanon",
+      "lat": 33.8938,
+      "lng": 35.5018,
+      "genres": [
+        "house",
+        "techno",
+        "ambient"
+      ],
+      "release_count": 3500,
+      "scene_peak": "2010s",
+      "description": "Vibrant underground — B018, Ruptured, Tunefork Records"
+    },
+    {
+      "id": "cairo",
+      "name": "Cairo",
+      "country": "Egypt",
+      "lat": 30.0444,
+      "lng": 31.2357,
+      "genres": [
+        "techno",
+        "house",
+        "electro"
+      ],
+      "release_count": 4500,
+      "scene_peak": "2010s",
+      "description": "Mahraganat and shaabi electronic roots — 100Copies, NACELLE, Cairo Jazz Club"
+    },
+    {
+      "id": "casablanca",
+      "name": "Casablanca",
+      "country": "Morocco",
+      "lat": 33.5731,
+      "lng": -7.5898,
+      "genres": [
+        "house",
+        "techno",
+        "ambient"
+      ],
+      "release_count": 2800,
+      "scene_peak": "2010s",
+      "description": "House and gnawa fusion hub — Le Dhow, Moroko Loko collective"
+    },
+    {
+      "id": "marrakech",
+      "name": "Marrakech",
+      "country": "Morocco",
+      "lat": 31.6295,
+      "lng": -7.9811,
+      "genres": [
+        "house",
+        "ambient",
+        "balearic"
+      ],
+      "release_count": 1500,
+      "scene_peak": "2010s",
+      "description": "Downtempo and world fusion destination — Oasis Festival, Atlas Electronic"
+    },
+    {
+      "id": "dubai",
+      "name": "Dubai",
+      "country": "UAE",
+      "lat": 25.2048,
+      "lng": 55.2708,
+      "genres": [
+        "house",
+        "techno",
+        "trance"
+      ],
+      "release_count": 2200,
+      "scene_peak": "2010s",
+      "description": "Growing club scene with international bookings — White Dubai, Analog Room"
+    },
+    {
+      "id": "amman",
+      "name": "Amman",
+      "country": "Jordan",
+      "lat": 31.9454,
+      "lng": 35.9284,
+      "genres": [
+        "techno",
+        "ambient"
+      ],
+      "release_count": 800,
+      "scene_peak": "2010s",
+      "description": "Underground techno and experimental — Kaoz, The Cellar Door"
+    },
+    {
+      "id": "tunis",
+      "name": "Tunis",
+      "country": "Tunisia",
+      "lat": 36.8065,
+      "lng": 10.1815,
+      "genres": [
+        "techno",
+        "ambient",
+        "house"
+      ],
+      "release_count": 1200,
+      "scene_peak": "2010s",
+      "description": "Post-revolution electronic culture — Les Dunes Electroniques, Waveform collective"
+    },
+    {
+      "id": "algiers",
+      "name": "Algiers",
+      "country": "Algeria",
+      "lat": 36.7538,
+      "lng": 3.0588,
+      "genres": [
+        "techno",
+        "house",
+        "electro"
+      ],
+      "release_count": 900,
+      "scene_peak": "2010s",
+      "description": "Rai-electronic crossover and underground techno — Shouka collective"
+    },
+    {
+      "id": "tehran",
+      "name": "Tehran",
+      "country": "Iran",
+      "lat": 35.6892,
+      "lng": 51.389,
+      "genres": [
+        "ambient",
+        "techno",
+        "minimal"
+      ],
+      "release_count": 2500,
+      "scene_peak": "2010s",
+      "description": "Underground electronic scene despite restrictions — Ata Records, Ash Koosha"
+    },
+    {
+      "id": "ramallah",
+      "name": "Ramallah",
+      "country": "Palestine",
+      "lat": 31.9038,
+      "lng": 35.2034,
+      "genres": [
+        "techno",
+        "ambient"
+      ],
+      "release_count": 400,
+      "scene_peak": "2010s",
+      "description": "Experimental and electronic — Muqata'a, Jazar Crew"
+    },
+    {
+      "id": "rabat",
+      "name": "Rabat",
+      "country": "Morocco",
+      "lat": 34.0209,
+      "lng": -6.8416,
+      "genres": [
+        "house",
+        "ambient"
+      ],
+      "release_count": 600,
+      "scene_peak": "2010s",
+      "description": "Moga Festival spillover and local electronic experimenters"
+    },
+    {
+      "id": "alexandria",
+      "name": "Alexandria",
+      "country": "Egypt",
+      "lat": 31.2001,
+      "lng": 29.9187,
+      "genres": [
+        "techno",
+        "house"
+      ],
+      "release_count": 1100,
+      "scene_peak": "2010s",
+      "description": "Mediterranean techno and house — VENT, underground parties along the Corniche"
+    },
+    {
+      "id": "tangier",
+      "name": "Tangier",
+      "country": "Morocco",
+      "lat": 35.7595,
+      "lng": -5.834,
+      "genres": [
+        "ambient",
+        "house",
+        "dub"
+      ],
+      "release_count": 700,
+      "scene_peak": "2010s",
+      "description": "Ambient and gnawa-tronic fusion — Beat Hotel legacy, cross-strait exchanges"
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+[
+  {
+    "id": "detroit-to-berlin",
+    "title": "Detroit to Berlin",
+    "description": "The transatlantic axis that defined modern electronic music. From Motown's machine-funk to the cavernous clubs of reunified Berlin.",
+    "author": "DiscoWorld",
+    "waypoints": [
+      { "slug": "detroittechno", "note": "Where it all began — Juan Atkins, Derrick May, Kevin Saunderson inventing a new sound from Kraftwerk, funk, and the future." },
+      { "slug": "electro", "note": "The common ancestor. Electro's robotic grooves fed both Detroit and the European scene." },
+      { "slug": "techno", "note": "The sound crystallizes. 4/4 kicks, hypnotic sequences, machines talking to machines." },
+      { "slug": "minimaltechno", "note": "Berlin's answer: strip it down to the essential. Robert Hood, Richie Hawtin, the Basic Channel axis." },
+      { "slug": "dub-techno", "note": "Where Detroit's soul meets Berlin's space. Endless reverb, submerged chords, time dissolving." },
+      { "slug": "hardtechno", "note": "The industrial edge. Berlin warehouses push the tempo and the distortion." }
+    ],
+    "tags": ["history", "essential", "beginner"]
+  },
+  {
+    "id": "birth-of-house",
+    "title": "Birth of House",
+    "description": "From Chicago's South Side to global domination. The story of house music in six chapters.",
+    "author": "DiscoWorld",
+    "waypoints": [
+      { "slug": "disco", "note": "The mother. Before house was house, it was disco records played in Chicago warehouses." },
+      { "slug": "chicagohouse", "note": "Frankie Knuckles at the Warehouse. Ron Hardy at the Music Box. A drum machine and a dream." },
+      { "slug": "acidhouse", "note": "Phuture's 'Acid Tracks' — the TB-303's squelchy revolution. The sound that crossed the Atlantic." },
+      { "slug": "deephouse", "note": "The soulful side. Larry Heard's 'Can You Feel It' — house music with jazz chords and emotion." },
+      { "slug": "garagemusic", "note": "New York's interpretation. Paradise Garage, Larry Levan, the diva vocal, the breakdown." },
+      { "slug": "progressivehouse", "note": "The 90s evolution. Longer builds, deeper journeys, stadium moments." }
+    ],
+    "tags": ["history", "essential", "beginner"]
+  },
+  {
+    "id": "uk-bass-evolution",
+    "title": "UK Bass Evolution",
+    "description": "The uniquely British obsession with bass weight, from jungle to dubstep to grime and beyond.",
+    "author": "DiscoWorld",
+    "waypoints": [
+      { "slug": "jungle", "note": "The original. Breakbeats at 170 BPM, massive bass, ragga vocals. Pirate radio gold." },
+      { "slug": "drumandbass", "note": "Jungle grows up. Goldie, LTJ Bukem, Photek refine the formula." },
+      { "slug": "2stepgarage", "note": "Speed garage loses the beats, gains the swing. MJ Cole, Artful Dodger, the UK charts." },
+      { "slug": "dubstep", "note": "Half-time, full weight. Croydon's finest: Skream, Benga, Digital Mystikz." },
+      { "slug": "grime", "note": "MC culture meets garage production. Wiley, Dizzee Rascal, bow to the bass." },
+      { "slug": "ukfunky", "note": "The carnival connection. Broken beats, tribal drums, London's multicultural bass music." }
+    ],
+    "tags": ["history", "bass", "intermediate"]
+  },
+  {
+    "id": "ambient-odyssey",
+    "title": "Ambient Odyssey",
+    "description": "Music for airports, forests, and the spaces between thoughts. A journey into electronic music's contemplative side.",
+    "author": "DiscoWorld",
+    "waypoints": [
+      { "slug": "ambient", "note": "Brian Eno's invitation: 'Music as ignorable as it is interesting.' The starting point." },
+      { "slug": "darkambient", "note": "The shadow side. Lustmord, Coil — ambient music for abandoned factories." },
+      { "slug": "downtempo", "note": "When ambient gets a pulse. Slow, thoughtful, headphone music with a heartbeat." },
+      { "slug": "triphop", "note": "Bristol's gift. Massive Attack, Portishead — cinematic downtempo with hip-hop bones." },
+      { "slug": "idm", "note": "Intelligent Dance Music (that nobody dances to). Aphex Twin, Autechre, Boards of Canada." },
+      { "slug": "glitch", "note": "The sound of broken machines made beautiful. Oval, Alva Noto, clicks and cuts." }
+    ],
+    "tags": ["mood", "chill", "intermediate"]
+  },
+  {
+    "id": "rave-history",
+    "title": "Rave History",
+    "description": "From illegal warehouses to massive festivals. The story of rave culture in tempo and intensity.",
+    "author": "DiscoWorld",
+    "waypoints": [
+      { "slug": "acidhouse", "note": "Summer of Love, 1988. Acid house hits the UK. Smiley faces, warehouse parties, moral panic." },
+      { "slug": "rave", "note": "It becomes a movement. Fields, motorways, police helicopters. The Criminal Justice Act awaits." },
+      { "slug": "happyhardcore", "note": "Rave's sugar rush. Pitched-up vocals, piano stabs, 170 BPM euphoria." },
+      { "slug": "trance", "note": "The melodic arm. Hands in the air, eyes closed, lost in the build and release." },
+      { "slug": "hardtrance", "note": "When trance gets serious. Harder kicks, bigger drops, festival main stages." },
+      { "slug": "psytrance", "note": "The spiritual wing. Goa beaches, full moon parties, 16-hour outdoor rituals." }
+    ],
+    "tags": ["history", "energy", "beginner"]
+  },
+  {
+    "id": "industrial-underground",
+    "title": "Industrial Underground",
+    "description": "The dark side of electronic music. From art-noise provocation to body-moving industrial techno.",
+    "author": "DiscoWorld",
+    "waypoints": [
+      { "slug": "industrial", "note": "Throbbing Gristle's 'industrial music for industrial people.' Provocation as art form." },
+      { "slug": "ebm", "note": "Electronic Body Music. Front 242, Nitzer Ebb — industrial learns to dance." },
+      { "slug": "darkelectro", "note": "Gothic electronics. Skinny Puppy, FLA — the sound of beautiful darkness." },
+      { "slug": "noise", "note": "The extreme edge. Merzbow, Whitehouse — volume as violence, distortion as liberation." },
+      { "slug": "powernoise", "note": "Where noise meets rhythm. Converter, Imminent — brutal but structured." },
+      { "slug": "hardtechno", "note": "Industrial's final form: 4/4 techno at maximum intensity. The Berlin bunker sound." }
+    ],
+    "tags": ["dark", "advanced", "niche"]
+  },
+  {
+    "id": "disco-to-trance",
+    "title": "From Disco to Trance",
+    "description": "How four-on-the-floor evolved from Studio 54 to Ibiza. The longest continuous thread in dance music.",
+    "author": "DiscoWorld",
+    "waypoints": [
+      { "slug": "disco", "note": "1977. The Bee Gees, Donna Summer, Giorgio Moroder's sequencers. The beat that started everything." },
+      { "slug": "italodisco", "note": "Disco goes electronic. Cheap synths, catchy melodies, European style." },
+      { "slug": "eurobeat", "note": "Italy's Hi-NRG offshoot. Fast, cheesy, unstoppable on the dancefloor." },
+      { "slug": "eurodance", "note": "The 90s formula. MC + diva + synth hook = chart domination." },
+      { "slug": "trance", "note": "The formula perfected. Long builds, emotional breakdowns, the superclub era." },
+      { "slug": "vocaltrance", "note": "Trance finds its voice. Above & Beyond, Armin — stadium anthems with feeling." }
+    ],
+    "tags": ["history", "melody", "beginner"]
+  },
+  {
+    "id": "vinyl-collectors-rarities",
+    "title": "Vinyl Collector's Rarities",
+    "description": "Deep cuts and forgotten gems from the most sought-after genres. For the crate digger who's heard everything.",
+    "author": "DiscoWorld",
+    "waypoints": [
+      { "slug": "detroittechno", "note": "Early Metroplex, Transmat, KMS pressings. The genesis records." },
+      { "slug": "breakbeat", "note": "Rare breaks compilations, white labels, the DJ's secret weapons." },
+      { "slug": "dub-techno", "note": "Chain Reaction, Basic Channel — the most collected electronic 12\"s on earth." },
+      { "slug": "balearicbeat", "note": "Café Del Mar, Ibiza sunsets, Jose Padilla's musical postcards." },
+      { "slug": "spacesynth", "note": "The most niche of all: Dutch space disco. Laser Dance, Koto. Collectors go deep." },
+      { "slug": "cosmicmusic", "note": "Cosmic disco, the Italian connection. Daniele Baldelli's DJ sets as lost masterpieces." }
+    ],
+    "tags": ["crate-digging", "advanced", "niche"]
+  }
+]

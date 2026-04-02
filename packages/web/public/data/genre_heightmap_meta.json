@@ -1,0 +1,126 @@
+{
+  "size": 1024,
+  "world_radius": 48.0,
+  "ocean_level": 0.15,
+  "elevation_range": [
+    0.04800188168883324,
+    1.0
+  ],
+  "land_coverage_pct": 84.2,
+  "territory_count": 166,
+  "continent_count": 28,
+  "scene_stats": {
+    "Eurotrash": {
+      "territory_count": 3,
+      "avg_elevation": 0.45
+    },
+    "Eurodisco": {
+      "territory_count": 5,
+      "avg_elevation": 0.439
+    },
+    "Europop": {
+      "territory_count": 6,
+      "avg_elevation": 0.431
+    },
+    "Eurotrance": {
+      "territory_count": 3,
+      "avg_elevation": 0.926
+    },
+    "Hard Dance": {
+      "territory_count": 6,
+      "avg_elevation": 0.885
+    },
+    "Trance": {
+      "territory_count": 6,
+      "avg_elevation": 0.922
+    },
+    "Psy Trance": {
+      "territory_count": 6,
+      "avg_elevation": 0.929
+    },
+    "Industrial/Goth": {
+      "territory_count": 10,
+      "avg_elevation": 0.837
+    },
+    "Intelligent Dance Music": {
+      "territory_count": 6,
+      "avg_elevation": 0.721
+    },
+    "Pioneers": {
+      "territory_count": 7,
+      "avg_elevation": 0.669
+    },
+    "Chiptune": {
+      "territory_count": 5,
+      "avg_elevation": 0.709
+    },
+    "Ambient": {
+      "territory_count": 3,
+      "avg_elevation": 0.249
+    },
+    "Chill Out": {
+      "territory_count": 4,
+      "avg_elevation": 0.213
+    },
+    "Downtempo": {
+      "territory_count": 5,
+      "avg_elevation": 0.265
+    },
+    "Urban": {
+      "territory_count": 5,
+      "avg_elevation": 0.551
+    },
+    "UK Garage": {
+      "territory_count": 6,
+      "avg_elevation": 0.548
+    },
+    "Garage/Deep House": {
+      "territory_count": 3,
+      "avg_elevation": 0.492
+    },
+    "Progressive": {
+      "territory_count": 6,
+      "avg_elevation": 0.863
+    },
+    "Tech House": {
+      "territory_count": 5,
+      "avg_elevation": 0.503
+    },
+    "House": {
+      "territory_count": 10,
+      "avg_elevation": 0.487
+    },
+    "Acid": {
+      "territory_count": 3,
+      "avg_elevation": 0.412
+    },
+    "Breakbeat": {
+      "territory_count": 6,
+      "avg_elevation": 0.658
+    },
+    "Drum n Bass": {
+      "territory_count": 12,
+      "avg_elevation": 0.697
+    },
+    "Hardcore": {
+      "territory_count": 7,
+      "avg_elevation": 0.918
+    },
+    "Techno": {
+      "territory_count": 9,
+      "avg_elevation": 0.945
+    },
+    "Electro": {
+      "territory_count": 3,
+      "avg_elevation": 0.951
+    },
+    "Hip Hop": {
+      "territory_count": 9,
+      "avg_elevation": 0.507
+    },
+    "Bass": {
+      "territory_count": 7,
+      "avg_elevation": 0.754
+    }
+  }
+}
