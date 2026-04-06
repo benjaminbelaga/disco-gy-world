@@ -51,6 +51,7 @@ export default function MusicPlayer() {
   const playerRef = useRef(null)
   const progressInterval = useRef(null)
   const apiReadyRef = useRef(false)
+  const ytContainerRef = useRef(null)
 
   const [isPlaying, setIsPlaying] = useState(false)
   const [embedError, setEmbedError] = useState(false)
@@ -142,7 +143,9 @@ export default function MusicPlayer() {
     }
     if (progressInterval.current) clearInterval(progressInterval.current)
 
-    playerRef.current = new window.YT.Player('yt-player-hidden', {
+    // Use the DOM element ref if available, fallback to ID string
+    const targetEl = ytContainerRef.current || 'yt-player-hidden'
+    playerRef.current = new window.YT.Player(targetEl, {
       videoId,
       playerVars: {
         autoplay: 1,
@@ -239,45 +242,54 @@ export default function MusicPlayer() {
     }
   }
 
-  if (!currentTrack) return null
-
-  const videoId = extractVideoId(currentTrack.youtube)
+  const videoId = currentTrack ? extractVideoId(currentTrack.youtube) : null
   const thumbnailUrl = videoId
     ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`
     : null
   const hasQueue = playerQueue.length > 1
   const queueLabel = hasQueue ? `${playerIndex + 1} / ${playerQueue.length}` : null
 
+  if (!currentTrack) {
+    return (
+      <>
+        {/* Hidden YT container persists even when player UI is hidden */}
+        <div id="yt-player-hidden" ref={ytContainerRef} className="music-player-iframe-hidden" />
+      </>
+    )
+  }
+
   // Collapsed mini-bar
   if (collapsed) {
     return (
-      <div className="music-player music-player--collapsed" role="region" aria-label="Music player (minimized)">
-        <button className="music-player-expand" onClick={() => setCollapsed(false)} aria-label="Expand player" title="Expand">
-          &#9650;
-        </button>
-        <div className="music-player-info music-player-info--collapsed">
-          <span className="music-player-title music-player-title--collapsed">
-            {currentTrack.artist} — {currentTrack.title}
-          </span>
+      <>
+        <div id="yt-player-hidden" ref={ytContainerRef} className="music-player-iframe-hidden" />
+        <div className="music-player music-player--collapsed" role="region" aria-label="Music player (minimized)">
+          <button className="music-player-expand" onClick={() => setCollapsed(false)} aria-label="Expand player" title="Expand">
+            &#9650;
+          </button>
+          <div className="music-player-info music-player-info--collapsed">
+            <span className="music-player-title music-player-title--collapsed">
+              {currentTrack.artist} — {currentTrack.title}
+            </span>
+          </div>
+          {hasQueue && (
+            <button className="music-player-btn" onClick={handlePrev} aria-label="Previous" disabled={!shuffleMode && playerIndex <= 0}>&#9198;</button>
+          )}
+          <button className="music-player-btn" onClick={handlePlayPause} aria-label={isPlaying ? 'Pause' : 'Play'}>
+            {isPlaying ? '\u23F8' : '\u25B6'}
+          </button>
+          {hasQueue && (
+            <button className="music-player-btn" onClick={handleNext} aria-label="Next" disabled={!shuffleMode && playerIndex >= playerQueue.length - 1}>&#9197;</button>
+          )}
+          <button className="music-player-close" onClick={handleClose} aria-label="Close">&times;</button>
         </div>
-        {hasQueue && (
-          <button className="music-player-btn" onClick={handlePrev} aria-label="Previous" disabled={!shuffleMode && playerIndex <= 0}>&#9198;</button>
-        )}
-        <button className="music-player-btn" onClick={handlePlayPause} aria-label={isPlaying ? 'Pause' : 'Play'}>
-          {isPlaying ? '\u23F8' : '\u25B6'}
-        </button>
-        {hasQueue && (
-          <button className="music-player-btn" onClick={handleNext} aria-label="Next" disabled={!shuffleMode && playerIndex >= playerQueue.length - 1}>&#9197;</button>
-        )}
-        <button className="music-player-close" onClick={handleClose} aria-label="Close">&times;</button>
-
-        {/* Hidden YT player container — persists across collapsed/expanded */}
-        <div id="yt-player-hidden" className="music-player-iframe-hidden" />
-      </div>
+      </>
     )
   }
 
   return (
+    <>
+    <div id="yt-player-hidden" ref={ytContainerRef} className="music-player-iframe-hidden" />
     <div className="music-player" role="region" aria-label={`Music player: ${currentTrack.artist} — ${currentTrack.title}`}>
       {/* Seek bar at top */}
       <div
@@ -292,9 +304,6 @@ export default function MusicPlayer() {
         <div className="music-player-seekbar-fill" style={{ width: `${progress * 100}%` }} />
         <div className="music-player-seekbar-thumb" style={{ left: `${progress * 100}%` }} />
       </div>
-
-      {/* Hidden YT player container */}
-      <div id="yt-player-hidden" className="music-player-iframe-hidden" />
 
       {/* Thumbnail area */}
       <div
@@ -408,5 +417,6 @@ export default function MusicPlayer() {
         </button>
       </div>
     </div>
+    </>
   )
 }
