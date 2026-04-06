@@ -326,22 +326,27 @@ const SESSION_KEY = 'discoworld-session-token'
  * @returns {Promise<{mode: string, authorize_url?: string, session_token?: string, user?: object}>}
  */
 export async function initiateLogin(callbackUrl) {
-  const url = `${API_BASE}/auth/discogs/login?callback_url=${encodeURIComponent(callbackUrl)}`
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(`Login initiation failed: ${res.status}`)
-  const data = await res.json()
+  try {
+    const url = `${API_BASE}/auth/discogs/login?callback_url=${encodeURIComponent(callbackUrl)}`
+    const res = await fetch(url)
+    if (!res.ok) return null
+    const data = await res.json()
 
-  if (data.mode === 'oauth' && data.authorize_url) {
-    // OAuth mode — redirect user to Discogs authorization page
-    window.location.href = data.authorize_url
+    if (data.mode === 'oauth' && data.authorize_url) {
+      // OAuth mode — redirect user to Discogs authorization page
+      window.location.href = data.authorize_url
+      return data
+    }
+
+    // Token fallback — already authenticated
+    if (data.session_token) {
+      sessionStorage.setItem(SESSION_KEY, data.session_token)
+    }
     return data
+  } catch {
+    // API unavailable — fail silently in static-only mode
+    return null
   }
-
-  // Token fallback — already authenticated
-  if (data.session_token) {
-    sessionStorage.setItem(SESSION_KEY, data.session_token)
-  }
-  return data
 }
 
 /**
@@ -367,9 +372,14 @@ export async function checkSession() {
   const token = sessionStorage.getItem(SESSION_KEY)
   if (!token) return { authenticated: false, user: null }
 
-  const res = await fetch(`${API_BASE}/auth/me?session_token=${encodeURIComponent(token)}`)
-  if (!res.ok) return { authenticated: false, user: null }
-  return res.json()
+  try {
+    const res = await fetch(`${API_BASE}/auth/me?session_token=${encodeURIComponent(token)}`)
+    if (!res.ok) return { authenticated: false, user: null }
+    return res.json()
+  } catch {
+    // API unavailable — fail silently in static-only mode
+    return { authenticated: false, user: null }
+  }
 }
 
 /**

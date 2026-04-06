@@ -28,7 +28,12 @@ export default function YoyakuLogin({ onClose }) {
       localStorage.setItem('yoyaku-session', JSON.stringify(data))
       setSession(data)
     } catch (err) {
-      setError(err.message)
+      // Network error or API unavailable — show user-friendly message
+      if (err instanceof TypeError || err.message === 'Failed to fetch') {
+        setError('Login service is currently unavailable')
+      } else {
+        setError(err.message)
+      }
     } finally {
       setLoading(false)
     }

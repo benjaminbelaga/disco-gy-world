@@ -72,6 +72,10 @@ const useStore = create((set) => ({
   filterBarOpen: false,
   setFilterBarOpen: (open) => set({ filterBarOpen: open }),
 
+  // Login modal
+  showYoyakuLogin: false,
+  setShowYoyakuLogin: (v) => set({ showYoyakuLogin: v }),
+
   // Camera fly-to target (null = orbit freely)
   cameraTarget: null,
   setCameraTarget: (target) => set({ cameraTarget: target }),

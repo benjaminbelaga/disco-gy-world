@@ -962,6 +962,23 @@ html, body, #root {
 .onboarding-skip-link:hover {
   color: rgba(255, 255, 255, 0.5);
 }
+.onboarding-login-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 12px 40px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  backdrop-filter: blur(8px);
+}
+.onboarding-login-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+}
 
 /* ---- ONBOARDING: DISCOGS IMPORT PROMPT ---- */
 .onboarding-discogs-prompt {

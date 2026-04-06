@@ -11,7 +11,8 @@ import './YoyakuLogin.css'
 export default function Header() {
   const genres = useStore(s => s.genres)
   const [toast, setToast] = useState(false)
-  const [showYoyakuLogin, setShowYoyakuLogin] = useState(false)
+  const showYoyakuLogin = useStore(s => s.showYoyakuLogin)
+  const setShowYoyakuLogin = useStore(s => s.setShowYoyakuLogin)
   const yoyakuSession = typeof localStorage !== 'undefined' ? localStorage.getItem('yoyaku-session') : null
 
   const handleShare = useCallback(() => {

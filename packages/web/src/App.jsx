@@ -4,7 +4,7 @@ import { OrbitControls, AdaptiveDpr, Preload } from '@react-three/drei'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import * as THREE from 'three'
 import useStore from './stores/useStore'
-import useAudioStore from './stores/useAudioStore'
+// import useAudioStore from './stores/useAudioStore' // Disabled — soundscape system off
 import useIsMobile from './hooks/useIsMobile'
 import useUrlState from './hooks/useUrlState'
 import GenreWorld from './components/GenreWorld'
@@ -36,7 +36,7 @@ import { pathFromUrl } from './lib/pathSerializer'
 import { LabelConstellationOverlay } from './components/LabelConstellation'
 import { ArtistThreadPanel } from './components/ArtistThread'
 import ErrorBoundary from './components/ErrorBoundary'
-import { setBiome, stopSoundscape } from './lib/soundscape'
+// import { setBiome, stopSoundscape } from './lib/soundscape' // Disabled — soundscape system off
 
 function LoadingScreen() {
   return (
@@ -117,37 +117,13 @@ function CameraAnimator({ controlsRef }) {
   return null
 }
 
-// Audio-reactive fog breathing
+// Fog — static values (soundscape audio-reactivity disabled)
 function AudioReactiveFog() {
-  const fogRef = useRef()
-
-  useFrame(() => {
-    if (!fogRef.current) return
-    const bass = useAudioStore.getState().bass
-    // Breathe the near plane with bass
-    fogRef.current.near = 60 - bass * 12
-  })
-
-  return <fog ref={fogRef} attach="fog" args={['#060610', 60, 150]} />
+  return <fog attach="fog" args={['#060610', 55, 150]} />
 }
 
-// Audio-reactive bloom intensity
+// Bloom — static values (soundscape audio-reactivity disabled)
 function AudioReactiveBloom() {
-  const bloomRef = useRef()
-  const [hasError, setHasError] = useState(false)
-
-  useFrame(() => {
-    if (!bloomRef.current || hasError) return
-    try {
-      const energy = useAudioStore.getState().energy
-      bloomRef.current.intensity = 0.8 + energy * 1.2
-    } catch {
-      setHasError(true)
-    }
-  })
-
-  if (hasError) return null
-
   return (
     <EffectComposer>
       <Bloom
@@ -302,20 +278,19 @@ export default function App() {
     return unsub
   }, [])
 
-  // Soundscape: crossfade ambient audio when genre/biome changes
-  useEffect(() => {
-    const unsub = useStore.subscribe((state, prev) => {
-      if (state.activeGenre && state.activeGenre !== prev.activeGenre) {
-        const biome = state.activeGenre.biome || 'unknown'
-        setBiome(biome)
-      }
-      // Stop soundscape when leaving genre view or deselecting
-      if (!state.activeGenre && prev.activeGenre) {
-        stopSoundscape()
-      }
-    })
-    return () => { unsub(); stopSoundscape() }
-  }, [])
+  // Soundscape disabled — re-enable by uncommenting this block + imports at top
+  // useEffect(() => {
+  //   const unsub = useStore.subscribe((state, prev) => {
+  //     if (state.activeGenre && state.activeGenre !== prev.activeGenre) {
+  //       const biome = state.activeGenre.biome || 'unknown'
+  //       setBiome(biome)
+  //     }
+  //     if (!state.activeGenre && prev.activeGenre) {
+  //       stopSoundscape()
+  //     }
+  //   })
+  //   return () => { unsub(); stopSoundscape() }
+  // }, [])
 
   useEffect(() => {
     Promise.all([
