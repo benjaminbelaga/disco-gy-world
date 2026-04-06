@@ -64,8 +64,8 @@ const useStore = create((set, get) => ({
   }),
   playNext: () => set((s) => {
     if (s.shuffleMode && s.playerQueue.length > 1) {
-      let rand
-      do { rand = Math.floor(Math.random() * s.playerQueue.length) } while (rand === s.playerIndex)
+      let rand, attempts = 0
+      do { rand = Math.floor(Math.random() * s.playerQueue.length); attempts++ } while (rand === s.playerIndex && attempts < 20)
       return { playerIndex: rand, currentTrack: s.playerQueue[rand], playing: true }
     }
     const next = s.playerIndex + 1
