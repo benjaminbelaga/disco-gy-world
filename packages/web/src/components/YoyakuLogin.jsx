@@ -10,8 +10,10 @@ export default function YoyakuLogin({ onClose }) {
   const [session, setSession] = useState(null)
 
   const handleDiscogs = async () => {
-    const callbackUrl = `${window.location.origin}/auth/callback`
-    await initiateLogin(callbackUrl)
+    // Discogs redirects to the API callback, which exchanges tokens and
+    // redirects to /auth/callback?session_token=... on the frontend
+    const apiCallback = `${window.location.origin}/api/auth/discogs/callback?frontend_url=${encodeURIComponent(window.location.origin)}`
+    await initiateLogin(apiCallback)
     // initiateLogin redirects — nothing to do after
   }
 

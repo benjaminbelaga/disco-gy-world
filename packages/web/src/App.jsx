@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState, useCallback } from 'react'
+import { handleCallback } from './lib/discogsApi'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls, AdaptiveDpr, Preload } from '@react-three/drei'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
@@ -249,6 +250,16 @@ function useProgressiveUI() {
 export default function App() {
   const [loaded, setLoaded] = useState(false)
   const [error, setError] = useState(null)
+
+  // Handle Discogs OAuth callback redirect (/auth/callback?session_token=...)
+  useEffect(() => {
+    if (window.location.pathname === '/auth/callback') {
+      const params = new URLSearchParams(window.location.search)
+      handleCallback(params)
+      // Replace URL so refresh doesn't re-trigger
+      window.history.replaceState({}, '', '/')
+    }
+  }, [])
   const setGenres = useStore(s => s.setGenres)
   const setReleases = useStore(s => s.setReleases)
   const setLinks = useStore(s => s.setLinks)
