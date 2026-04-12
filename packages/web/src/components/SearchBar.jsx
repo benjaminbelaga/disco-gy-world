@@ -103,23 +103,32 @@ export default function SearchBar() {
     }
   }, [searchIndex, genres])
 
-  // URL paste detection: YouTube / Discogs → locate matching track on map
-  // Returns { matched, track, genreSlug } or null if no match.
+  // URL paste detection: YouTube / Discogs → locate matching track on map.
+  // Returns { track, genreSlug } or null if no match.
   const locateByUrl = useCallback((url) => {
     if (!url || !releases) return null
-    // YouTube video ID extraction
-    let videoId = null
+    let kind = null, key = null
     try {
       const u = new URL(url)
-      if (u.hostname.includes('youtube.com')) videoId = u.searchParams.get('v')
-      else if (u.hostname === 'youtu.be') videoId = u.pathname.slice(1)
+      if (u.hostname.includes('youtube.com')) {
+        kind = 'youtube'; key = u.searchParams.get('v')
+      } else if (u.hostname === 'youtu.be') {
+        kind = 'youtube'; key = u.pathname.slice(1)
+      } else if (u.hostname.includes('discogs.com')) {
+        // Discogs: /release/12345-artist-title, /master/67890-...
+        const m = u.pathname.match(/\/(release|master)\/(\d+)/)
+        if (m) { kind = 'discogs'; key = m[2] }
+      }
     } catch { return null }
-    if (!videoId) return null
-    // Scan releases dict for a track whose youtube field contains this id
+    if (!key) return null
+    // Scan releases dict
     for (const [genreSlug, tracks] of Object.entries(releases)) {
       if (!Array.isArray(tracks)) continue
       for (const t of tracks) {
-        if (t.youtube && t.youtube.includes(videoId)) {
+        if (kind === 'youtube' && t.youtube && t.youtube.includes(key)) {
+          return { track: t, genreSlug }
+        }
+        if (kind === 'discogs' && t.discogs_id && String(t.discogs_id) === key) {
           return { track: t, genreSlug }
         }
       }
