@@ -120,9 +120,28 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('node_modules/three/')) return 'three'
-          if (id.includes('node_modules/globe.gl/') || id.includes('node_modules/three-globe/')) return 'globe'
-          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) return 'react-vendor'
+          // React core
+          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/scheduler/')) return 'react-vendor'
+          // Globe view (earth mode) — isolates globe.gl's huge d3/topojson/three-globe deps
+          if (id.includes('globe.gl') || id.includes('three-globe') || id.includes('topojson-client')) return 'globe'
+          if (id.includes('/d3-') || id.match(/node_modules\/d3-[a-z]+/)) return 'globe'
+          // Three.js core + ecosystem — shared between earth and genre views
+          if (
+            id.includes('node_modules/three/') ||
+            id.includes('three-stdlib') ||
+            id.includes('three-mesh-bvh') ||
+            id.includes('three-conic-polygon') ||
+            id.includes('three-geojson-geometry') ||
+            id.includes('three-render-objects') ||
+            id.includes('troika-')
+          ) return 'three'
+          // R3F
+          if (id.includes('@react-three/fiber') || id.includes('@react-three/drei')) return 'r3f'
+          // Postprocessing (pmndrs) — only needed on desktop bloom
+          if (id.includes('@react-three/postprocessing') || id.includes('node_modules/postprocessing/')) return 'postfx'
+          // gsap / maath — animation helpers
+          if (id.includes('node_modules/gsap/') || id.includes('node_modules/maath/')) return 'anim'
+          // zustand — tiny, keep in main bundle
         }
       }
     }

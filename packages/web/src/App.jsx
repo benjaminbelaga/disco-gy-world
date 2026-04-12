@@ -29,8 +29,11 @@ const TasteTopology = lazy(() => import('./components/TasteTopology'))
 const RecommendationPanel = lazy(() => import('./components/RecommendationPanel'))
 const DriftMode = lazy(() => import('./components/DriftMode'))
 const DigPathPanel = lazy(() => import('./components/DigPathPanel'))
-const LabelConstellationOverlay = lazy(() => import('./components/LabelConstellation').then(m => ({ default: m.LabelConstellationOverlay })))
-const ArtistThreadPanel = lazy(() => import('./components/ArtistThread').then(m => ({ default: m.ArtistThreadPanel })))
+// LabelConstellationOverlay + ArtistThreadPanel are statically imported by
+// GenreWorld.jsx so lazy() in App has no effect — they're already in the
+// r3f chunk. Regular import.
+import { LabelConstellationOverlay } from './components/LabelConstellation'
+import { ArtistThreadPanel } from './components/ArtistThread'
 import ViewTransition from './components/ViewTransition'
 import ViewSwitch from './components/ViewSwitch'
 import CityPanel from './components/CityPanel'
