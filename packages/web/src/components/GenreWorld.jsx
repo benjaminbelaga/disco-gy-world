@@ -192,7 +192,7 @@ function GenreWireframes({ genres, activeSlug, hoveredSlug }) {
         const floatY = g.y + Math.sin(t * 0.5 + g.x * 0.1) * 0.3
         _obj.position.set(g.x, floatY, g.z)
         // Wireframe slightly larger than solid sphere
-        let scale = g.size * 1.02 * bassPulse
+        let scale = Math.min(g.size, 4.2) * 1.02 * bassPulse
         if (g.slug === activeSlug) scale *= (1 + Math.sin(t * 3) * 0.15)
         else if (g.slug === hoveredSlug) scale *= 1.12
         _obj.scale.setScalar(scale)
@@ -203,7 +203,7 @@ function GenreWireframes({ genres, activeSlug, hoveredSlug }) {
       const isHovered = g.slug === hoveredSlug
       const isActive = g.slug === activeSlug
       const opacity = visible ? Math.min(1, (year - g.year + 5) / 10) : 0
-      const boost = isActive ? 1.2 : isHovered ? 0.8 : 0.3
+      const boost = isActive ? 1.5 : isHovered ? 1.0 : 0.5
       _color.set(g.color).multiplyScalar(boost * opacity)
       colors[i * 3] = _color.r
       colors[i * 3 + 1] = _color.g
@@ -311,7 +311,7 @@ function GenreInstances({ genres, onClickGenre, onHoverGenre, activeSlug, hovere
         const floatY = g.y + Math.sin(t * 0.5 + g.x * 0.1) * 0.3
         _obj.position.set(g.x, floatY, g.z)
 
-        let scale = g.size * bassPulse * beatKick * scales[i]
+        let scale = Math.min(g.size, 4.2) * bassPulse * beatKick * scales[i]
         if (g.slug === activeSlug) {
           scale *= (1 + Math.sin(t * 3) * 0.15)
         }
@@ -325,7 +325,7 @@ function GenreInstances({ genres, onClickGenre, onHoverGenre, activeSlug, hovere
       const isHovered = g.slug === hoveredSlug
       const inCollection = hasCollection && collectionGenres[g.slug]
       const dimFactor = hasCollection && !inCollection && !isActive && !isHovered ? 0.55 : 1
-      const boost = isActive ? 2.5 : isHovered ? 1.6 : 0.7
+      const boost = isActive ? 3.0 : isHovered ? 2.0 : 1.0
       _color.set(g.color).multiplyScalar(boost * opacity * dimFactor)
       colors[i * 3] = _color.r
       colors[i * 3 + 1] = _color.g
@@ -365,10 +365,8 @@ function GenreInstances({ genres, onClickGenre, onHoverGenre, activeSlug, hovere
       <meshStandardMaterial
         vertexColors
         toneMapped={false}
-        roughness={0.3}
-        metalness={0.1}
-        emissive="#ffffff"
-        emissiveIntensity={0.2}
+        roughness={0.25}
+        metalness={0.05}
       />
     </instancedMesh>
   )
@@ -398,13 +396,18 @@ function HoverTooltip({ genre }) {
   )
 }
 
-// Billboard genre labels — only for genres with >50 releases, fade with distance
+// Billboard genre labels — only for top-tier genres, fade with distance
 function GenreLabels({ genres, activeSlug }) {
   const year = useStore(s => s.year)
   const { camera } = useThree()
 
-  const labelGenres = useMemo(() => {
-    return genres.filter(g => g.trackCount > 50)
+  const { labelGenres, maxTrackCount } = useMemo(() => {
+    // Only show genres with significant track counts — reduces clutter
+    const sorted = genres
+      .filter(g => g.trackCount >= 100)
+      .sort((a, b) => b.trackCount - a.trackCount)
+    const max = sorted.length > 0 ? sorted[0].trackCount : 1
+    return { labelGenres: sorted, maxTrackCount: max }
   }, [genres])
 
   return (
@@ -418,6 +421,7 @@ function GenreLabels({ genres, activeSlug }) {
             genre={g}
             camera={camera}
             isActive={g.slug === activeSlug}
+            maxTrackCount={maxTrackCount}
           />
         )
       })}
@@ -425,18 +429,20 @@ function GenreLabels({ genres, activeSlug }) {
   )
 }
 
-function GenreLabel({ genre, camera, isActive }) {
+function GenreLabel({ genre, camera, isActive, maxTrackCount }) {
   const textRef = useRef()
+
+  // Proportional font size: major genres are larger/more readable
+  const fontSize = 0.6 + (genre.trackCount / maxTrackCount) * 0.6
 
   useFrame(() => {
     if (!textRef.current) return
     const dist = camera.position.distanceTo(
       new THREE.Vector3(genre.x, genre.y, genre.z)
     )
-    // Fade: fully visible under 30, fade out by 60, invisible beyond 70
     const opacity = isActive
-      ? Math.min(1, Math.max(0.3, 1 - (dist - 40) / 40))
-      : Math.min(0.5, Math.max(0, 1 - (dist - 25) / 35))
+      ? Math.min(1, Math.max(0.6, 1 - (dist - 45) / 40))
+      : Math.min(0.92, Math.max(0, 1 - (dist - 28) / 38))
     textRef.current.fillOpacity = opacity
     textRef.current.visible = opacity > 0.01
   })
@@ -444,15 +450,15 @@ function GenreLabel({ genre, camera, isActive }) {
   return (
     <Text
       ref={textRef}
-      position={[genre.x, genre.y + genre.size + 1.2, genre.z]}
-      fontSize={0.6}
+      position={[genre.x, genre.y + Math.min(genre.size, 3.5) + 0.9, genre.z]}
+      fontSize={fontSize}
       color={genre.color}
       anchorX="center"
       anchorY="bottom"
-      fillOpacity={0.4}
-      outlineWidth={0.02}
-      outlineColor="#000000"
-      outlineOpacity={0.5}
+      fillOpacity={0.88}
+      outlineWidth={0.07}
+      outlineColor="#020208"
+      outlineOpacity={1}
       depthOffset={-1}
     >
       {genre.name}
@@ -782,19 +788,20 @@ function BiomeLabels({ genres }) {
           center
           style={{
             color: b.color,
-            fontSize: '12px',
+            fontSize: '13px',
             fontFamily: "'JetBrains Mono', monospace",
-            fontWeight: 400,
+            fontWeight: 600,
             textTransform: 'uppercase',
-            letterSpacing: '2px',
-            opacity: 0.35,
+            letterSpacing: '3px',
+            opacity: 0.6,
             whiteSpace: 'nowrap',
             cursor: 'pointer',
             userSelect: 'none',
             transition: 'opacity 0.2s',
+            textShadow: '0 0 12px currentColor, 0 1px 3px rgba(0,0,0,0.9)',
           }}
-          onPointerEnter={(e) => { e.target.style.opacity = '0.8' }}
-          onPointerLeave={(e) => { e.target.style.opacity = '0.35' }}
+          onPointerEnter={(e) => { e.target.style.opacity = '1' }}
+          onPointerLeave={(e) => { e.target.style.opacity = '0.6' }}
           onClick={() => {
             setActiveGenre(b.primary)
             setCameraTarget(b.primary)

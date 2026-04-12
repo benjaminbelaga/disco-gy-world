@@ -527,10 +527,16 @@ html, body, #root {
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   opacity: 0.85;
-  transition: opacity 0.2s;
+  transition: bottom 0.2s ease, opacity 0.2s;
 }
 .minimap:hover {
   opacity: 1;
+}
+.minimap--above-player {
+  bottom: 92px; /* 72px full player + 20px gap */
+}
+.minimap--above-player-mini {
+  bottom: 56px; /* 36px collapsed player + 20px gap */
 }
 
 /* ---- LAYER CONTROLS ---- */
@@ -539,6 +545,7 @@ html, body, #root {
   bottom: 20px;
   right: 20px;
   z-index: 50;
+  transition: bottom 0.2s ease;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -549,6 +556,12 @@ html, body, #root {
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+.layer-controls--above-player {
+  bottom: 92px;
+}
+.layer-controls--above-player-mini {
+  bottom: 56px;
 }
 .layer-btn {
   display: flex;
@@ -669,10 +682,16 @@ html, body, #root {
     font-size: 11px;
   }
 
-  /* Layer controls: bottom left, compact */
+  /* Layer controls: compact on mobile */
   .layer-controls {
-    bottom: 64px;
+    bottom: 20px;
     right: 12px;
+  }
+  .layer-controls--above-player {
+    bottom: 84px; /* 64px mobile player + 20px gap */
+  }
+  .layer-controls--above-player-mini {
+    bottom: 52px; /* 32px mobile collapsed + 20px gap */
   }
 
   /* Larger tap targets for genre spheres (handled by CSS on markers) */

@@ -14,11 +14,17 @@ export default function LayerControls() {
   const setGlobeLayer = useStore(s => s.setGlobeLayer)
   const tasteProfile = useStore(s => s.tasteProfile)
   const showOverlay = useStore(s => s.showCollectionOverlay)
+  const hasPlayer = useStore(s => !!s.currentTrack)
+  const playerCollapsed = useStore(s => s.playerCollapsed)
 
   if (viewMode !== 'earth') return null
 
+  const playerClass = hasPlayer
+    ? (playerCollapsed ? ' layer-controls--above-player-mini' : ' layer-controls--above-player')
+    : ''
+
   return (
-    <div className="layer-controls">
+    <div className={`layer-controls${playerClass}`}>
       {LAYERS.map(({ key, label, icon, requiresCollection, activeColor }) => {
         // Hide collection layer when no profile loaded or overlay not active
         if (requiresCollection && (!tasteProfile || !showOverlay)) return null

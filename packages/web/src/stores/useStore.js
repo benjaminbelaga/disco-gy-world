@@ -41,6 +41,8 @@ const useStore = create((set, get) => ({
   playerQueue: [],
   playerIndex: 0,
   shuffleMode: false,
+  playerCollapsed: false,
+  setPlayerCollapsed: (collapsed) => set({ playerCollapsed: collapsed }),
   toggleShuffle: () => set(s => ({ shuffleMode: !s.shuffleMode })),
   setPlaying: (playing) => set({ playing }),
   setCurrentTrack: (track) => set((s) => {

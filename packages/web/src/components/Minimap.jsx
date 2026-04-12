@@ -26,6 +26,8 @@ export default function Minimap() {
   const globeCenter = useStore(s => s.globeCenter)
   const citiesData = useStore(s => s.citiesData)
   const flyToCity = useStore(s => s.flyToCity)
+  const hasPlayer = useStore(s => !!s.currentTrack)
+  const playerCollapsed = useStore(s => s.playerCollapsed)
   const svgRef = useRef(null)
 
   const handleClick = useCallback((e) => {
@@ -47,7 +49,7 @@ export default function Minimap() {
   const vpH = (40 / 180) * MAP_H
 
   return (
-    <div className="minimap">
+    <div className={`minimap${hasPlayer ? (playerCollapsed ? ' minimap--above-player-mini' : ' minimap--above-player') : ''}`}>
       <svg
         ref={svgRef}
         width={MAP_W}

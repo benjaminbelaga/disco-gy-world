@@ -47,6 +47,7 @@ export default function MusicPlayer() {
   const shuffleMode = useStore(s => s.shuffleMode)
   const toggleShuffle = useStore(s => s.toggleShuffle)
   const setAudioPlaying = useAudioStore(s => s.setPlaying)
+  const setPlayerCollapsedStore = useStore(s => s.setPlayerCollapsed)
 
   const playerRef = useRef(null)
   const progressInterval = useRef(null)
@@ -65,6 +66,11 @@ export default function MusicPlayer() {
   useEffect(() => {
     setAudioPlaying(!!currentTrack)
   }, [currentTrack, setAudioPlaying])
+
+  // Sync collapsed state to store so Minimap/LayerControls can react
+  useEffect(() => {
+    setPlayerCollapsedStore(collapsed)
+  }, [collapsed, setPlayerCollapsedStore])
 
   // Load YouTube IFrame API once
   useEffect(() => {
@@ -144,9 +150,29 @@ export default function MusicPlayer() {
     }
     if (progressInterval.current) clearInterval(progressInterval.current)
 
-    // Use the DOM element ref if available, fallback to ID string
-    const targetEl = ytContainerRef.current || 'yt-player-hidden'
-    playerRef.current = new window.YT.Player(targetEl, {
+    // YouTube replaces the target element with an iframe on each Player() call.
+    // Re-insert a fresh div inside the stable wrapper so the wrapper stays in DOM.
+    const wrapper = ytContainerRef.current
+    if (!wrapper) return
+    while (wrapper.firstChild) wrapper.removeChild(wrapper.firstChild)
+    const targetDiv = document.createElement('div')
+    wrapper.appendChild(targetDiv)
+
+    // Chrome/Safari require `allow="autoplay"` on the iframe for programmatic
+    // play to emit audio — YT IFrame API does NOT set this by default. Patch
+    // via MutationObserver so we catch the iframe the instant YT inserts it,
+    // before its load event fires.
+    const ytIframeObserver = new MutationObserver((_m, obs) => {
+      const iframe = wrapper.querySelector('iframe')
+      if (iframe) {
+        iframe.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture')
+        iframe.setAttribute('allowfullscreen', 'true')
+        obs.disconnect()
+      }
+    })
+    ytIframeObserver.observe(wrapper, { childList: true, subtree: true })
+
+    playerRef.current = new window.YT.Player(targetDiv, {
       videoId,
       playerVars: {
         autoplay: 1,
@@ -159,6 +185,16 @@ export default function MusicPlayer() {
       },
       events: {
         onReady: (e) => {
+          // Belt + suspenders: ensure iframe has autoplay permission (also set via
+          // MutationObserver above) AND force playVideo() in case the autoplay=1
+          // playerVar was ignored due to browser autoplay policy.
+          try {
+            const iframe = e.target.getIframe && e.target.getIframe()
+            if (iframe && !iframe.hasAttribute('allow')) {
+              iframe.setAttribute('allow', 'autoplay; encrypted-media')
+            }
+            e.target.playVideo()
+          } catch (_err) { /* ignore */ }
           const d = e.target.getDuration()
           setDuration(d)
           setIsPlaying(true)

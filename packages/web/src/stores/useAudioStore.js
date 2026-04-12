@@ -116,12 +116,10 @@ const useAudioStore = create((set, get) => {
     setPlaying: (playing) => {
       set({ isPlaying: playing })
       if (playing) {
-        // When YouTube starts and mode is off, auto-switch to simulated
+        // Only start loop if user has manually enabled an audio mode
+        // Do NOT auto-switch from 'off' — that would drive audio-reactive visuals with fake data
         const mode = get().audioMode
-        if (mode === 'off') {
-          set({ audioMode: 'simulated' })
-        }
-        startLoop()
+        if (mode !== 'off') startLoop()
       } else {
         stopLoop()
       }

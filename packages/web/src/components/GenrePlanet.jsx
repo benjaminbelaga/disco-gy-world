@@ -623,6 +623,8 @@ export default function GenrePlanet({ paused = false }) {
   const selectionPulseRef = useRef(0)
 
   const setActivePlanetTerritory = useStore(s => s.setActivePlanetTerritory)
+  const releases = useStore(s => s.releases)
+  const setPlayerQueue = useStore(s => s.setPlayerQueue)
 
   const onPointerDown = useCallback((e) => {
     const clientX = e.touches ? e.touches[0].clientX : e.clientX
@@ -1004,6 +1006,20 @@ export default function GenrePlanet({ paused = false }) {
             )}
             <span>elevation {(activeTerritory.elevation * 100).toFixed(0)}%</span>
           </div>
+          {(() => {
+            const slug = activeTerritory.slug || activeTerritory.name?.toLowerCase().replace(/\s+/g, '-')
+            const tracks = releases.filter(t => t.youtube && (t.genre === slug || t.genre === activeTerritory.name || t.genres?.includes(slug)))
+            if (!tracks.length) return null
+            return (
+              <button
+                className="territory-panel-play"
+                onClick={() => setPlayerQueue(tracks, 0)}
+                style={{ marginTop: 10, padding: '6px 14px', background: `${activeTerritory.color}22`, border: `1px solid ${activeTerritory.color}66`, borderRadius: 6, color: activeTerritory.color, cursor: 'pointer', fontSize: 12, fontFamily: 'inherit' }}
+              >
+                &#9654; Play {tracks.length} track{tracks.length !== 1 ? 's' : ''}
+              </button>
+            )
+          })()}
         </div>
       )}
     </>

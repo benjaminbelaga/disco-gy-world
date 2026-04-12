@@ -58,6 +58,7 @@ export default function useUrlState() {
     }
 
     const city = params.get('city')
+    const viewExplicit = !!params.get('view')
     if (city) {
       // Defer city selection until cities are loaded
       const trySelectCity = () => {
@@ -67,7 +68,8 @@ export default function useUrlState() {
           c => c.name?.toLowerCase() === city.toLowerCase() || c.slug === city
         )
         if (match) {
-          setViewMode('earth')
+          // Only switch to earth if no explicit view param was given
+          if (!viewExplicit) setViewMode('earth')
           setSelectedCity(match)
           if (match.lat != null && match.lng != null) {
             flyToCity(match.lat, match.lng)

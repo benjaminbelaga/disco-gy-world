@@ -123,9 +123,9 @@ function AudioReactiveBloom() {
   return (
     <EffectComposer>
       <Bloom
-        luminanceThreshold={0.35}
-        luminanceSmoothing={0.7}
-        intensity={1.2}
+        luminanceThreshold={0.6}
+        luminanceSmoothing={0.4}
+        intensity={0.8}
         mipmapBlur
       />
     </EffectComposer>

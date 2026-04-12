@@ -21,16 +21,19 @@
   to { transform: translateY(0); }
 }
 
-/* Hidden iframe — plays audio offscreen */
+/* Hidden iframe — must stay IN viewport (not offscreen) so Chrome doesn't
+   classify the media as invisible and block autoplay. 1px at bottom-right
+   with opacity 0 + pointer-events none is effectively invisible to the user. */
 .music-player-iframe-hidden {
-  position: absolute;
-  left: -9999px;
-  top: -9999px;
+  position: fixed;
+  right: 0;
+  bottom: 0;
   width: 1px;
   height: 1px;
   border: none;
   pointer-events: none;
   opacity: 0;
+  z-index: -1;
 }
 
 /* Collapsed mini-bar */

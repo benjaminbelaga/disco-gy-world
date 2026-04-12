@@ -1,7 +1,40 @@
+import { useEffect, useRef } from 'react'
 import useStore from '../stores/useStore'
 
 function formatGenre(slug) {
   return slug.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+}
+
+// Normalize genre slug for lookup: strip all separators (_, space, -)
+// City genres: "minimal_techno" → "minimaltechno"
+// Track keys:  "minimaltechno"  → "minimaltechno"  ✓ match
+function normalizeSlug(s) {
+  return s.toLowerCase().replace(/[_\s-]/g, '')
+}
+
+// Look up tracks for a genre slug with 3 progressively-broader strategies:
+//   1. Direct key match (fast path)
+//   2. Normalized equality (strips _, space, -): "minimal_techno" = "minimaltechno"
+//   3. Parent-genre fallback: if city genre is "techno" but data only has
+//      "minimaltechno"/"dubtechno"/etc., union all keys that END or START
+//      with the normalized parent ("techno" → minimaltechno, bleeptechno,
+//      technobass). Unlocks 18/49 cities that have only parent-genre tags.
+function findGenreTracks(releases, genre) {
+  if (!releases) return []
+  const direct = releases[genre]
+  if (direct) return direct
+  const norm = normalizeSlug(genre)
+  const keys = Object.keys(releases)
+  const exact = keys.find(k => normalizeSlug(k) === norm)
+  if (exact) return releases[exact]
+  const children = keys.filter(k => {
+    const nk = normalizeSlug(k)
+    return nk !== norm && (nk.endsWith(norm) || nk.startsWith(norm))
+  })
+  if (children.length) {
+    return children.flatMap(k => releases[k] || [])
+  }
+  return []
 }
 
 export default function CityPanel() {
@@ -17,20 +50,11 @@ export default function CityPanel() {
 
   // Collect ALL playable tracks from all city genres
   const cityGenres = selectedCity.genres || []
-  const allKeys = releases ? Object.keys(releases) : []
   const allCityTracks = []
 
   for (const genre of cityGenres) {
-    const tracks = releases[genre]
-      || releases[genre.replace(/_/g, ' ')]
-      || (() => {
-        const normalized = genre.toLowerCase().replace(/_/g, ' ')
-        const match = allKeys.find(k => k.toLowerCase().replace(/_/g, ' ') === normalized)
-        return match ? releases[match] : null
-      })()
-      || []
-
-    for (const t of tracks) {
+    const genreTracks = findGenreTracks(releases, genre)
+    for (const t of genreTracks) {
       if (t.youtube && !allCityTracks.some(x => x.artist === t.artist && x.title === t.title)) {
         allCityTracks.push({ ...t, genre: formatGenre(genre) })
       }
@@ -40,6 +64,18 @@ export default function CityPanel() {
   const isQueuePlaying = currentTrack && playing && allCityTracks.some(
     t => t.artist === currentTrack.artist && t.title === currentTrack.title
   )
+
+  // Auto-play when a new city is selected
+  const prevCityNameRef = useRef(null)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!selectedCity) { prevCityNameRef.current = null; return }
+    if (selectedCity.name === prevCityNameRef.current) return
+    prevCityNameRef.current = selectedCity.name
+    if (allCityTracks.length > 0) {
+      setPlayerQueue(allCityTracks, 0)
+    }
+  }, [selectedCity])
 
   const releaseStr = selectedCity.release_count
     ? selectedCity.release_count.toLocaleString()
@@ -57,20 +93,11 @@ export default function CityPanel() {
 
   function handleGenreClick(genreSlug) {
     const genreName = formatGenre(genreSlug)
-    // Try to find tracks for this genre in releases data
-    const tracks = releases[genreSlug]
-      || releases[genreSlug.replace(/_/g, ' ')]
-      || (() => {
-        const normalized = genreSlug.toLowerCase().replace(/_/g, ' ')
-        const match = (releases ? Object.keys(releases) : []).find(k => k.toLowerCase().replace(/_/g, ' ') === normalized)
-        return match ? releases[match] : null
-      })()
-      || []
+    const tracks = findGenreTracks(releases, genreSlug)
     const playable = tracks.filter(t => t.youtube)
     if (playable.length > 0) {
       setPlayerQueue(playable, 0)
     } else {
-      // No tracks in data — search YouTube via embed fallback
       setCurrentTrack({ artist: genreName, title: `${selectedCity.name} mix`, youtube: null })
     }
   }
@@ -138,6 +165,24 @@ export default function CityPanel() {
               </span>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Empty state when the city has no playable tracks */}
+      {allCityTracks.length === 0 && (
+        <div className="city-panel-empty" style={{
+          marginTop: 12,
+          padding: '10px 12px',
+          borderRadius: 6,
+          background: 'rgba(255,255,255,0.03)',
+          border: '1px dashed rgba(255,255,255,0.12)',
+          color: 'rgba(255,255,255,0.5)',
+          fontSize: 11,
+          fontFamily: "'JetBrains Mono', monospace",
+          lineHeight: 1.5,
+        }}>
+          No playable tracks mapped for this city's genres yet.
+          Click a genre tag above to explore its subgenres.
         </div>
       )}
 
