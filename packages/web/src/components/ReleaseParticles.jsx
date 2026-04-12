@@ -51,8 +51,11 @@ export default function ReleaseParticles({ maxCount }) {
   const yearDirtyRef = useRef(true)
   useEffect(() => { yearDirtyRef.current = true }, [year])
 
+  const rpFrameSkip = useRef(0)
   useFrame((state) => {
     if (!pointsRef.current || !colors || !data) return
+    // Throttle to 30Hz — release particles are ambient, not critical path
+    if (++rpFrameSkip.current % 2) return
 
     const { energy, beat } = useAudioStore.getState()
     const posAttr = pointsRef.current.geometry.getAttribute('position')

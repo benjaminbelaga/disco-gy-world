@@ -564,13 +564,18 @@ function AmbientDust({ genres }) {
     return { positions: pos, velocities: vel, genreColors: col, sizes: sz }
   }, [genres])
 
+  const frameSkip = useRef(0)
   useFrame((state, delta) => {
     if (!pointsRef.current) return
+    // Throttle ambient particle update to ~30Hz (every 2 frames) — particles
+    // drift slowly, 30Hz is imperceptible vs 60Hz and halves main-thread cost.
+    if (++frameSkip.current % 2) return
     const posAttr = pointsRef.current.geometry.getAttribute('position')
     const sizeAttr = pointsRef.current.geometry.getAttribute('size')
     if (!posAttr) return
 
-    const dt = Math.min(delta, 0.05)
+    // Compensate for the halved tick rate by doubling effective dt
+    const dt = Math.min(delta * 2, 0.1)
     const t = state.clock.elapsedTime
     for (let i = 0; i < count; i++) {
       posAttr.array[i * 3] += velocities[i * 3] * dt * 20
