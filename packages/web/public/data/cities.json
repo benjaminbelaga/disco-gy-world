@@ -19,7 +19,50 @@
       ],
       "release_count": 48800,
       "scene_peak": "1980s",
-      "description": "Birthplace of techno — Belleville Three, Underground Resistance"
+      "description": "Birthplace of techno — Belleville Three, Underground Resistance",
+      "top_labels": [
+        {
+          "name": "Motown",
+          "releases": 4090
+        },
+        {
+          "name": "echospace [detroit]",
+          "releases": 556
+        },
+        {
+          "name": "Hermitage Tapes",
+          "releases": 548
+        },
+        {
+          "name": "TRASHFUCK Records",
+          "releases": 538
+        },
+        {
+          "name": "KMS",
+          "releases": 502
+        },
+        {
+          "name": "Planet E",
+          "releases": 441
+        },
+        {
+          "name": "Plus 8 Records",
+          "releases": 415
+        },
+        {
+          "name": "Flamingo Recordings",
+          "releases": 382
+        },
+        {
+          "name": "Detroit Underground",
+          "releases": 342
+        },
+        {
+          "name": "Digital World Audio",
+          "releases": 341
+        }
+      ],
+      "label_count": 435
     },
     {
       "id": "chicago",
@@ -35,7 +78,50 @@
       ],
       "release_count": 70300,
       "scene_peak": "1980s",
-      "description": "Birthplace of house music — Warehouse, Trax Records, DJ International"
+      "description": "Birthplace of house music — Warehouse, Trax Records, DJ International",
+      "top_labels": [
+        {
+          "name": "Wax Trax! Records",
+          "releases": 1151
+        },
+        {
+          "name": "Trax Records",
+          "releases": 844
+        },
+        {
+          "name": "Kranky",
+          "releases": 690
+        },
+        {
+          "name": "Underground Construction",
+          "releases": 631
+        },
+        {
+          "name": "Dance Mania",
+          "releases": 627
+        },
+        {
+          "name": "Systematic (3)",
+          "releases": 553
+        },
+        {
+          "name": "Relief Records",
+          "releases": 457
+        },
+        {
+          "name": "Invisible",
+          "releases": 406
+        },
+        {
+          "name": "The Rocket Record Company",
+          "releases": 400
+        },
+        {
+          "name": "Large Records",
+          "releases": 386
+        }
+      ],
+      "label_count": 733
     },
     {
       "id": "berlin",
@@ -51,7 +137,50 @@
       ],
       "release_count": 152100,
       "scene_peak": "1990s",
-      "description": "Post-reunification techno capital — Tresor, Berghain, Hard Wax"
+      "description": "Post-reunification techno capital — Tresor, Berghain, Hard Wax",
+      "top_labels": [
+        {
+          "name": "Hansa",
+          "releases": 2816
+        },
+        {
+          "name": "Neu Harmony Recordable",
+          "releases": 2043
+        },
+        {
+          "name": "Polystar (3)",
+          "releases": 1910
+        },
+        {
+          "name": "Out Of Line",
+          "releases": 1860
+        },
+        {
+          "name": "!K7 Records",
+          "releases": 1754
+        },
+        {
+          "name": "Iono Music",
+          "releases": 1550
+        },
+        {
+          "name": "Urban",
+          "releases": 1522
+        },
+        {
+          "name": "Tresor",
+          "releases": 1210
+        },
+        {
+          "name": "Low Spirit Recordings",
+          "releases": 1067
+        },
+        {
+          "name": "Get Physical Music",
+          "releases": 1045
+        }
+      ],
+      "label_count": 2127
     },
     {
       "id": "london",
@@ -70,7 +199,50 @@
       ],
       "release_count": 262800,
       "scene_peak": "1990s",
-      "description": "Multi-genre epicenter — pirate radio, Fabric, DMZ, FWD>>"
+      "description": "Multi-genre epicenter — pirate radio, Fabric, DMZ, FWD>>",
+      "top_labels": [
+        {
+          "name": "Virgin",
+          "releases": 34277
+        },
+        {
+          "name": "Parlophone",
+          "releases": 9780
+        },
+        {
+          "name": "Chrysalis",
+          "releases": 7908
+        },
+        {
+          "name": "London Records",
+          "releases": 7299
+        },
+        {
+          "name": "Warp Records",
+          "releases": 5400
+        },
+        {
+          "name": "Philips",
+          "releases": 3998
+        },
+        {
+          "name": "Anjunabeats",
+          "releases": 3823
+        },
+        {
+          "name": "Ninja Tune",
+          "releases": 3730
+        },
+        {
+          "name": "FFRR",
+          "releases": 3658
+        },
+        {
+          "name": "DMC",
+          "releases": 3634
+        }
+      ],
+      "label_count": 3856
     },
     {
       "id": "new_york",
@@ -87,7 +259,50 @@
       ],
       "release_count": 193700,
       "scene_peak": "1970s",
-      "description": "Disco, hip-hop, and electro origins — Studio 54, Paradise Garage, Loft"
+      "description": "Disco, hip-hop, and electro origins — Studio 54, Paradise Garage, Loft",
+      "top_labels": [
+        {
+          "name": "Warner Bros. Records",
+          "releases": 15562
+        },
+        {
+          "name": "Mercury",
+          "releases": 14435
+        },
+        {
+          "name": "Arista",
+          "releases": 12737
+        },
+        {
+          "name": "Atlantic",
+          "releases": 12606
+        },
+        {
+          "name": "Island Records",
+          "releases": 12385
+        },
+        {
+          "name": "Sony Music",
+          "releases": 8890
+        },
+        {
+          "name": "Sire",
+          "releases": 7850
+        },
+        {
+          "name": "Jive",
+          "releases": 6965
+        },
+        {
+          "name": "Elektra",
+          "releases": 5739
+        },
+        {
+          "name": "Nervous Records",
+          "releases": 3698
+        }
+      ],
+      "label_count": 1571
     },
     {
       "id": "amsterdam",
@@ -101,7 +316,50 @@
       ],
       "release_count": 66600,
       "scene_peak": "1990s",
-      "description": "Trance headquarters — Armada, Black Hole, ADE festival"
+      "description": "Trance headquarters — Armada, Black Hole, ADE festival",
+      "top_labels": [
+        {
+          "name": "Armada (4)",
+          "releases": 4568
+        },
+        {
+          "name": "Revealed Recordings",
+          "releases": 2639
+        },
+        {
+          "name": "ID&T",
+          "releases": 974
+        },
+        {
+          "name": "Delsin",
+          "releases": 868
+        },
+        {
+          "name": "Mokum Records",
+          "releases": 805
+        },
+        {
+          "name": "Dekmantel",
+          "releases": 763
+        },
+        {
+          "name": "Rush Hour (4)",
+          "releases": 735
+        },
+        {
+          "name": "Cloud 9 Dance",
+          "releases": 686
+        },
+        {
+          "name": "Shimmering Moods Records",
+          "releases": 623
+        },
+        {
+          "name": "Protocol Recordings",
+          "releases": 586
+        }
+      ],
+      "label_count": 435
     },
     {
       "id": "rotterdam",
@@ -115,7 +373,50 @@
       ],
       "release_count": 27700,
       "scene_peak": "1990s",
-      "description": "Gabber capital — Thunderdome, Rotterdam Terror Corps"
+      "description": "Gabber capital — Thunderdome, Rotterdam Terror Corps",
+      "top_labels": [
+        {
+          "name": "Fokuz Recordings",
+          "releases": 1651
+        },
+        {
+          "name": "Planet Rhythm Records",
+          "releases": 1529
+        },
+        {
+          "name": "Celsius Recordings",
+          "releases": 1129
+        },
+        {
+          "name": "Flashover Recordings",
+          "releases": 627
+        },
+        {
+          "name": "Traxtorm Records",
+          "releases": 620
+        },
+        {
+          "name": "Material Series",
+          "releases": 526
+        },
+        {
+          "name": "PRSPCT Recordings",
+          "releases": 499
+        },
+        {
+          "name": "Rotterdam Records",
+          "releases": 489
+        },
+        {
+          "name": "5th Gear",
+          "releases": 444
+        },
+        {
+          "name": "Mord",
+          "releases": 405
+        }
+      ],
+      "label_count": 208
     },
     {
       "id": "brussels",
@@ -129,7 +430,50 @@
       ],
       "release_count": 25400,
       "scene_peak": "1980s",
-      "description": "EBM and New Beat origins — Front 242, Boccaccio club"
+      "description": "EBM and New Beat origins — Front 242, Boccaccio club",
+      "top_labels": [
+        {
+          "name": "Arcade",
+          "releases": 2899
+        },
+        {
+          "name": "Alfa Matrix",
+          "releases": 2150
+        },
+        {
+          "name": "Play It Again Sam Records",
+          "releases": 754
+        },
+        {
+          "name": "Sub Rosa",
+          "releases": 620
+        },
+        {
+          "name": "Crammed Discs",
+          "releases": 618
+        },
+        {
+          "name": "Universal Music Belgium",
+          "releases": 419
+        },
+        {
+          "name": "Dance Opera",
+          "releases": 368
+        },
+        {
+          "name": "Red Rhino Europe",
+          "releases": 242
+        },
+        {
+          "name": "Who's That Beat?",
+          "releases": 218
+        },
+        {
+          "name": "Ziriguiboom",
+          "releases": 166
+        }
+      ],
+      "label_count": 215
     },
     {
       "id": "sheffield",
@@ -145,7 +489,50 @@
       ],
       "release_count": 26300,
       "scene_peak": "1980s",
-      "description": "Industrial and synth-pop crucible — Warp Records, Cabaret Voltaire"
+      "description": "Industrial and synth-pop crucible — Warp Records, Cabaret Voltaire",
+      "top_labels": [
+        {
+          "name": "Vicious Circle Recordings",
+          "releases": 602
+        },
+        {
+          "name": "Sheffield Tunes",
+          "releases": 527
+        },
+        {
+          "name": "Over The Top",
+          "releases": 374
+        },
+        {
+          "name": "Central Processing Unit",
+          "releases": 308
+        },
+        {
+          "name": "Dust Science Recordings",
+          "releases": 274
+        },
+        {
+          "name": "Tempo Trax",
+          "releases": 224
+        },
+        {
+          "name": "Off Me Nut Records",
+          "releases": 200
+        },
+        {
+          "name": "Neutron Records",
+          "releases": 168
+        },
+        {
+          "name": "Ozone Recordings",
+          "releases": 167
+        },
+        {
+          "name": "Choo Choo Records",
+          "releases": 133
+        }
+      ],
+      "label_count": 119
     },
     {
       "id": "manchester",
@@ -159,7 +546,50 @@
       ],
       "release_count": 35100,
       "scene_peak": "1980s",
-      "description": "Madchester and acid house — Haçienda, Factory Records"
+      "description": "Madchester and acid house — Haçienda, Factory Records",
+      "top_labels": [
+        {
+          "name": "Fireball Recordings",
+          "releases": 429
+        },
+        {
+          "name": "Bush",
+          "releases": 411
+        },
+        {
+          "name": "Garuda",
+          "releases": 401
+        },
+        {
+          "name": "Modern Love",
+          "releases": 392
+        },
+        {
+          "name": "Toolbox Recordings",
+          "releases": 356
+        },
+        {
+          "name": "Grand Central Records",
+          "releases": 328
+        },
+        {
+          "name": "Skam",
+          "releases": 290
+        },
+        {
+          "name": "BFW Recordings",
+          "releases": 257
+        },
+        {
+          "name": "Twisted Nerve",
+          "releases": 253
+        },
+        {
+          "name": "Gizeh Records",
+          "releases": 198
+        }
+      ],
+      "label_count": 302
     },
     {
       "id": "dusseldorf",
@@ -173,7 +603,50 @@
       ],
       "release_count": 20500,
       "scene_peak": "1970s",
-      "description": "Kraftwerk's home — electronic music ground zero"
+      "description": "Kraftwerk's home — electronic music ground zero",
+      "top_labels": [
+        {
+          "name": "Unique",
+          "releases": 251
+        },
+        {
+          "name": "Desolat",
+          "releases": 240
+        },
+        {
+          "name": "Holzplatten",
+          "releases": 145
+        },
+        {
+          "name": "Netrecord-Z",
+          "releases": 118
+        },
+        {
+          "name": "Discordia",
+          "releases": 117
+        },
+        {
+          "name": "Sounds Good Records",
+          "releases": 95
+        },
+        {
+          "name": "Kazumi",
+          "releases": 75
+        },
+        {
+          "name": "Binge Æther Recordings",
+          "releases": 65
+        },
+        {
+          "name": "Electric Lounge",
+          "releases": 48
+        },
+        {
+          "name": "Offen Music",
+          "releases": 48
+        }
+      ],
+      "label_count": 90
     },
     {
       "id": "frankfurt",
@@ -187,7 +660,50 @@
       ],
       "release_count": 35900,
       "scene_peak": "1990s",
-      "description": "Trance epicenter — Sven Väth, Dorian Gray, Omen"
+      "description": "Trance epicenter — Sven Väth, Dorian Gray, Omen",
+      "top_labels": [
+        {
+          "name": "Bellaphon",
+          "releases": 942
+        },
+        {
+          "name": "Cocoon Recordings",
+          "releases": 863
+        },
+        {
+          "name": "Superstar Recordings",
+          "releases": 806
+        },
+        {
+          "name": "Fax +49-69/450464",
+          "releases": 494
+        },
+        {
+          "name": "CLR (2)",
+          "releases": 466
+        },
+        {
+          "name": "Rawax",
+          "releases": 419
+        },
+        {
+          "name": "Playhouse",
+          "releases": 408
+        },
+        {
+          "name": "Klang Elektronik",
+          "releases": 346
+        },
+        {
+          "name": "Cold Transmission Music",
+          "releases": 332
+        },
+        {
+          "name": "Overdose",
+          "releases": 326
+        }
+      ],
+      "label_count": 264
     },
     {
       "id": "bristol",
@@ -201,7 +717,50 @@
       ],
       "release_count": 14900,
       "scene_peak": "1990s",
-      "description": "Trip-hop birthplace — Massive Attack, Portishead, Tricky"
+      "description": "Trip-hop birthplace — Massive Attack, Portishead, Tricky",
+      "top_labels": [
+        {
+          "name": "NRK Sound Division",
+          "releases": 593
+        },
+        {
+          "name": "Hope Recordings",
+          "releases": 365
+        },
+        {
+          "name": "Full Cycle Records",
+          "releases": 325
+        },
+        {
+          "name": "Tech Itch Recordings",
+          "releases": 269
+        },
+        {
+          "name": "Black Acre",
+          "releases": 198
+        },
+        {
+          "name": "Timeisnow",
+          "releases": 193
+        },
+        {
+          "name": "Cup Of Tea Records",
+          "releases": 169
+        },
+        {
+          "name": "Loading Bay Records",
+          "releases": 125
+        },
+        {
+          "name": "Livity Sound",
+          "releases": 120
+        },
+        {
+          "name": "H.E.N.C.H Recordings",
+          "releases": 112
+        }
+      ],
+      "label_count": 224
     },
     {
       "id": "tokyo",
@@ -215,7 +774,50 @@
       ],
       "release_count": 49800,
       "scene_peak": "1980s",
-      "description": "Noise and ambient innovations — Merzbow, Yellow Magic Orchestra"
+      "description": "Noise and ambient innovations — Merzbow, Yellow Magic Orchestra",
+      "top_labels": [
+        {
+          "name": "Victor",
+          "releases": 3062
+        },
+        {
+          "name": "P-Vine Records",
+          "releases": 988
+        },
+        {
+          "name": "Beat Records",
+          "releases": 944
+        },
+        {
+          "name": "Canyon International",
+          "releases": 721
+        },
+        {
+          "name": "King Records",
+          "releases": 647
+        },
+        {
+          "name": "Planet B.E.N. Records",
+          "releases": 602
+        },
+        {
+          "name": "Exit Tunes",
+          "releases": 399
+        },
+        {
+          "name": "Mule Musiq",
+          "releases": 379
+        },
+        {
+          "name": "Farm Records",
+          "releases": 323
+        },
+        {
+          "name": "Home Normal",
+          "releases": 309
+        }
+      ],
+      "label_count": 527
     },
     {
       "id": "goa",
@@ -242,7 +844,50 @@
       ],
       "release_count": 48800,
       "scene_peak": "1980s",
-      "description": "Italo disco capital — Giorgio Moroder, Discomagic Records"
+      "description": "Italo disco capital — Giorgio Moroder, Discomagic Records",
+      "top_labels": [
+        {
+          "name": "Discomagic Records",
+          "releases": 2265
+        },
+        {
+          "name": "Baby Records (2)",
+          "releases": 1792
+        },
+        {
+          "name": "Heimat Der Katastrophe",
+          "releases": 1586
+        },
+        {
+          "name": "X-Energy Records",
+          "releases": 1359
+        },
+        {
+          "name": "CGD",
+          "releases": 1232
+        },
+        {
+          "name": "Asia Records",
+          "releases": 1013
+        },
+        {
+          "name": "Do It Yourself Entertainment",
+          "releases": 991
+        },
+        {
+          "name": "Dig It International",
+          "releases": 975
+        },
+        {
+          "name": "New Music International",
+          "releases": 924
+        },
+        {
+          "name": "Durium",
+          "releases": 902
+        }
+      ],
+      "label_count": 583
     },
     {
       "id": "cologne",
@@ -256,7 +901,50 @@
       ],
       "release_count": 21100,
       "scene_peak": "2000s",
-      "description": "Minimal and microhouse — Kompakt Records, Studio 672"
+      "description": "Minimal and microhouse — Kompakt Records, Studio 672",
+      "top_labels": [
+        {
+          "name": "Kompakt",
+          "releases": 1839
+        },
+        {
+          "name": "D.Max Recordings",
+          "releases": 801
+        },
+        {
+          "name": "Traum Schallplatten",
+          "releases": 541
+        },
+        {
+          "name": "Tiger Records",
+          "releases": 537
+        },
+        {
+          "name": "Trapez",
+          "releases": 395
+        },
+        {
+          "name": "Clubstar",
+          "releases": 328
+        },
+        {
+          "name": "Gang Go Music",
+          "releases": 310
+        },
+        {
+          "name": "X-IT Records",
+          "releases": 265
+        },
+        {
+          "name": "Disco Galaxy Recordings",
+          "releases": 252
+        },
+        {
+          "name": "My Best Friend",
+          "releases": 247
+        }
+      ],
+      "label_count": 252
     },
     {
       "id": "johannesburg",
@@ -269,7 +957,50 @@
       ],
       "release_count": 5100,
       "scene_peak": "2010s",
-      "description": "Afro house and amapiano — Black Coffee, Watergate"
+      "description": "Afro house and amapiano — Black Coffee, Watergate",
+      "top_labels": [
+        {
+          "name": "RPM Dance",
+          "releases": 218
+        },
+        {
+          "name": "David Gresham Records",
+          "releases": 207
+        },
+        {
+          "name": "Soul Candi",
+          "releases": 150
+        },
+        {
+          "name": "Gallo Record Company",
+          "releases": 130
+        },
+        {
+          "name": "House Afrika Records",
+          "releases": 104
+        },
+        {
+          "name": "Tusk Music",
+          "releases": 97
+        },
+        {
+          "name": "Just Music (7)",
+          "releases": 92
+        },
+        {
+          "name": "Principal Records",
+          "releases": 91
+        },
+        {
+          "name": "Universal Music South Africa",
+          "releases": 74
+        },
+        {
+          "name": "Grooved Music",
+          "releases": 71
+        }
+      ],
+      "label_count": 68
     },
     {
       "id": "brighton",
@@ -282,7 +1013,50 @@
       ],
       "release_count": 21100,
       "scene_peak": "1990s",
-      "description": "Big beat headquarters — Fatboy Slim, Skint Records"
+      "description": "Big beat headquarters — Fatboy Slim, Skint Records",
+      "top_labels": [
+        {
+          "name": "Skint",
+          "releases": 1717
+        },
+        {
+          "name": "Tru Thoughts",
+          "releases": 878
+        },
+        {
+          "name": "Discover",
+          "releases": 750
+        },
+        {
+          "name": "Loaded Records",
+          "releases": 555
+        },
+        {
+          "name": "Jalapeno Records",
+          "releases": 488
+        },
+        {
+          "name": "Freshly Squeezed Music",
+          "releases": 328
+        },
+        {
+          "name": "Mr Bongo",
+          "releases": 281
+        },
+        {
+          "name": "Catskills Records",
+          "releases": 252
+        },
+        {
+          "name": "Marine Parade",
+          "releases": 251
+        },
+        {
+          "name": "Eve Records",
+          "releases": 206
+        }
+      ],
+      "label_count": 151
     },
     {
       "id": "glasgow",
@@ -296,7 +1070,50 @@
       ],
       "release_count": 17600,
       "scene_peak": "1990s",
-      "description": "Scottish techno and post-punk — Soma, Sub Club, Optimo"
+      "description": "Scottish techno and post-punk — Soma, Sub Club, Optimo",
+      "top_labels": [
+        {
+          "name": "Soma Quality Recordings",
+          "releases": 1864
+        },
+        {
+          "name": "Glasgow Underground",
+          "releases": 610
+        },
+        {
+          "name": "Evolution Records",
+          "releases": 513
+        },
+        {
+          "name": "Limbo Records",
+          "releases": 401
+        },
+        {
+          "name": "Darkside Unleashed",
+          "releases": 379
+        },
+        {
+          "name": "Sleaze Records",
+          "releases": 273
+        },
+        {
+          "name": "Welcome To Clydebank",
+          "releases": 265
+        },
+        {
+          "name": "Motormouth Recordz",
+          "releases": 247
+        },
+        {
+          "name": "Aria Digital",
+          "releases": 192
+        },
+        {
+          "name": "Optimo Music",
+          "releases": 176
+        }
+      ],
+      "label_count": 219
     },
     {
       "id": "paris",
@@ -317,14 +1134,38 @@
       "scene_peak": "1990s",
       "description": "French touch — Daft Punk, Ed Banger, Roule, Kitsuné, Versatile",
       "top_labels": [
-        { "name": "Ed Banger Records", "releases": 320 },
-        { "name": "Roule", "releases": 45 },
-        { "name": "Crydamoure", "releases": 52 },
-        { "name": "Versatile Records", "releases": 280 },
-        { "name": "Record Makers", "releases": 210 },
-        { "name": "Kitsuné", "releases": 380 },
-        { "name": "InFiné", "releases": 190 },
-        { "name": "Bromance Records", "releases": 85 }
+        {
+          "name": "Ed Banger Records",
+          "releases": 320
+        },
+        {
+          "name": "Roule",
+          "releases": 45
+        },
+        {
+          "name": "Crydamoure",
+          "releases": 52
+        },
+        {
+          "name": "Versatile Records",
+          "releases": 280
+        },
+        {
+          "name": "Record Makers",
+          "releases": 210
+        },
+        {
+          "name": "Kitsuné",
+          "releases": 380
+        },
+        {
+          "name": "InFiné",
+          "releases": 190
+        },
+        {
+          "name": "Bromance Records",
+          "releases": 85
+        }
       ],
       "label_count": 8
     },
@@ -340,7 +1181,50 @@
       ],
       "release_count": 8500,
       "scene_peak": "2000s",
-      "description": "Psytrance and minimal techno — Infected Mushroom, The Block"
+      "description": "Psytrance and minimal techno — Infected Mushroom, The Block",
+      "top_labels": [
+        {
+          "name": "Phonokol",
+          "releases": 516
+        },
+        {
+          "name": "Sacred Technology",
+          "releases": 336
+        },
+        {
+          "name": "Dropzone Records",
+          "releases": 235
+        },
+        {
+          "name": "Buygore",
+          "releases": 167
+        },
+        {
+          "name": "Stereo Society",
+          "releases": 139
+        },
+        {
+          "name": "Krembo Records",
+          "releases": 127
+        },
+        {
+          "name": "Bounce Recordings (2)",
+          "releases": 121
+        },
+        {
+          "name": "Beat Boutique (2)",
+          "releases": 118
+        },
+        {
+          "name": "IMP Records (3)",
+          "releases": 107
+        },
+        {
+          "name": "Supplement Facts",
+          "releases": 90
+        }
+      ],
+      "label_count": 59
     },
     {
       "id": "lisbon",
@@ -354,7 +1238,50 @@
       ],
       "release_count": 8000,
       "scene_peak": "2010s",
-      "description": "Rising techno scene — Lux Frágil, Village Underground"
+      "description": "Rising techno scene — Lux Frágil, Village Underground",
+      "top_labels": [
+        {
+          "name": "Naked Lunch",
+          "releases": 570
+        },
+        {
+          "name": "Trau-Ma",
+          "releases": 217
+        },
+        {
+          "name": "Discotexas",
+          "releases": 158
+        },
+        {
+          "name": "Enchufada",
+          "releases": 140
+        },
+        {
+          "name": "Toxic Recordings (3)",
+          "releases": 117
+        },
+        {
+          "name": "Príncipe",
+          "releases": 89
+        },
+        {
+          "name": "Lisbon Lux Records",
+          "releases": 88
+        },
+        {
+          "name": "Grey City Records",
+          "releases": 82
+        },
+        {
+          "name": "To Be Records (2)",
+          "releases": 76
+        },
+        {
+          "name": "AVNL Records",
+          "releases": 75
+        }
+      ],
+      "label_count": 114
     },
     {
       "id": "tbilisi",
@@ -367,7 +1294,50 @@
       ],
       "release_count": 1200,
       "scene_peak": "2010s",
-      "description": "Techno as resistance — Bassiani, Café Gallery"
+      "description": "Techno as resistance — Bassiani, Café Gallery",
+      "top_labels": [
+        {
+          "name": "†Corporis Mysterium†",
+          "releases": 245
+        },
+        {
+          "name": "CES Records (3)",
+          "releases": 27
+        },
+        {
+          "name": "Bassiani",
+          "releases": 27
+        },
+        {
+          "name": "Objection Tbilisi",
+          "releases": 19
+        },
+        {
+          "name": "Concrete Tbilisi",
+          "releases": 19
+        },
+        {
+          "name": "S H I S H I",
+          "releases": 15
+        },
+        {
+          "name": "Murder Records (5)",
+          "releases": 13
+        },
+        {
+          "name": "Fantastic Planet",
+          "releases": 11
+        },
+        {
+          "name": "KHIDI",
+          "releases": 11
+        },
+        {
+          "name": "Kapanadze Recordings",
+          "releases": 9
+        }
+      ],
+      "label_count": 32
     },
     {
       "id": "kingston",
@@ -426,7 +1396,50 @@
       ],
       "release_count": 9700,
       "scene_peak": "2010s",
-      "description": "Latin America's rising scene — NRMAL festival"
+      "description": "Latin America's rising scene — NRMAL festival",
+      "top_labels": [
+        {
+          "name": "Sequencer Label",
+          "releases": 249
+        },
+        {
+          "name": "Umor Rex",
+          "releases": 170
+        },
+        {
+          "name": "Evolution Works",
+          "releases": 150
+        },
+        {
+          "name": "Popol Vuh Records",
+          "releases": 115
+        },
+        {
+          "name": "Secuencias Temporales",
+          "releases": 95
+        },
+        {
+          "name": "Warner Music Mexico",
+          "releases": 87
+        },
+        {
+          "name": "Maya Shakti Records",
+          "releases": 46
+        },
+        {
+          "name": "Sony Music Entertainment México, S.A. De C.V.",
+          "releases": 43
+        },
+        {
+          "name": "Kupuri Music",
+          "releases": 42
+        },
+        {
+          "name": "KB Sound Collective",
+          "releases": 39
+        }
+      ],
+      "label_count": 67
     },
     {
       "id": "seoul",
@@ -440,7 +1453,50 @@
       ],
       "release_count": 9900,
       "scene_peak": "2010s",
-      "description": "Asia's growing club scene — Cakeshop, Faust"
+      "description": "Asia's growing club scene — Cakeshop, Faust",
+      "top_labels": [
+        {
+          "name": "Seoul Records",
+          "releases": 501
+        },
+        {
+          "name": "S.M. Entertainment",
+          "releases": 495
+        },
+        {
+          "name": "YG Entertainment",
+          "releases": 248
+        },
+        {
+          "name": "JYP Entertainment",
+          "releases": 215
+        },
+        {
+          "name": "Moon Records (25)",
+          "releases": 119
+        },
+        {
+          "name": "Warner Music Korea",
+          "releases": 101
+        },
+        {
+          "name": "Sung Eum Limited",
+          "releases": 92
+        },
+        {
+          "name": "Yedang Entertainment Company",
+          "releases": 43
+        },
+        {
+          "name": "Loen Entertainment",
+          "releases": 41
+        },
+        {
+          "name": "Artscope",
+          "releases": 41
+        }
+      ],
+      "label_count": 72
     },
     {
       "id": "melbourne",
@@ -454,7 +1510,50 @@
       ],
       "release_count": 25800,
       "scene_peak": "2000s",
-      "description": "Australia's electronic capital — Revolver, Lounge"
+      "description": "Australia's electronic capital — Revolver, Lounge",
+      "top_labels": [
+        {
+          "name": "405 Recordings",
+          "releases": 268
+        },
+        {
+          "name": "Shock (2)",
+          "releases": 251
+        },
+        {
+          "name": "Festival Mushroom Records",
+          "releases": 224
+        },
+        {
+          "name": "Extreme",
+          "releases": 211
+        },
+        {
+          "name": "clipp.art",
+          "releases": 155
+        },
+        {
+          "name": "Vicious Vinyl",
+          "releases": 151
+        },
+        {
+          "name": "A Colourful Storm",
+          "releases": 139
+        },
+        {
+          "name": "Bellarine Recordings",
+          "releases": 137
+        },
+        {
+          "name": "Liberation Music",
+          "releases": 131
+        },
+        {
+          "name": "Balance Music (3)",
+          "releases": 128
+        }
+      ],
+      "label_count": 306
     },
     {
       "id": "mumbai",
@@ -468,7 +1567,50 @@
       ],
       "release_count": 1800,
       "scene_peak": "2010s",
-      "description": "India's electronic frontier — Magnetic Fields festival"
+      "description": "India's electronic frontier — Magnetic Fields festival",
+      "top_labels": [
+        {
+          "name": "Profound Records",
+          "releases": 154
+        },
+        {
+          "name": "Times Music",
+          "releases": 120
+        },
+        {
+          "name": "Tips",
+          "releases": 58
+        },
+        {
+          "name": "Pralayah Records",
+          "releases": 24
+        },
+        {
+          "name": "Temple Twisters Records",
+          "releases": 17
+        },
+        {
+          "name": "Next Generation Music",
+          "releases": 16
+        },
+        {
+          "name": "Super Metro Music",
+          "releases": 13
+        },
+        {
+          "name": "Rajneesh Foundation",
+          "releases": 13
+        },
+        {
+          "name": "Digital Distortion Records",
+          "releases": 11
+        },
+        {
+          "name": "Vale Music (India) PVT. LTD.",
+          "releases": 8
+        }
+      ],
+      "label_count": 24
     },
     {
       "id": "copenhagen",
@@ -482,7 +1624,50 @@
       ],
       "release_count": 7800,
       "scene_peak": "2010s",
-      "description": "Nordic club culture — Culture Box, Strøm festival"
+      "description": "Nordic club culture — Culture Box, Strøm festival",
+      "top_labels": [
+        {
+          "name": "Iboga Records",
+          "releases": 1554
+        },
+        {
+          "name": "Remixed Records",
+          "releases": 573
+        },
+        {
+          "name": "Big Star Records",
+          "releases": 420
+        },
+        {
+          "name": "Posh Isolation",
+          "releases": 375
+        },
+        {
+          "name": "Janushoved",
+          "releases": 257
+        },
+        {
+          "name": "IDP Records",
+          "releases": 235
+        },
+        {
+          "name": "Crunchy Frog",
+          "releases": 163
+        },
+        {
+          "name": "Tartelet Records",
+          "releases": 153
+        },
+        {
+          "name": "Fallen Metropolis",
+          "releases": 151
+        },
+        {
+          "name": "Copenhagen Records",
+          "releases": 141
+        }
+      ],
+      "label_count": 196
     },
     {
       "id": "warsaw",
@@ -496,7 +1681,50 @@
       ],
       "release_count": 17200,
       "scene_peak": "2010s",
-      "description": "Eastern European techno hub — Smolna, Jasna 1"
+      "description": "Eastern European techno hub — Smolna, Jasna 1",
+      "top_labels": [
+        {
+          "name": "Soundwaves",
+          "releases": 723
+        },
+        {
+          "name": "Soundteller Records",
+          "releases": 214
+        },
+        {
+          "name": "BMG Poland",
+          "releases": 175
+        },
+        {
+          "name": "U Know Me Records",
+          "releases": 169
+        },
+        {
+          "name": "Monotype Records",
+          "releases": 120
+        },
+        {
+          "name": "Fluttering Dragon",
+          "releases": 103
+        },
+        {
+          "name": "Recognition",
+          "releases": 96
+        },
+        {
+          "name": "Acid Works",
+          "releases": 95
+        },
+        {
+          "name": "Pointless Geometry",
+          "releases": 76
+        },
+        {
+          "name": "Pawlacz Perski Tapes",
+          "releases": 66
+        }
+      ],
+      "label_count": 94
     },
     {
       "id": "kyiv",
@@ -541,7 +1769,50 @@
       ],
       "release_count": 12000,
       "scene_peak": "2010s",
-      "description": "Thriving techno and psychedelic scene — Klik Records, Tantana, Babylon venue"
+      "description": "Thriving techno and psychedelic scene — Klik Records, Tantana, Babylon venue",
+      "top_labels": [
+        {
+          "name": "Neu Gravity",
+          "releases": 397
+        },
+        {
+          "name": "Bosphorus Underground Recordings",
+          "releases": 299
+        },
+        {
+          "name": "Doğan Music Company",
+          "releases": 212
+        },
+        {
+          "name": "Funkfield Recordings",
+          "releases": 136
+        },
+        {
+          "name": "İstanbul Plak",
+          "releases": 117
+        },
+        {
+          "name": "Doublemoon",
+          "releases": 79
+        },
+        {
+          "name": "Ventuno Recordings",
+          "releases": 62
+        },
+        {
+          "name": "Ahura Mazda Recordings NITRO",
+          "releases": 43
+        },
+        {
+          "name": "Tamar Records",
+          "releases": 41
+        },
+        {
+          "name": "Ters Music",
+          "releases": 37
+        }
+      ],
+      "label_count": 67
     },
     {
       "id": "beirut",
@@ -556,7 +1827,50 @@
       ],
       "release_count": 3500,
       "scene_peak": "2010s",
-      "description": "Vibrant underground — B018, Ruptured, Tunefork Records"
+      "description": "Vibrant underground — B018, Ruptured, Tunefork Records",
+      "top_labels": [
+        {
+          "name": "Sensual Bliss Recordings",
+          "releases": 122
+        },
+        {
+          "name": "Nahawand Recordings",
+          "releases": 118
+        },
+        {
+          "name": "Per-vurt Records",
+          "releases": 51
+        },
+        {
+          "name": "Ruptured",
+          "releases": 40
+        },
+        {
+          "name": "Vibe Lebanon Records",
+          "releases": 28
+        },
+        {
+          "name": "Fantôme de Nuit",
+          "releases": 11
+        },
+        {
+          "name": "Al Maslakh",
+          "releases": 10
+        },
+        {
+          "name": "TDO Records",
+          "releases": 10
+        },
+        {
+          "name": "Ministry Of Dance Arabia",
+          "releases": 9
+        },
+        {
+          "name": "System Revival Recordings",
+          "releases": 8
+        }
+      ],
+      "label_count": 15
     },
     {
       "id": "cairo",
