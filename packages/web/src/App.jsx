@@ -2,7 +2,6 @@ import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { handleCallback } from './lib/discogsApi'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls, AdaptiveDpr, Preload } from '@react-three/drei'
-import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import * as THREE from 'three'
 import useStore from './stores/useStore'
 // import useAudioStore from './stores/useAudioStore' // Disabled — soundscape system off
@@ -21,6 +20,9 @@ import ShortcutHelp from './components/ShortcutHelp'
 import Onboarding from './components/Onboarding'
 const EarthGlobe = lazy(() => import('./components/EarthGlobe'))
 const GenrePlanet = lazy(() => import('./components/GenrePlanet'))
+// Bloom + postprocessing stack — desktop-only, lazy-loaded to keep the
+// 397 KB gzip chunk out of mobile first-paint (audit AGENT-E).
+const AudioReactiveBloom = lazy(() => import('./components/AudioReactiveBloom'))
 // Phase 3 components — lazy-loaded. None of these are needed until the user
 // has interacted for 2min or completes onboarding → saves ~250KB off the
 // initial index chunk (pulls d3/maath/icon helpers). See perf audit.
@@ -124,20 +126,6 @@ function CameraAnimator({ controlsRef }) {
   return null
 }
 
-// Bloom — static values (soundscape audio-reactivity disabled)
-function AudioReactiveBloom() {
-  return (
-    <EffectComposer>
-      <Bloom
-        luminanceThreshold={0.35}
-        luminanceSmoothing={0.5}
-        intensity={0.55}
-        mipmapBlur={false}
-      />
-    </EffectComposer>
-  )
-}
-
 function Scene({ isMobile }) {
   const controlsRef = useRef()
 
@@ -177,7 +165,11 @@ function Scene({ isMobile }) {
       />
 
       <CameraAnimator controlsRef={controlsRef} />
-      {!isMobile && <AudioReactiveBloom />}
+      {!isMobile && (
+        <Suspense fallback={null}>
+          <AudioReactiveBloom />
+        </Suspense>
+      )}
 
       <AdaptiveDpr pixelated />
       <Preload all />
