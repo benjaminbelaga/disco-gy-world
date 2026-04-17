@@ -33,7 +33,7 @@ function Ground() {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]}>
       <planeGeometry args={[300, 300]} />
-      <meshLambertMaterial color="#060610" />
+      <meshLambertMaterial color="#292524" />
     </mesh>
   )
 }
@@ -42,7 +42,7 @@ function Ground() {
 function Grid() {
   return (
     <gridHelper
-      args={[200, 80, '#1a1a2e', '#12121f']}
+      args={[200, 80, '#2c2724', '#1c1917']}
       position={[0, -1.9, 0]}
     />
   )
