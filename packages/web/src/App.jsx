@@ -143,18 +143,18 @@ function Scene({ isMobile }) {
 
   return (
     <>
-      {/* Nebula-dusk palette (no pitch black) + extended fog far for peripheral genre visibility */}
-      <color attach="background" args={['#0e1220']} />
-      <fog attach="fog" args={['#141826', 180, 500]} />
-      <ambientLight intensity={0.5} color="#8888cc" />
-      {/* Main overhead light — cooler blue */}
-      <pointLight position={[0, 50, 0]} intensity={0.8} color="#4466ff" />
-      {/* Warm accent from side */}
-      <pointLight position={[30, 20, -30]} intensity={0.4} color="#ff6644" />
-      {/* Rim light from behind camera — subtle fill */}
-      <directionalLight position={[0, 10, 60]} intensity={0.15} color="#8899cc" />
-      {/* Low fill from below for depth */}
-      <pointLight position={[0, -10, 0]} intensity={0.08} color="#221133" />
+      {/* Night Atlas palette (audit 2026-04-17, Agent C) — Stone 900 warm-black + horizon-match fog */}
+      <color attach="background" args={['#1c1917']} />
+      <fog attach="fog" args={['#1c1917', 180, 500]} />
+      <ambientLight intensity={0.55} color="#a89888" />
+      {/* Main overhead light — warm gold */}
+      <pointLight position={[0, 50, 0]} intensity={0.8} color="#c4956a" />
+      {/* Warm accent from side — terracotta */}
+      <pointLight position={[30, 20, -30]} intensity={0.4} color="#a86b47" />
+      {/* Rim light from behind camera — sand */}
+      <directionalLight position={[0, 10, 60]} intensity={0.18} color="#d4a574" />
+      {/* Low fill from below for depth — bronze */}
+      <pointLight position={[0, -10, 0]} intensity={0.1} color="#2a1d15" />
 
       <Stars count={isMobile ? 500 : 3000} />
       <ReleaseParticles maxCount={isMobile ? 500 : undefined} />
