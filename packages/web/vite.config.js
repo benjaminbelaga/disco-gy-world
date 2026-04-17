@@ -117,6 +117,12 @@ export default defineConfig({
     exclude: ['e2e/**', 'node_modules/**'],
   },
   build: {
+    // Exclude postfx from modulepreload — it's desktop-only and lazy-loaded
+    // via React.lazy() in App.jsx, so preloading forces mobile to download
+    // ~397 KB gzip it will never execute (audit 2026-04-17 AGENT-E).
+    modulePreload: {
+      resolveDependencies: (_filename, deps) => deps.filter((d) => !d.includes('postfx-')),
+    },
     rollupOptions: {
       output: {
         manualChunks(id) {
