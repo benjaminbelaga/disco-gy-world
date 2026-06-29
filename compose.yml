@@ -1,0 +1,32 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: packages/api/Dockerfile
+    env_file: .env
+    environment:
+      DISCOWORLD_ORIGIN: http://localhost:5173
+    volumes:
+      # Persist the auto-created users DB. Drop a pipeline-built
+      # discoworld.db here to enable search / recommendations / releases.
+      - ./data:/app/data
+    ports:
+      - "8787:8787"          # direct API + /api/docs access (optional)
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0) if urllib.request.urlopen('http://localhost:8787/api/health').status==200 else sys.exit(1)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  web:
+    build:
+      context: .
+      dockerfile: packages/web/Dockerfile
+    depends_on:
+      api:
+        condition: service_started
+    ports:
+      - "5173:80"
+    restart: unless-stopped
