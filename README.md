@@ -72,6 +72,32 @@ python3 -m uvicorn packages.api.main:app --port 8000
 # DISCOGS_CONSUMER_KEY, DISCOGS_CONSUMER_SECRET, DISCOGS_TOKEN
 ```
 
+### Run with Docker (one command)
+
+For a zero-setup local environment, use Docker Compose instead of installing
+Node and Python yourself:
+
+```bash
+cp .env.example .env          # optional Discogs keys; core 3D needs none
+docker compose up --build
+# Web → http://localhost:5173   API → http://localhost:8787/api/docs
+```
+
+This builds two containers:
+
+| Service | Stack | Port | Notes |
+|---------|-------|------|-------|
+| `web`   | `vite build` → nginx | `5173` → 80 | Serves the SPA; proxies `/api` → the `api` service |
+| `api`   | FastAPI / uvicorn | `8787` | Bundles `world.json` + static datasets |
+
+Mount a pipeline-built `data/discoworld.db` (via the `./data` volume) to enable
+search, recommendations, and collection features; without it those routes fall
+back to in-memory genre data.
+
+> **Local development only.** This Compose setup is for running the app on your
+> machine — it is **not** the production deployment path. Production is deployed
+> via `discoworld-business/deploy/deploy.sh` (rsync + PM2), not Docker.
+
 > **Note:** The 3D world loads from pre-built static JSON files in `packages/web/public/data/`. No database needed for basic exploration. The SQLite DB is only needed for search, recommendations, and collection features.
 
 ### Building the database (optional)
