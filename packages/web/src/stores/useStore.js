@@ -263,6 +263,12 @@ const useStore = create((set, get) => ({
   // Onboarding progressive disclosure
   onboardingStep: (() => {
     try {
+      // Dev bypass: skip the welcome/login wall on local access. Covers both
+      // `vite dev` and the docker (prod build) stack served on localhost.
+      const host = typeof window !== 'undefined' ? window.location.hostname : ''
+      const isLocal = import.meta.env.DEV ||
+        /^(localhost|127\.0\.0\.1|0\.0\.0\.0|::1|\[::1\])$/.test(host)
+      if (isLocal) return 'complete'
       return localStorage.getItem('discoworld-onboarded') ? 'complete' : 'vibe'
     } catch { return 'vibe' }
   })(),
