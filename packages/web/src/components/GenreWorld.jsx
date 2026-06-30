@@ -344,6 +344,9 @@ function GenreInstances({ genres, onClickGenre, onHoverGenre, activeSlug, hovere
       onPointerOut={() => onHoverGenre(null)}
     >
       <meshStandardMaterial
+        transparent
+        opacity={0.3}
+        depthWrite={false}
         toneMapped={false}
         roughness={0.25}
         metalness={0.05}
