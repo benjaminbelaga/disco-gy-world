@@ -6,10 +6,11 @@
 //   - LABEL_TOKENS : audit-2026/EXECUTION-PLAN.md §PR-12B
 //   - TIER_LOD     : original inline values from commit 9a2b131 (PR #11)
 export const LABEL_TOKENS = {
-  // Spec named Medium/SemiBold .woff, but only the variable woff2 ships in
-  // public/fonts — point at what actually exists so labels don't 404.
-  font: '/fonts/SpaceGrotesk-Variable.woff2',
-  fontBold: '/fonts/SpaceGrotesk-Variable.woff2',
+  // Must be a troika-three-text-parseable format (ttf/otf/woff) — NOT woff2,
+  // which troika cannot decode ("woff2 fonts not supported"), breaking the
+  // genre labels and blanking the GenreWorld scene. Use the shipped TTF.
+  font: '/fonts/SpaceGrotesk-Variable.ttf',
+  fontBold: '/fonts/SpaceGrotesk-Variable.ttf',
   tiers: {
     0: { size: 2.2, weight: 'bold', tracking: 0.22, case: 'upper', colorMode: 'biome' },
     1: { size: 1.6, weight: 'medium', tracking: 0, case: 'sentence', colorMode: 'genre' },
