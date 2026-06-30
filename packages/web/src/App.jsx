@@ -263,6 +263,7 @@ export default function App() {
   const setReleases = useStore(s => s.setReleases)
   const setLinks = useStore(s => s.setLinks)
   const setCitiesData = useStore(s => s.setCitiesData)
+  const setActiveGenre = useStore(s => s.setActiveGenre)
   const viewMode = useStore(s => s.viewMode)
   const { isFullUI, isVibe, midUIVisible, minimapVisible } = useProgressiveUI()
   const isMobile = useIsMobile()
@@ -434,6 +435,7 @@ export default function App() {
           <ErrorBoundary name="Canvas">
             <Canvas
               camera={{ position: [0, 50, 85], fov: 50, near: 0.1, far: 500 }}
+              onPointerMissed={() => setActiveGenre(null)}
               dpr={isMobile ? [1, 1.5] : [1, 1.75]}
               gl={{
                 antialias: false,

@@ -17,16 +17,6 @@ const _sphere = new THREE.SphereGeometry(1, 24, 24)
 const _wireframeSphere = new THREE.SphereGeometry(1, 12, 12)
 const _color = new THREE.Color()
 const _obj = new THREE.Object3D()
-// Module-level mutable color buffer for instanced mesh (avoids ref-during-render lint)
-let _instanceColors = null
-let _instanceColorsCount = 0
-function getInstanceColors(count) {
-  if (_instanceColorsCount !== count) {
-    _instanceColors = new Float32Array(count * 3)
-    _instanceColorsCount = count
-  }
-  return _instanceColors
-}
 
 // Ground plane — dark reflective surface
 // Shadow casters/receivers not in use (no shadowMap enabled on renderer);
@@ -191,7 +181,6 @@ function GenreWireframes({ genres, activeSlug, hoveredSlug }) {
     const t = state.clock.elapsedTime
     const { bass } = useAudioStore.getState()
     const bassPulse = 1 + bass * 0.15
-    const colors = getInstanceColors(count)
 
     for (let i = 0; i < count; i++) {
       const g = genres[i]
@@ -216,27 +205,16 @@ function GenreWireframes({ genres, activeSlug, hoveredSlug }) {
       const opacity = visible ? Math.min(1, (year - g.year + 5) / 10) : 0
       const boost = isActive ? 1.5 : isHovered ? 1.0 : 0.5
       _color.set(g.color).multiplyScalar(boost * opacity)
-      colors[i * 3] = _color.r
-      colors[i * 3 + 1] = _color.g
-      colors[i * 3 + 2] = _color.b
+      meshRef.current.setColorAt(i, _color)
     }
     meshRef.current.instanceMatrix.needsUpdate = true
-    const attr = meshRef.current.geometry.getAttribute('instanceColor')
-    if (attr) {
-      attr.array.set(colors)
-      attr.needsUpdate = true
-    }
+    if (meshRef.current.instanceColor) meshRef.current.instanceColor.needsUpdate = true
   })
 
   return (
     <instancedMesh ref={meshRef} args={[_wireframeSphere, undefined, count]} raycast={() => null}>
-      <instancedBufferAttribute
-        attach="geometry-attributes-instanceColor"
-        args={[getInstanceColors(count), 3]}
-      />
       <meshBasicMaterial
         wireframe
-        vertexColors
         transparent
         opacity={0.12}
         depthWrite={false}
@@ -296,7 +274,6 @@ function GenreInstances({ genres, onClickGenre, onHoverGenre, activeSlug, hovere
     if (!meshRef.current) return
     const t = state.clock.elapsedTime
     const { bass, beat } = useAudioStore.getState()
-    const colors = getInstanceColors(count)
     const hasCollection = showOverlay && Object.keys(collectionGenres).length > 0
 
     // Bass pulse: subtle 1.0-1.15x range
@@ -338,19 +315,16 @@ function GenreInstances({ genres, onClickGenre, onHoverGenre, activeSlug, hovere
       const dimFactor = hasCollection && !inCollection && !isActive && !isHovered ? 0.55 : 1
       const boost = isActive ? 3.0 : isHovered ? 2.0 : 1.0
       _color.set(g.color).multiplyScalar(boost * opacity * dimFactor)
-      colors[i * 3] = _color.r
-      colors[i * 3 + 1] = _color.g
-      colors[i * 3 + 2] = _color.b
+      meshRef.current.setColorAt(i, _color)
     }
 
     meshRef.current.instanceMatrix.needsUpdate = true
 
-    // Update instance colours
-    const attr = meshRef.current.geometry.getAttribute('instanceColor')
-    if (attr) {
-      attr.array.set(colors)
-      attr.needsUpdate = true
-    }
+    // Per-instance colour reaches the GPU via mesh.instanceColor +
+    // USE_INSTANCING_COLOR (auto-set once instanceColor is non-null).
+    // setColorAt allocates instanceColor on first call; a geometry
+    // attribute named "instanceColor" is inert and was rendering black.
+    if (meshRef.current.instanceColor) meshRef.current.instanceColor.needsUpdate = true
   })
 
   // Raycast helper — find which instance was hit
@@ -369,12 +343,7 @@ function GenreInstances({ genres, onClickGenre, onHoverGenre, activeSlug, hovere
       onPointerOver={(e) => handlePointer(e, onHoverGenre)}
       onPointerOut={() => onHoverGenre(null)}
     >
-      <instancedBufferAttribute
-        attach="geometry-attributes-instanceColor"
-        args={[getInstanceColors(count), 3]}
-      />
       <meshStandardMaterial
-        vertexColors
         toneMapped={false}
         roughness={0.25}
         metalness={0.05}
@@ -435,7 +404,7 @@ function HoverTooltip({ genre }) {
 // filter silently dropped ~130 genres and erased whole regions (Ambient,
 // Electro). Replaced with a 3-tier system where all genres are eligible;
 // tier determines base size and fade-out distance.
-function GenreLabels({ genres, activeSlug }) {
+function GenreLabels({ genres, activeSlug, onSelect }) {
   const year = useStore(s => s.year)
 
   const { labelGenres, maxTrackCount } = useMemo(() => {
@@ -465,6 +434,7 @@ function GenreLabels({ genres, activeSlug }) {
             genre={g}
             isActive={g.slug === activeSlug}
             maxTrackCount={maxTrackCount}
+            onSelect={onSelect}
           />
         )
       })}
@@ -476,7 +446,7 @@ function GenreLabels({ genres, activeSlug }) {
 // Each entry: { ref, tier, trackCount, position: THREE.Vector3, isActive }.
 const _labelRegistry = new Set()
 
-function GenreLabel({ genre, isActive, maxTrackCount }) {
+function GenreLabel({ genre, isActive, maxTrackCount, onSelect }) {
   const textRef = useRef()
   const tier = genre.tier || 2
   const lod = TIER_LOD[tier]
@@ -513,6 +483,9 @@ function GenreLabel({ genre, isActive, maxTrackCount }) {
         color={isActive ? GOLD_USER_ACCENT : genre.color}
         anchorX="center"
         anchorY="bottom"
+        onClick={(e) => { e.stopPropagation(); onSelect?.(genre) }}
+        onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer' }}
+        onPointerOut={() => { document.body.style.cursor = 'auto' }}
         fillOpacity={0.95}
         outlineWidth={LABEL_TOKENS.outline.width}
         outlineColor={LABEL_TOKENS.outline.color}
@@ -1211,7 +1184,7 @@ export default function GenreWorld() {
       />
 
       {/* Billboard labels for major genres */}
-      <GenreLabels genres={genres} activeSlug={activeGenre?.slug} />
+      <GenreLabels genres={genres} activeSlug={activeGenre?.slug} onSelect={handleClick} />
 
       <BiomeLabels genres={genres} />
       <DecadeLabels genres={genres} />

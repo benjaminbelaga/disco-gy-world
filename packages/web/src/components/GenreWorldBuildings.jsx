@@ -47,7 +47,6 @@ export default function GenreWorldBuildings({ genres }) {
   useEffect(() => {
     const updateMesh = (ref, items) => {
       if (!ref.current || items.length === 0) return
-      const colorArr = new Float32Array(items.length * 3)
 
       for (let i = 0; i < items.length; i++) {
         const item = items[i]
@@ -58,20 +57,15 @@ export default function GenreWorldBuildings({ genres }) {
         ref.current.setMatrixAt(i, _obj.matrix)
 
         _color.set(item.emissiveColor || '#111122')
-        colorArr[i * 3] = _color.r
-        colorArr[i * 3 + 1] = _color.g
-        colorArr[i * 3 + 2] = _color.b
+        ref.current.setColorAt(i, _color)
       }
 
       ref.current.count = items.length
       ref.current.instanceMatrix.needsUpdate = true
 
-      // Set instance colors for emissive variation
-      const attr = ref.current.geometry.getAttribute('instanceColor')
-      if (attr) {
-        attr.array.set(colorArr)
-        attr.needsUpdate = true
-      }
+      // Per-instance colour via mesh.instanceColor (setColorAt allocates it);
+      // a geometry attribute named "instanceColor" is inert and renders flat.
+      if (ref.current.instanceColor) ref.current.instanceColor.needsUpdate = true
     }
 
     updateMesh(boxRef, boxes)
@@ -84,15 +78,10 @@ export default function GenreWorldBuildings({ genres }) {
       {/* Box buildings */}
       {boxes.length > 0 && (
         <instancedMesh ref={boxRef} args={[_box, undefined, boxes.length]} raycast={() => null}>
-          <instancedBufferAttribute
-            attach="geometry-attributes-instanceColor"
-            args={[new Float32Array(boxes.length * 3), 3]}
-          />
           <meshLambertMaterial
-            color="#1a1a2e"
+            color="#ffffff"
             emissive="#000000"
             emissiveIntensity={0.4}
-            vertexColors
           />
         </instancedMesh>
       )}
@@ -100,15 +89,10 @@ export default function GenreWorldBuildings({ genres }) {
       {/* Cylinder buildings */}
       {cylinders.length > 0 && (
         <instancedMesh ref={cylRef} args={[_cylinder, undefined, cylinders.length]} raycast={() => null}>
-          <instancedBufferAttribute
-            attach="geometry-attributes-instanceColor"
-            args={[new Float32Array(cylinders.length * 3), 3]}
-          />
           <meshLambertMaterial
-            color="#1a1a2e"
+            color="#ffffff"
             emissive="#000000"
             emissiveIntensity={0.4}
-            vertexColors
           />
         </instancedMesh>
       )}
@@ -116,15 +100,10 @@ export default function GenreWorldBuildings({ genres }) {
       {/* Cone buildings */}
       {cones.length > 0 && (
         <instancedMesh ref={coneRef} args={[_cone, undefined, cones.length]} raycast={() => null}>
-          <instancedBufferAttribute
-            attach="geometry-attributes-instanceColor"
-            args={[new Float32Array(cones.length * 3), 3]}
-          />
           <meshLambertMaterial
-            color="#1a1a2e"
+            color="#ffffff"
             emissive="#000000"
             emissiveIntensity={0.4}
-            vertexColors
           />
         </instancedMesh>
       )}
