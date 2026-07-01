@@ -42,14 +42,29 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,woff,woff2}'],
-        // Precache world.json (large but essential for offline)
-        additionalManifestEntries: [
-          { url: '/data/world.json', revision: null },
-          { url: '/data/cities.json', revision: null }
-        ],
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB for world.json
+        // ttf included — the troika label font is a .ttf and MUST be cached
+        // for offline (woff2 blanks the 3D world, see tokens/labels.js).
+        globPatterns: ['**/*.{js,css,html,svg,ttf,woff,woff2}'],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         runtimeCaching: [
+          {
+            // World data — NEVER precache these with revision:null: that froze
+            // world.json forever, so returning users got stale data the newer
+            // render code choked on → black world on soft-reload while a hard
+            // reload (bypassing the SW) worked. NetworkFirst keeps data fresh
+            // and still falls back to cache when offline.
+            urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.startsWith('/data/'),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'world-data',
+              networkTimeoutSeconds: 5,
+              expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 7 },
+              cacheableResponse: { statuses: [0, 200] }
+            }
+          },
           {
             // YouTube / external API calls — network first, fall back to cache
             urlPattern: /^https:\/\/(www\.googleapis\.com|i\.ytimg\.com|img\.youtube\.com)/,

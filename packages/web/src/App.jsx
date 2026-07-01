@@ -249,53 +249,6 @@ function useProgressiveUI() {
 export default function App() {
   const [loaded, setLoaded] = useState(false)
   const [error, setError] = useState(null)
-  // Bumped to remount the Canvas — a fresh mount recreates the WebGLRenderer
-  // from scratch. Used for two failure modes on soft-reload:
-  //  1. context restore after a 'webglcontextlost'.
-  //  2. context *creation* failure ("A WebGL context could not be created"):
-  //     on a soft reload the previous page's GPU context may not be released
-  //     before the new one is requested, so creation throws and the world goes
-  //     black (menus intact) until a hard reload. We catch that error and
-  //     retry the mount a few times — by then the driver has freed the slot.
-  const [glEpoch, setGlEpoch] = useState(0)
-  const glRetries = useRef(0)
-
-  // Catch the async "Error creating WebGL context" throw (it escapes React
-  // error boundaries because R3F builds the renderer outside the render cycle)
-  // and retry the Canvas mount. Capped so a genuinely GPU-less device still
-  // stops instead of thrashing.
-  useEffect(() => {
-    const onErr = (e) => {
-      const msg = e?.message || e?.error?.message || ''
-      if (/WebGL context could not be created|Error creating WebGL context/i.test(msg)) {
-        if (glRetries.current >= 4) return
-        glRetries.current += 1
-        setTimeout(() => setGlEpoch((n) => n + 1), 350 * glRetries.current)
-      }
-    }
-    window.addEventListener('error', onErr)
-    return () => window.removeEventListener('error', onErr)
-  }, [])
-
-  // Release the WebGL context before the page unloads so a soft reload gets a
-  // free GPU slot. Without this the reloaded page's context creation can fail.
-  const glRef = useRef(null)
-  useEffect(() => {
-    const release = () => {
-      const gl = glRef.current
-      if (!gl) return
-      try {
-        gl.forceContextLoss?.()
-        gl.dispose?.()
-      } catch { /* best-effort */ }
-    }
-    window.addEventListener('pagehide', release)
-    window.addEventListener('beforeunload', release)
-    return () => {
-      window.removeEventListener('pagehide', release)
-      window.removeEventListener('beforeunload', release)
-    }
-  }, [])
 
   // Handle Discogs OAuth callback redirect (/auth/callback?session_token=...)
   useEffect(() => {
@@ -481,7 +434,6 @@ export default function App() {
         <div style={{ display: viewMode === 'genre' ? 'block' : 'none', position: 'absolute', inset: 0 }}>
           <ErrorBoundary name="Canvas">
             <Canvas
-              key={glEpoch}
               camera={{ position: [0, 50, 85], fov: 50, near: 0.1, far: 500 }}
               onPointerMissed={() => setActiveGenre(null)}
               dpr={isMobile ? [1, 1.5] : [1, 1.75]}
@@ -495,25 +447,9 @@ export default function App() {
               }}
               frameloop={viewMode === 'genre' ? 'always' : 'never'}
               onCreated={({ gl }) => {
-                // Context created successfully — expose it for pagehide release
-                // and reset the creation-failure retry budget.
-                glRef.current = gl
-                glRetries.current = 0
-                const el = gl.domElement
-                let fallbackTimer = null
-                el.addEventListener('webglcontextlost', (e) => {
-                  // preventDefault() flags the context as restorable so the
-                  // browser will fire 'webglcontextrestored'.
+                gl.domElement.addEventListener('webglcontextlost', (e) => {
                   e.preventDefault()
-                  console.warn('WebGL context lost — scheduling remount')
-                  // Fallback: some drivers never fire 'restored'. Force a
-                  // remount after a short grace period so we recover anyway.
-                  fallbackTimer = setTimeout(() => setGlEpoch((n) => n + 1), 1500)
-                })
-                el.addEventListener('webglcontextrestored', () => {
-                  if (fallbackTimer) clearTimeout(fallbackTimer)
-                  console.warn('WebGL context restored — remounting Canvas')
-                  setGlEpoch((n) => n + 1)
+                  console.warn('WebGL context lost, attempting recovery...')
                 })
               }}
             >
