@@ -687,7 +687,11 @@ function GenreLinks({ genres, links, activeSlug, hoveredSlug }) {
 
   return (
     <lineSegments ref={meshRef} raycast={() => null}>
-      <bufferGeometry>
+      {/* key on vertex count: when the visible-link count changes with the
+          timeline year, the buffer length changes. three cannot resize a GPU
+          buffer in place ("Resizing buffer attributes is not supported"), so
+          remount the geometry to build a fresh, correctly-sized buffer. */}
+      <bufferGeometry key={positions.length}>
         <bufferAttribute
           attach="attributes-position"
           array={positions}
@@ -883,7 +887,9 @@ function SceneConnections({ genres }) {
 
   return (
     <lineSegments raycast={() => null}>
-      <bufferGeometry>
+      {/* key on vertex count — see GenreLinks: the buffer length changes with
+          the timeline year and three cannot resize buffers in place. */}
+      <bufferGeometry key={count}>
         <bufferAttribute
           attach="attributes-position"
           array={positions}
