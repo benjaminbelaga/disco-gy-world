@@ -249,6 +249,11 @@ function useProgressiveUI() {
 export default function App() {
   const [loaded, setLoaded] = useState(false)
   const [error, setError] = useState(null)
+  // Bumped on WebGL context restore to remount the Canvas — a fresh mount
+  // rebuilds the scene graph and re-uploads every GPU buffer (instanceColor,
+  // instanceMatrix, geometries, troika label atlases). Without this, a context
+  // lost on soft-reload leaves the world permanently black until a hard reload.
+  const [glEpoch, setGlEpoch] = useState(0)
 
   // Handle Discogs OAuth callback redirect (/auth/callback?session_token=...)
   useEffect(() => {
@@ -434,6 +439,7 @@ export default function App() {
         <div style={{ display: viewMode === 'genre' ? 'block' : 'none', position: 'absolute', inset: 0 }}>
           <ErrorBoundary name="Canvas">
             <Canvas
+              key={glEpoch}
               camera={{ position: [0, 50, 85], fov: 50, near: 0.1, far: 500 }}
               onPointerMissed={() => setActiveGenre(null)}
               dpr={isMobile ? [1, 1.5] : [1, 1.75]}
@@ -447,9 +453,21 @@ export default function App() {
               }}
               frameloop={viewMode === 'genre' ? 'always' : 'never'}
               onCreated={({ gl }) => {
-                gl.domElement.addEventListener('webglcontextlost', (e) => {
+                const el = gl.domElement
+                let fallbackTimer = null
+                el.addEventListener('webglcontextlost', (e) => {
+                  // preventDefault() flags the context as restorable so the
+                  // browser will fire 'webglcontextrestored'.
                   e.preventDefault()
-                  console.warn('WebGL context lost, attempting recovery...')
+                  console.warn('WebGL context lost — scheduling remount')
+                  // Fallback: some drivers never fire 'restored'. Force a
+                  // remount after a short grace period so we recover anyway.
+                  fallbackTimer = setTimeout(() => setGlEpoch((n) => n + 1), 1500)
+                })
+                el.addEventListener('webglcontextrestored', () => {
+                  if (fallbackTimer) clearTimeout(fallbackTimer)
+                  console.warn('WebGL context restored — remounting Canvas')
+                  setGlEpoch((n) => n + 1)
                 })
               }}
             >
