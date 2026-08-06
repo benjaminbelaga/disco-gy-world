@@ -138,6 +138,26 @@ html, body, #root {
   transition: color 0.2s;
 }
 .genre-panel .tracks li:hover { color: #fff; }
+/* Cover art. The box is reserved whether or not a cover resolves — Discogs has
+   no image for a fair share of releases, and a row that reflows when one lands
+   makes the whole list jump while it fills in. */
+.genre-panel .tracks .release-art {
+  float: left;
+  width: 34px;
+  height: 34px;
+  margin: 1px 9px 2px 0;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.05);
+  overflow: hidden;
+  display: block;
+}
+.genre-panel .tracks .release-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.genre-panel .tracks li::after { content: ''; display: block; clear: both; }
 .genre-panel .tracks .artist { font-weight: 500; }
 .genre-panel .tracks .title { opacity: 0.6; }
 .genre-panel .tracks .year-tag {

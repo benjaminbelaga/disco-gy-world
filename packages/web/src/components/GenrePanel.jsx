@@ -87,6 +87,9 @@ export default function GenrePanel() {
   const setActiveLabel = useStore(s => s.setActiveLabel)
   const setActiveArtist = useStore(s => s.setActiveArtist)
   const [discogsReleases, setDiscogsReleases] = useState([])
+  // { [release_id]: { thumb, cover, status } } — accumulates across genres, so
+  // revisiting a genre costs nothing.
+  const [artwork, setArtwork] = useState({})
   const [shareStatus, setShareStatus] = useState(null)
   const panelRef = useRef(null)
 
@@ -162,6 +165,30 @@ export default function GenrePanel() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeGenre, setPlayerQueue])
+
+  // Cover art for the visible releases.
+  //
+  // The Discogs data dumps carry no image URLs, so artwork can only come from
+  // the live API — which is why this goes through our own cached endpoint
+  // rather than hitting Discogs from the browser. One batched request per
+  // genre, ids we already hold. Ten rows, one call.
+  useEffect(() => {
+    const ids = discogsForGenre
+      .map(r => r.id)
+      .filter(id => id && !(id in artwork))
+    if (!ids.length) return
+
+    let cancelled = false
+    fetch(`/api/artwork?ids=${ids.join(',')}`)
+      .then(r => (r.ok ? r.json() : null))
+      .then(data => {
+        if (cancelled || !data?.artwork) return
+        setArtwork(prev => ({ ...prev, ...data.artwork }))
+      })
+      .catch(() => {})
+    return () => { cancelled = true }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [discogsForGenre])
 
   // Auto-play classic tracks if no Discogs releases matched
   useEffect(() => {
@@ -283,6 +310,16 @@ export default function GenrePanel() {
                   setPlayerQueue(queue, i)
                 }} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); const queue = discogsForGenre.map(dr => ({ artist: dr.artist, title: dr.title, year: dr.year, genre: activeGenre.name, youtube: dr.youtube })); setPlayerQueue(queue, i) } }}>
                   {active && <span className="playing-indicator" aria-hidden="true"><span /><span /><span /></span>}
+                  {(() => {
+                    const art = artwork[r.id]
+                    // Fixed box either way, so the row never reflows when a
+                    // cover resolves — or never does.
+                    return (
+                      <span className="release-art" aria-hidden="true">
+                        {art?.thumb && <img src={art.thumb} alt="" loading="lazy" decoding="async" />}
+                      </span>
+                    )
+                  })()}
                   <span className="artist"><ClickableArtist name={r.artist} onClick={setActiveArtist} /></span>
                   {' — '}
                   <span className="title">{r.title}</span>

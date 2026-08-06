@@ -8,6 +8,7 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
 from .routes.artists import router as artists_router
+from .routes.artwork import router as artwork_router
 from .routes.auth import router as auth_router
 from .routes.cities import router as cities_router
 from .routes.collection import router as collection_router
@@ -81,6 +82,7 @@ app.add_middleware(
 
 # SQLite-backed routes (releases, recommendations, auth, collection)
 app.include_router(artists_router)
+app.include_router(artwork_router)
 app.include_router(auth_router)
 app.include_router(cities_router)
 app.include_router(collection_router)

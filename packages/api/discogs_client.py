@@ -32,7 +32,16 @@ def _load_env() -> dict[str, str]:
 
 _env = _load_env()
 
-DISCOGS_TOKEN = os.environ.get("DISCOGS_TOKEN") or _env.get("DISCOGS_TOKEN", "")
+# discogs.env carries the token under YOYAKU_DISCOGS_PERSONAL_TOKEN; there is no
+# bare DISCOGS_TOKEN key in it, on this machine or on the server. Without the
+# fallback every call goes out unauthenticated, which Discogs rate-limits to
+# 25 req/min instead of 60 — and the RateLimiter below is configured for 58, so
+# we would have been silently over budget rather than under it.
+DISCOGS_TOKEN = (
+    os.environ.get("DISCOGS_TOKEN")
+    or _env.get("DISCOGS_TOKEN", "")
+    or _env.get("YOYAKU_DISCOGS_PERSONAL_TOKEN", "")
+)
 DISCOGS_CONSUMER_KEY = os.environ.get("DISCOGS_CONSUMER_KEY") or _env.get(
     "DISCOGS_CONSUMER_KEY", ""
 )
