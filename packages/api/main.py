@@ -103,7 +103,14 @@ app.include_router(genre_edits_router)
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok", "genres": len(_genres_by_slug)}
+    # `releases` names the source behind every DB-backed route: "corpus" (the
+    # full offline build), "preview" (the 5k-release fallback), or "none".
+    # Health used to report only the genre count, which is served from
+    # world.json and is therefore green even when every DB route is 503 — which
+    # is exactly what happened, unnoticed, since launch.
+    from .db import db_source
+
+    return {"status": "ok", "genres": len(_genres_by_slug), "releases": db_source()}
 
 
 @app.get("/api/genres")

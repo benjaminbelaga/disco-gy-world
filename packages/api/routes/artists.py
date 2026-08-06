@@ -78,7 +78,13 @@ def artist_timeline(name: str):
                     all_genres.add((br[0], br[1]))
 
             timeline.append({
-                "id": r.get("id") or r.get("discogs_id"),
+                # discogs_id first: `id` is the table's AUTOINCREMENT rowid, which
+                # means nothing outside this database. The old order read `id` ||
+                # `discogs_id`, which is correct for releases_preview.json (where
+                # `id` IS the Discogs id) but backwards for the schema — so the
+                # timeline was emitting rowids. Consumers need the Discogs id to
+                # resolve artwork and to link out.
+                "id": r.get("discogs_id") or r.get("id"),
                 "title": r.get("title", ""),
                 "label": r.get("label", ""),
                 "catno": r.get("catno", ""),
