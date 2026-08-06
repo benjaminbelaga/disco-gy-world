@@ -1,12 +1,24 @@
 # DiscoWorld Execution Plan
 **Last updated:** 2026-04-19 · **Owner:** Benjamin Belaga · **Repo:** `benjaminbelaga/discoworld` (private) · **Prod:** `world.yoyaku.io` on Contabo
 
+> **▶️ RESUMED 2026-08-06 — Ben's explicit go-ahead.** The pause below is lifted. DiscoWorld is back in scope as one of four surfaces in the consolidation mission, whose plan is the authority for what gets done here:
+> **`~/.claude/plans/reprends-i-i-exported-14-synthetic-turtle.md`**
+>
+> Scope resumed: kill the `503 Database not available` on every dynamic route by repointing at the `mcp-discogs` Postgres corpus (one corpus per host); add release artwork to the genre panel; add a YOYAKU commerce layer behind the `discoworld-yoyaku` adapter (this repo is AGPL — no private commerce logic lands here). The PR queue below was written 2026-04-19 and is **not** the current priority order; read the consolidation plan first.
+>
+> Prod URL stays `world.yoyaku.io`. Prod runs PM2 `discoworld-api` → `python3 -m uvicorn packages.api.main:app --host 127.0.0.1 --port 8200`, cwd `/var/www/world.yoyaku.io`, logs `/root/.pm2/logs/discoworld-api-{out,error}.log`.
+
+<details>
+<summary>Original pause banner (2026-04-19 → 2026-08-06)</summary>
+
 > **⏸️ PAUSED 2026-04-19 — product pivot.** Ben has decided the 3D world is premature. We ship a working, useful consumer product first: **disco.gy** (domain purchased 2026-04-19). DiscoWorld comes back as the 3D companion **`world.disco.gy`** in phase 4 on top of the disco.gy backend.
 >
 > **Active plan:** `~/repos/yoyaku-reco/docs/RADIO-PRODUCT-PLAN.md`
 > **Future prod URL for this codebase:** `world.disco.gy` (replaces current `world.yoyaku.io`, which stays live until migration)
 >
 > Do NOT start any PR below without Ben's explicit go-ahead to resume DiscoWorld. If you are an agent reading this file, switch over to the Radio plan. The shipped DiscoWorld code (PRs #9-#18) stays in prod on `world.yoyaku.io`, untouched.
+
+</details>
 
 > This file is the single source of truth for what remains to do on DiscoWorld. Any agent (human or Claude) picking up work MUST read this file first. Each PR section is self-contained — it points to audit-2026/AGENT-X.md for deep rationale but contains everything needed to execute.
 
