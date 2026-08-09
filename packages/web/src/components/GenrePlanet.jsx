@@ -611,7 +611,12 @@ export default function GenrePlanet({ paused = false }) {
   const genreSkyRef = useRef(null)
   const genreParticlesRef = useRef(null)
   const lastBiomeRef = useRef(null)
-  const clockRef = useRef(new THREE.Clock())
+  // Timer, not Clock: three r183 deprecates Clock (it warns on every planet
+  // mount). Timer also fixes the failure mode that actually bites here — Clock
+  // hands back the entire wall-clock gap after a tab switch, and `elapsedTime`
+  // below accumulates it, so returning to the tab jumped the ocean shader
+  // forward by minutes. connect(document) makes Timer skip hidden time instead.
+  const clockRef = useRef(new THREE.Timer())
   const pausedRef = useRef(paused)
   const raycasterRef = useRef(new THREE.Raycaster())
   const mouseRef = useRef(new THREE.Vector2())
@@ -797,12 +802,16 @@ export default function GenrePlanet({ paused = false }) {
     container.addEventListener('mousemove', onMouseMove)
 
     // Render loop (respects pausedRef)
+    clockRef.current.connect(document)
     let elapsedTime = 0
     const hoverRaycaster = new THREE.Raycaster()
 
     const animate = () => {
       animFrameRef.current = requestAnimationFrame(animate)
       if (pausedRef.current) return
+      // Timer is explicit: update() advances its internal state once per frame,
+      // and getDelta() is then stable for the rest of the step.
+      clockRef.current.update()
       const delta = clockRef.current.getDelta()
       elapsedTime += delta
       controls.update()
@@ -904,6 +913,7 @@ export default function GenrePlanet({ paused = false }) {
       container.removeEventListener('touchend', onPointerUp)
       container.removeEventListener('mousemove', onMouseMove)
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current)
+      clockRef.current.disconnect()
       if (buildingSystemRef.current) {
         buildingSystemRef.current.dispose()
         buildingSystemRef.current = null

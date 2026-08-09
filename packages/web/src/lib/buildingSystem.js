@@ -65,7 +65,9 @@ function getSurfacePoint(direction, planetMesh) {
  */
 export function createBuildingSystem(scene, planetMesh) {
   const activeTerritories = new Map() // territorySlug -> { group, materials }
-  const clock = new THREE.Clock()
+  // Timer replaces the deprecated Clock (three r183). update() is called once
+  // per frame from the caller's render loop, in update() below.
+  const timer = new THREE.Timer()
   let currentTerritory = null
 
   /**
@@ -198,7 +200,8 @@ export function createBuildingSystem(scene, planetMesh) {
    * @param {THREE.Camera} camera
    */
   function update(camera) {
-    const elapsed = clock.getElapsedTime()
+    timer.update()
+    const elapsed = timer.getElapsed()
 
     // Update shader time uniforms
     for (const [, entry] of activeTerritories) {

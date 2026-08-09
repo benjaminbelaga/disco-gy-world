@@ -1,13 +1,19 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { initiateLogin } from '../lib/discogsApi'
 
+// Discogs OAuth is the only sign-in this app has.
+//
+// There used to be a second path here — "Continue with YOYAKU", an email +
+// password form POSTing to /api/auth/login. That route does not exist: the auth
+// router only serves /discogs/login, /discogs/callback, /discogs/login/token and
+// /logout, so every submission 404'd and the panel answered "Login failed".
+// It was removed rather than wired, because what it collected was a live
+// yoyaku.io shop password, sent cross-origin to a world.yoyaku.io endpoint. A
+// naive implementation of that route (look the email up, compare the hash) is a
+// credential-stuffing oracle against the shop's 16k customer accounts. Sign-in
+// with a YOYAKU account belongs behind OAuth on yoyaku.io, not behind a password
+// field on this domain.
 export default function YoyakuLogin({ onClose }) {
-  const [showEmailForm, setShowEmailForm] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [session, setSession] = useState(null)
   const panelRef = useRef(null)
   const previouslyFocusedRef = useRef(null)
 
@@ -44,61 +50,6 @@ export default function YoyakuLogin({ onClose }) {
     // initiateLogin redirects — nothing to do after
   }
 
-  const handleYoyaku = async (e) => {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      })
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.message || 'Login failed')
-      }
-      const data = await res.json()
-      localStorage.setItem('yoyaku-session', JSON.stringify(data))
-      setSession(data)
-    } catch (err) {
-      setError(
-        err instanceof TypeError || err.message === 'Failed to fetch'
-          ? 'Login service is currently unavailable'
-          : err.message
-      )
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  if (session) {
-    const initials = (session.name || session.email || '?').charAt(0).toUpperCase()
-    return (
-      <div className="yl-panel" ref={panelRef} role="dialog" aria-modal="true" aria-labelledby="yl-success-title">
-        <button className="yl-close" onClick={onClose} aria-label="Close login panel">&times;</button>
-        <div className="yl-success">
-          <div className="yl-avatar">{initials}</div>
-          <h3 id="yl-success-title">{session.name || session.email}</h3>
-          {session.tier && <div className="yl-tier">{session.tier}</div>}
-          {(session.orders != null || session.collection != null) && (
-            <div className="yl-stats">
-              {session.orders != null && <span>{session.orders} orders</span>}
-              {session.collection != null && <span>{session.collection} collected</span>}
-            </div>
-          )}
-          {session.genres && session.genres.length > 0 && (
-            <div className="yl-genres">
-              {session.genres.map((g) => (
-                <span key={g} className="yl-genre-tag">{g}</span>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="yl-panel" ref={panelRef} role="dialog" aria-modal="true" aria-labelledby="yl-login-title">
       <button className="yl-close" onClick={onClose} aria-label="Close login panel">&times;</button>
@@ -127,43 +78,6 @@ export default function YoyakuLogin({ onClose }) {
         </svg>
         Continue with Discogs
       </button>
-
-      {/* Secondary: YOYAKU */}
-      <button className="yl-btn yl-btn-yoyaku" onClick={() => setShowEmailForm(v => !v)}>
-        <svg className="yl-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-          <path d="M2 17l10 5 10-5"/>
-          <path d="M2 12l10 5 10-5"/>
-        </svg>
-        Continue with YOYAKU
-        <span className="yl-btn-chevron">{showEmailForm ? '▲' : '▼'}</span>
-      </button>
-
-      {showEmailForm && (
-        <form className="yl-email-form" onSubmit={handleYoyaku}>
-          <input
-            className="yl-input"
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoFocus
-          />
-          <input
-            className="yl-input"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          {error && <div className="yl-error">{error}</div>}
-          <button className="yl-submit" type="submit" disabled={loading}>
-            {loading ? 'Signing in…' : 'Sign in'}
-          </button>
-        </form>
-      )}
 
       <div className="yl-footer">
         <a href="https://yoyaku.io/my-account/" target="_blank" rel="noopener noreferrer">

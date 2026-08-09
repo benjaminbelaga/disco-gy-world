@@ -143,15 +143,23 @@ export default function MusicPlayer() {
     setDuration(0)
     setCurrentTime(0)
 
-    // Destroy previous player
+    // Tear the previous player down in this order — polling, then the video,
+    // then destroy, then the DOM. Reversing any pair is what produced the
+    // "Failed to execute 'postMessage' on 'DOMWindow': The target origin
+    // provided does not match the recipient window's origin" spam: the API
+    // keeps posting `listening` frames to an iframe whose contentWindow has
+    // already gone to about:blank (origin "null"), forever, once per poll.
+    if (progressInterval.current) clearInterval(progressInterval.current)
     if (playerRef.current) {
-      playerRef.current.destroy()
+      try { playerRef.current.stopVideo?.() } catch { /* half-initialised player */ }
+      try { playerRef.current.destroy?.() } catch { /* already gone */ }
       playerRef.current = null
     }
-    if (progressInterval.current) clearInterval(progressInterval.current)
 
     // YouTube replaces the target element with an iframe on each Player() call.
     // Re-insert a fresh div inside the stable wrapper so the wrapper stays in DOM.
+    // This runs *after* destroy() on purpose: emptying the wrapper first would
+    // pull the iframe out from under a player that still owns it.
     const wrapper = ytContainerRef.current
     if (!wrapper) return
     while (wrapper.firstChild) wrapper.removeChild(wrapper.firstChild)
@@ -185,6 +193,11 @@ export default function MusicPlayer() {
       },
       events: {
         onReady: (e) => {
+          // onReady can land *after* the effect re-ran for a new track (YT is
+          // slow to init). That player is already destroyed: playing it would
+          // put a second track behind the current one, and polling it would
+          // post messages at a dead iframe.
+          if (e.target !== playerRef.current) return
           // Belt + suspenders: ensure iframe has autoplay permission (also set via
           // MutationObserver above) AND force playVideo() in case the autoplay=1
           // playerVar was ignored due to browser autoplay policy.
@@ -198,7 +211,7 @@ export default function MusicPlayer() {
           const d = e.target.getDuration()
           setDuration(d)
           setIsPlaying(true)
-          // Poll progress
+          // Poll progress.
           if (progressInterval.current) clearInterval(progressInterval.current)
           progressInterval.current = setInterval(() => {
             if (playerRef.current?.getCurrentTime) {
@@ -230,7 +243,8 @@ export default function MusicPlayer() {
       if (progressInterval.current) clearInterval(progressInterval.current)
       // Destroy player on unmount to prevent iframe/audio leaks
       if (playerRef.current) {
-        try { playerRef.current.destroy() } catch {}
+        try { playerRef.current.stopVideo?.() } catch { /* half-initialised */ }
+        try { playerRef.current.destroy?.() } catch { /* already gone */ }
         playerRef.current = null
       }
     }
@@ -259,11 +273,12 @@ export default function MusicPlayer() {
   }
 
   const handleClose = useCallback(() => {
+    if (progressInterval.current) clearInterval(progressInterval.current)
     if (playerRef.current) {
-      playerRef.current.destroy()
+      try { playerRef.current.stopVideo?.() } catch { /* half-initialised */ }
+      try { playerRef.current.destroy?.() } catch { /* already gone */ }
       playerRef.current = null
     }
-    if (progressInterval.current) clearInterval(progressInterval.current)
     setCurrentTrack(null)
     setPlaying(false)
     setAudioPlaying(false)
