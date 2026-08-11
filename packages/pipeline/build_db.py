@@ -142,6 +142,48 @@ def populate_cooccurrence(conn: sqlite3.Connection) -> None:
     print(f"Loaded {len(top_pairs)} style co-occurrence pairs")
 
 
+def stream_releases_from_preview() -> "list[dict]":
+    """Yield the curated preview releases, in the JSONL dump's shape.
+
+    `releases_preview.json` is a hand-picked electronic selection — the records
+    DiscoWorld exists to show. The Postgres corpus is broader but not a
+    superset: of the preview's 5,000 releases only 218 survive there, because
+    `masters` only holds what a YouTube enrichment pass reached. Building from
+    Postgres alone would trade 4,782 curated records for a million general ones
+    and quietly lose the curation.
+
+    So the corpus is the union. `INSERT OR IGNORE` on discogs_id makes the merge
+    idempotent and order-independent.
+    """
+    for directory in (DATA_DIR, Path(__file__).resolve().parent.parent / "web" / "public" / "data"):
+        path = directory / "releases_preview.json"
+        if not path.exists():
+            continue
+        with open(path) as fh:
+            payload = json.load(fh)
+        rows = payload.get("releases") if isinstance(payload, dict) else payload
+        for r in rows or []:
+            catno = r.get("catno")
+            record = {
+                "id": r.get("id"),
+                "title": r.get("title") or "",
+                "artists": [{"name": r.get("artist")}] if r.get("artist") else [{}],
+                "country": r.get("country"),
+                "year": r.get("year"),
+                "styles": r.get("styles") or [],
+                # The preview stores one watch URL; the dump stores a video list.
+                "videos": [{"uri": r["youtube"]}] if r.get("youtube") else [],
+            }
+            if r.get("label"):
+                # The generator writes the literal string "none" for a missing catno.
+                record["labels"] = [{"name": r["label"], "catno": "" if catno == "none" else (catno or "")}]
+            if r.get("vinyl"):
+                record["formats"] = [{"name": "Vinyl"}]
+            yield record
+        return
+    raise FileNotFoundError("releases_preview.json not found")
+
+
 def populate_releases(
     conn: sqlite3.Connection,
     sample_size: int | None = None,
@@ -149,12 +191,14 @@ def populate_releases(
 ) -> None:
     """Load releases into the database from `source`.
 
-    Two sources, one insert path and one schema:
+    Three sources, one insert path and one schema:
 
     - `jsonl`    — the Discogs monthly dump streamed by style_cooccurrence.
                    The original source; absent from every host we deploy to.
     - `postgres` — the `mcp` corpus (masters), see pipeline/postgres_source.py.
-                   Yields the same dict shape, so nothing below changes.
+    - `preview`  — the curated 5,000 shipped with the frontend.
+
+    Each yields the same dict shape, so nothing below changes.
     """
     from itertools import islice
 
@@ -162,6 +206,10 @@ def populate_releases(
         from postgres_source import stream_releases_from_postgres
 
         releases = stream_releases_from_postgres(limit=sample_size)
+    elif source == "preview":
+        releases = stream_releases_from_preview()
+        if sample_size:
+            releases = islice(releases, sample_size)
     else:
         from style_cooccurrence import stream_releases
 
@@ -252,6 +300,15 @@ def main():
         populate_releases(conn, sample_size=args.sample, source=args.source)
     except (ImportError, FileNotFoundError) as e:
         print(f"Skipping releases: {e}")
+
+    # Phase 4a: merge the curated preview on top. It is not a subset of any
+    # other source — see stream_releases_from_preview — and INSERT OR IGNORE
+    # means whichever ran first keeps the row.
+    if args.source != "preview":
+        try:
+            populate_releases(conn, source="preview")
+        except (ImportError, FileNotFoundError) as e:
+            print(f"Skipping preview merge: {e}")
 
     # Phase 4b: taxonomy fallback. Runs after releases because it derives the
     # bridge from the styles actually loaded — so it cannot run at phase 2.
