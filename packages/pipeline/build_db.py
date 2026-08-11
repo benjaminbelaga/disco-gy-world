@@ -92,16 +92,46 @@ def stamp_carried_by_catno(conn: sqlite3.Connection) -> int:
     That is the whole reason the YOYAKU bridge felt empty. It was not missing
     code; it was joined on the wrong key.
 
-    Guards against a wrong stamp:
-      - normalized catalogue numbers shorter than 4 characters are skipped.
-        "001" or "EP2" collide across unrelated labels; a real catalogue number
-        carries a label prefix.
-      - rows already stamped by release id are left alone — that match is exact
-        and strictly stronger than this one.
+    A catalogue number is only usable as a key when it looks like one: at least
+    four characters, and at least one digit. The digit is what matters, and it
+    was learnt the expensive way — the first run of this pass matched 80,118
+    releases, and 73,826 of them came from a single "catalogue number": the
+    literal string `none`, which both sides use as a placeholder for "unknown".
+    It is four characters long, so a length guard alone waved it through and
+    marked 8% of the corpus as being on our shelves.
+
+    Requiring a digit kills that whole class — `none`, `na`, `unknown`,
+    `various` — without a list of sentinels to keep up to date. Applied to both
+    sides, because a placeholder is just as wrong on the corpus side.
+
+    A label check was measured as the stricter alternative and rejected: it
+    keeps only 10,012 of 16,344 rows, and essentially all of those are the
+    shop's own. Label names do not agree between the shop's taxonomy and
+    Discogs (the very problem rules/82 exists for), so the check does not
+    remove wrong matches — it removes right ones.
+
+    What survives is imprecise in one bounded way: a generic number like CD001
+    is used by more than one label, and matches up to 87 releases. For a hint
+    that reads "we may have this record", pointing at the shop page that
+    settles it, that is a fair trade. Rows already stamped by release id are
+    left alone — that match is exact and strictly stronger.
     """
 
     def normalize(catno: str) -> str:
-        return "".join(ch for ch in catno.upper() if ch.isalnum())
+        return "".join(ch for ch in (catno or "").upper() if ch.isalnum())
+
+    def usable(key: str) -> bool:
+        # Four characters, at least one digit, at least one letter. The letter
+        # is the label prefix — AI07, BSR030, CMR008 — and it is what makes a
+        # catalogue number identify anything. Bare numbers do not: "4117" and
+        # "01209" matched 1940s 78rpm discs to modern shop products, and 43 of
+        # the shop's 10,082 usable numbers are purely numeric, so the rule
+        # costs 0.4% of the catalogue to remove that entire class.
+        return (
+            len(key) >= 4
+            and any(ch.isdigit() for ch in key)
+            and any(ch.isalpha() for ch in key)
+        )
 
     shop_by_catno: dict[str, tuple] = {}
     try:
@@ -110,7 +140,7 @@ def stamp_carried_by_catno(conn: sqlite3.Connection) -> int:
             if not sku:
                 continue
             key = normalize(sku)
-            if len(key) >= 4:
+            if usable(key):
                 shop_by_catno.setdefault(key, (sku, r.get("shop_url")))
     except (ImportError, FileNotFoundError):
         return 0
@@ -123,7 +153,10 @@ def stamp_carried_by_catno(conn: sqlite3.Connection) -> int:
         "SELECT id, catno FROM releases "
         "WHERE shop_url IS NULL AND catno IS NOT NULL AND catno != ''"
     ):
-        hit = shop_by_catno.get(normalize(catno))
+        key = normalize(catno)
+        if not usable(key):
+            continue
+        hit = shop_by_catno.get(key)
         if hit:
             updates.append((hit[0], hit[1], rid))
 
