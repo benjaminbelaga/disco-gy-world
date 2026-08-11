@@ -39,6 +39,17 @@ def artist_releases(
         }
 
 
+# A timeline is a drawing, not an export. Past a few hundred points it stops
+# being readable and starts being a payload, so the query is bounded.
+#
+# The bound is not cosmetic at corpus scale: `artist LIKE '%a%'` matches 648,042
+# of the 954,703 rows, and the loop below used to issue one taxonomy query per
+# style per row. Unbounded, that single request would have run for minutes and
+# returned tens of megabytes. On the 5,000-row preview the same code was
+# harmless, which is exactly why it survived to be found here.
+TIMELINE_MAX_RELEASES = 500
+
+
 @router.get("/{name}/timeline")
 def artist_timeline(name: str):
     """Releases sorted by year with genre mappings for timeline visualization."""
@@ -47,9 +58,20 @@ def artist_timeline(name: str):
 
     with get_db() as conn:
         rows = conn.execute(
-            "SELECT * FROM releases WHERE artist LIKE ? AND year > 0 ORDER BY year ASC",
-            (f"%{name}%",),
+            "SELECT * FROM releases WHERE artist LIKE ? AND year > 0 "
+            "ORDER BY year ASC LIMIT ?",
+            (f"%{name}%", TIMELINE_MAX_RELEASES),
         ).fetchall()
+
+        # One query for the whole bridge instead of one per style per row. The
+        # table holds a few dozen mappings; the loop below reads it thousands of
+        # times.
+        style_genres: dict[str, list[dict]] = {}
+        for style, gname, gslug in conn.execute(
+            "SELECT tb.discogs_style, g.name, g.slug FROM taxonomy_bridge tb "
+            "JOIN genres g ON tb.genre_id = g.id"
+        ):
+            style_genres.setdefault(style, []).append({"name": gname, "slug": gslug})
 
         timeline = []
         all_genres = set()
@@ -65,17 +87,10 @@ def artist_timeline(name: str):
             # Map styles to genres via taxonomy bridge
             genres = []
             for style in styles:
-                bridge_rows = conn.execute(
-                    "SELECT g.name, g.slug FROM taxonomy_bridge tb "
-                    "JOIN genres g ON tb.genre_id = g.id "
-                    "WHERE tb.discogs_style = ?",
-                    (style,),
-                ).fetchall()
-                for br in bridge_rows:
-                    genre_entry = {"name": br[0], "slug": br[1]}
+                for genre_entry in style_genres.get(style, ()):
                     if genre_entry not in genres:
                         genres.append(genre_entry)
-                    all_genres.add((br[0], br[1]))
+                    all_genres.add((genre_entry["name"], genre_entry["slug"]))
 
             timeline.append({
                 # discogs_id first: `id` is the table's AUTOINCREMENT rowid, which
@@ -100,6 +115,9 @@ def artist_timeline(name: str):
             "artist": name,
             "timeline": timeline,
             "total": len(timeline),
+            # Additive, so no existing consumer changes: `total` still counts what
+            # was returned. This says whether that is the whole story.
+            "truncated": len(timeline) >= TIMELINE_MAX_RELEASES,
             "genres": [{"name": g[0], "slug": g[1]} for g in sorted(all_genres)],
             "year_min": min(years) if years else None,
             "year_max": max(years) if years else None,

@@ -19,15 +19,34 @@ is a real reduction in coverage and it is deliberate: a thin, honest answer beat
 a 503, and it costs nothing to carry — the file is already deployed and already
 fetched by the browser on every visit.
 
-Corpus note (2026-08-06): the plan for this change was to repoint at the
-`mcp-discogs` PostgreSQL corpus advertised as 15M releases / 46 GB. It does not
-exist. `mcp-discogs.yoyaku.fr` answers `/` with a status banner and 404s every
-documented route; its PM2 process is up but its Postgres (`yoyaku_knowledge`,
-91 MB) holds MCP ops tables — autonomous_actions, incident_history,
-learned_patterns — and no Discogs data. No volume on either host is anywhere near
-46 GB. So there is no corpus to repoint at today, and this fallback is not a
-stopgap for one: it is the safety net that should exist regardless, because the
-corpus file has always been absent from deploys.
+Corpus note (2026-08-11) — correcting the note this docstring carried before.
+
+The 2026-08-06 note said the `mcp-discogs` corpus "does not exist". That was
+wrong, and it was wrong twice over: a second session reached the same conclusion
+from a different direction five days later. Both were measurement errors worth
+naming, because they share a shape.
+
+  - The first queried the Docker container `yoyaku-mcp-postgres` — database
+    `yoyaku_knowledge`, 7.8 MB, tables autonomous_actions / incident_history /
+    learned_patterns. That is MCP operations telemetry. The container name is a
+    near-perfect decoy for the thing it is not.
+  - The second read an empty `docker compose ps` in /opt/mcp-discogs as "the
+    database is down", and 404s on `/health` and `/search` as "the routes are
+    dead". The service does not run in Docker (that compose file is vestigial),
+    and the routes are `/healthz` and `/mcp/*`.
+
+Measured 2026-08-11: a native PostgreSQL 18 on localhost:5432, database `mcp`,
+73 GB, 15,080,106 rows in `releases`. The corpus is real.
+
+It is also not the corpus this application needs. `releases` is an identity
+table — `year` is NULL on every row sampled and `data` is `{}` — built so
+`/mcp/resolve/catno` can turn a catalogue number into a release id. A timeline
+cannot be drawn from it. `masters` can: 1,012,900 rows, 94% with a year, 98%
+with YouTube videos. That is the source `build_db.py --source postgres` reads,
+and `data/discoworld.db` now carries 954,703 releases built from it.
+
+The in-memory preview below remains as the fallback, unchanged. It is not a
+stopgap: it is what serves the site if the corpus file is ever absent again.
 """
 
 import json
@@ -117,6 +136,13 @@ def get_db_path() -> Path | None:
     genres-only build leaves a valid-looking 124 KB database with an empty
     `releases` table — which would shadow the fallback and make local
     development strictly worse than production. Presence is not readiness.
+
+    The probe asks "is there a row", not "how many" — `SELECT 1 ... LIMIT 1`
+    rather than `COUNT(*)`. Both answer the readiness question; only one is
+    O(1). SQLite has no stored row count, so the count scans the whole table:
+    29 ms on the 954,703-row corpus, paid twice per request (`db_available()`
+    then `get_db()`), and growing with every rebuild. It was free on the
+    5,000-row preview, which is why it survived.
     """
     for path in DB_PATHS:
         if not path.exists():
@@ -124,12 +150,12 @@ def get_db_path() -> Path | None:
         try:
             probe = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
             try:
-                count = probe.execute("SELECT COUNT(*) FROM releases").fetchone()[0]
+                has_rows = probe.execute("SELECT 1 FROM releases LIMIT 1").fetchone()
             finally:
                 probe.close()
         except sqlite3.Error:
             continue
-        if count:
+        if has_rows:
             return path
     return None
 

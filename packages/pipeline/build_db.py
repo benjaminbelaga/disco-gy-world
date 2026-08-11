@@ -79,6 +79,54 @@ def populate_taxonomy(conn: sqlite3.Connection) -> None:
     print(f"Loaded taxonomy bridge: {count} mappings")
 
 
+def populate_taxonomy_exact(conn: sqlite3.Connection) -> int:
+    """Bridge styles to genres by exact normalized name, from styles actually present.
+
+    The fuzzy bridge (`populate_taxonomy`) needs taxonomy_bridge.py plus a
+    `data/processed/stats.json` that only exists where a Discogs dump was
+    unpacked — never on the build host. Without a fallback the built corpus
+    would ship an empty `taxonomy_bridge`, and the artist timeline would render
+    every release with no genre: strictly worse than the 5,000-row preview,
+    which does derive a bridge this way.
+
+    Same conservative rule as `packages/api/db.py::_hydrate_taxonomy` — exact
+    match on a normalized name or slug, never fuzzy. Correct where it fires
+    beats plausible everywhere. The two implementations are deliberate: the API
+    package is deployed and the pipeline is not, so they cannot share a module.
+    Keep the normalization identical if either changes.
+    """
+
+    def normalize(name: str) -> str:
+        return "".join(ch for ch in name.lower() if ch.isalnum())
+
+    index: dict[str, int] = {}
+    for row in conn.execute("SELECT id, name FROM genres"):
+        index.setdefault(normalize(row[1]), row[0])
+    for row in conn.execute("SELECT id, slug FROM genres"):
+        index.setdefault(normalize(row[1]), row[0])
+
+    styles_seen: set[str] = set()
+    for (styles_json,) in conn.execute("SELECT styles FROM releases WHERE styles IS NOT NULL"):
+        try:
+            styles_seen.update(s for s in json.loads(styles_json) if s)
+        except (json.JSONDecodeError, TypeError):
+            continue
+
+    added = 0
+    for style in sorted(styles_seen):
+        genre_id = index.get(normalize(style))
+        if genre_id is None:
+            continue
+        conn.execute(
+            "INSERT OR IGNORE INTO taxonomy_bridge (discogs_style, genre_id, confidence) "
+            "VALUES (?, ?, ?)",
+            (style, genre_id, 1.0),
+        )
+        added += 1
+    conn.commit()
+    return added
+
+
 def populate_cooccurrence(conn: sqlite3.Connection) -> None:
     """Load style co-occurrence matrix. Requires style_cooccurrence module."""
     from style_cooccurrence import build_cooccurrence
@@ -94,14 +142,32 @@ def populate_cooccurrence(conn: sqlite3.Connection) -> None:
     print(f"Loaded {len(top_pairs)} style co-occurrence pairs")
 
 
-def populate_releases(conn: sqlite3.Connection, sample_size: int | None = None) -> None:
-    """Load releases from JSONL into database. Requires style_cooccurrence module."""
-    from itertools import islice
-    from style_cooccurrence import stream_releases
+def populate_releases(
+    conn: sqlite3.Connection,
+    sample_size: int | None = None,
+    source: str = "jsonl",
+) -> None:
+    """Load releases into the database from `source`.
 
-    releases = stream_releases()
-    if sample_size:
-        releases = islice(releases, sample_size)
+    Two sources, one insert path and one schema:
+
+    - `jsonl`    — the Discogs monthly dump streamed by style_cooccurrence.
+                   The original source; absent from every host we deploy to.
+    - `postgres` — the `mcp` corpus (masters), see pipeline/postgres_source.py.
+                   Yields the same dict shape, so nothing below changes.
+    """
+    from itertools import islice
+
+    if source == "postgres":
+        from postgres_source import stream_releases_from_postgres
+
+        releases = stream_releases_from_postgres(limit=sample_size)
+    else:
+        from style_cooccurrence import stream_releases
+
+        releases = stream_releases()
+        if sample_size:
+            releases = islice(releases, sample_size)
 
     batch = []
     for i, r in enumerate(releases):
@@ -153,6 +219,12 @@ def main():
         "--skip-similarity", action="store_true", help="Skip similarity index (slow)"
     )
     parser.add_argument("--db-path", type=str, help="Custom database path")
+    parser.add_argument(
+        "--source",
+        choices=["jsonl", "postgres"],
+        default="jsonl",
+        help="Where releases come from (default: jsonl, the Discogs dump)",
+    )
     args = parser.parse_args()
 
     db_path = Path(args.db_path) if args.db_path else DB_PATH
@@ -175,11 +247,18 @@ def main():
     except (ImportError, FileNotFoundError) as e:
         print(f"Skipping co-occurrence: {e}")
 
-    # Phase 4: releases (requires JSONL data)
+    # Phase 4: releases (JSONL dump, or the mcp Postgres corpus)
     try:
-        populate_releases(conn, sample_size=args.sample)
+        populate_releases(conn, sample_size=args.sample, source=args.source)
     except (ImportError, FileNotFoundError) as e:
         print(f"Skipping releases: {e}")
+
+    # Phase 4b: taxonomy fallback. Runs after releases because it derives the
+    # bridge from the styles actually loaded — so it cannot run at phase 2.
+    bridge_count = conn.execute("SELECT COUNT(*) FROM taxonomy_bridge").fetchone()[0]
+    if bridge_count == 0:
+        added = populate_taxonomy_exact(conn)
+        print(f"Taxonomy bridge (exact-match fallback): {added} mappings")
 
     # Phase 5: similarity index (requires scikit-learn + releases)
     if not args.skip_similarity:
