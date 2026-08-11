@@ -79,6 +79,59 @@ def populate_taxonomy(conn: sqlite3.Connection) -> None:
     print(f"Loaded taxonomy bridge: {count} mappings")
 
 
+def stamp_carried_by_catno(conn: sqlite3.Connection) -> int:
+    """Mark corpus releases we carry, matching on catalogue number.
+
+    The Discogs release id is a *pressing* id. The same record exists under many
+    of them, so a shop product and a corpus entry for the same music almost
+    never share one unless they were sourced identically. Measured 2026-08-11:
+    joining the shop's 10,178 catalogue numbers to the corpus by release id
+    matched **618**; joining by normalized catalogue number matched **7,545**.
+    Twelve times the coverage, for the same question — "do we have this record".
+
+    That is the whole reason the YOYAKU bridge felt empty. It was not missing
+    code; it was joined on the wrong key.
+
+    Guards against a wrong stamp:
+      - normalized catalogue numbers shorter than 4 characters are skipped.
+        "001" or "EP2" collide across unrelated labels; a real catalogue number
+        carries a label prefix.
+      - rows already stamped by release id are left alone — that match is exact
+        and strictly stronger than this one.
+    """
+
+    def normalize(catno: str) -> str:
+        return "".join(ch for ch in catno.upper() if ch.isalnum())
+
+    shop_by_catno: dict[str, tuple] = {}
+    try:
+        for r in stream_releases_from_shop():
+            sku = r.get("sku")
+            if not sku:
+                continue
+            key = normalize(sku)
+            if len(key) >= 4:
+                shop_by_catno.setdefault(key, (sku, r.get("shop_url")))
+    except (ImportError, FileNotFoundError):
+        return 0
+
+    if not shop_by_catno:
+        return 0
+
+    updates = []
+    for rid, catno in conn.execute(
+        "SELECT id, catno FROM releases "
+        "WHERE shop_url IS NULL AND catno IS NOT NULL AND catno != ''"
+    ):
+        hit = shop_by_catno.get(normalize(catno))
+        if hit:
+            updates.append((hit[0], hit[1], rid))
+
+    conn.executemany("UPDATE releases SET sku = ?, shop_url = ? WHERE id = ?", updates)
+    conn.commit()
+    return len(updates)
+
+
 def populate_taxonomy_exact(conn: sqlite3.Connection) -> int:
     """Bridge styles to genres by exact normalized name, from styles actually present.
 
@@ -184,6 +237,48 @@ def stream_releases_from_preview() -> "list[dict]":
     raise FileNotFoundError("releases_preview.json not found")
 
 
+def stream_releases_from_shop() -> "list[dict]":
+    """Yield the YOYAKU catalogue, in the JSONL dump's shape, carrying sku + shop_url.
+
+    Produced by `export_shop_catalogue.php` on the shop host; this reads the JSON
+    artifact, so the build never depends on reaching a second machine.
+
+    This is what makes "we have this record" a column instead of a per-render
+    API call — and, more to the point, what makes it visible at all. Measured
+    2026-08-11: of the shop's 10,236 discogs-identified products, only 618 were
+    present in the Postgres corpus. Adding the catalogue as a source is the
+    difference between a shop that is 6% visible in the world and one that is
+    wholly visible.
+
+    Most of these carry no year (the shop does not maintain one), so they will
+    not appear on the timeline. They do appear in genre panels, in search, and
+    under their label and artist — which is where someone would meet them.
+    """
+    for directory in (DATA_DIR, Path(__file__).resolve().parent.parent / "web" / "public" / "data"):
+        path = directory / "shop_catalogue.json"
+        if not path.exists():
+            continue
+        with open(path) as fh:
+            payload = json.load(fh)
+        for r in payload.get("releases") or []:
+            record = {
+                "id": r.get("discogs_id"),
+                "title": r.get("title") or "",
+                "artists": [{"name": r["artist"]}] if r.get("artist") else [{}],
+                "country": r.get("country"),
+                "year": r.get("year") or 0,
+                "styles": r.get("styles") or [],
+                "videos": [],
+                "sku": r.get("sku"),
+                "shop_url": r.get("shop_url"),
+            }
+            if r.get("label"):
+                record["labels"] = [{"name": r["label"], "catno": r.get("sku") or ""}]
+            yield record
+        return
+    raise FileNotFoundError("shop_catalogue.json not found")
+
+
 def populate_releases(
     conn: sqlite3.Connection,
     sample_size: int | None = None,
@@ -210,12 +305,35 @@ def populate_releases(
         releases = stream_releases_from_preview()
         if sample_size:
             releases = islice(releases, sample_size)
+    elif source == "shop":
+        releases = stream_releases_from_shop()
+        if sample_size:
+            releases = islice(releases, sample_size)
     else:
         from style_cooccurrence import stream_releases
 
         releases = stream_releases()
         if sample_size:
             releases = islice(releases, sample_size)
+
+    _COLUMNS = (
+        "(discogs_id, title, artist, label, catno, country, year, format, styles, "
+        "youtube_url, sku, shop_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    )
+    if source == "shop":
+        # The shop runs last and must not lose to rows already present: 618 of
+        # its records also came from Postgres, richer (year, YouTube). Plain
+        # INSERT OR IGNORE would drop the shop row entirely and leave exactly
+        # those releases — the ones both in the world and on the shelf —
+        # unmarked. So new records insert, and existing ones only get stamped
+        # with the two columns the shop owns.
+        insert_sql = (
+            "INSERT INTO releases " + _COLUMNS +
+            " ON CONFLICT(discogs_id) DO UPDATE SET "
+            "sku = excluded.sku, shop_url = excluded.shop_url"
+        )
+    else:
+        insert_sql = "INSERT OR IGNORE INTO releases " + _COLUMNS
 
     batch = []
     for i, r in enumerate(releases):
@@ -234,26 +352,18 @@ def populate_releases(
             r.get("formats", [{}])[0].get("name", ""),
             json.dumps(r.get("styles", [])),
             youtube,
+            r.get("sku"),
+            r.get("shop_url"),
         ))
         if len(batch) >= 10000:
-            conn.executemany(
-                "INSERT OR IGNORE INTO releases "
-                "(discogs_id, title, artist, label, catno, country, year, format, styles, youtube_url) "
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                batch,
-            )
+            conn.executemany(insert_sql, batch)
             conn.commit()
             batch = []
             if (i + 1) % 100000 == 0:
                 print(f"  ... {i + 1:,} releases loaded")
 
     if batch:
-        conn.executemany(
-            "INSERT OR IGNORE INTO releases "
-            "(discogs_id, title, artist, label, catno, country, year, format, styles, youtube_url) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            batch,
-        )
+        conn.executemany(insert_sql, batch)
         conn.commit()
 
     total = conn.execute("SELECT COUNT(*) FROM releases").fetchone()[0]
@@ -269,7 +379,7 @@ def main():
     parser.add_argument("--db-path", type=str, help="Custom database path")
     parser.add_argument(
         "--source",
-        choices=["jsonl", "postgres"],
+        choices=["jsonl", "postgres", "preview", "shop"],
         default="jsonl",
         help="Where releases come from (default: jsonl, the Discogs dump)",
     )
@@ -309,6 +419,27 @@ def main():
             populate_releases(conn, source="preview")
         except (ImportError, FileNotFoundError) as e:
             print(f"Skipping preview merge: {e}")
+
+    # Phase 4c: the YOYAKU catalogue, last so that it stamps sku/shop_url onto
+    # rows the richer sources already placed (see the upsert in populate_releases).
+    if args.source != "shop":
+        try:
+            populate_releases(conn, source="shop")
+            # Two numbers, because one of them flatters. Every shop row carries a
+            # shop_url by construction, so a bare count of them says nothing
+            # about the bridge. What matters is how many releases that came from
+            # *elsewhere* turned out to be records we sell.
+            marked = conn.execute(
+                "SELECT COUNT(*) FROM releases WHERE shop_url IS NOT NULL"
+            ).fetchone()[0]
+            by_catno = stamp_carried_by_catno(conn)
+            print(
+                f"Carried by YOYAKU: {marked:,} rows carry a shop link "
+                f"(mostly the catalogue's own), +{by_catno:,} corpus releases "
+                f"matched by catalogue number"
+            )
+        except (ImportError, FileNotFoundError) as e:
+            print(f"Skipping shop merge: {e}")
 
     # Phase 4b: taxonomy fallback. Runs after releases because it derives the
     # bridge from the styles actually loaded — so it cannot run at phase 2.

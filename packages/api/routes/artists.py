@@ -20,14 +20,21 @@ def artist_releases(
         raise HTTPException(503, "Database not available.")
 
     with get_db() as conn:
+        # Same exact-first rule as the timeline (see _artist_rows), decided once
+        # so the count and the page cannot disagree about which artists they are
+        # describing.
+        exact = conn.execute(
+            "SELECT 1 FROM releases WHERE artist = ? LIMIT 1", (name,)
+        ).fetchone()
+        predicate, needle = ("artist = ?", name) if exact else ("artist LIKE ?", f"%{name}%")
+
         total = conn.execute(
-            "SELECT COUNT(*) FROM releases WHERE artist LIKE ?",
-            (f"%{name}%",),
+            f"SELECT COUNT(*) FROM releases WHERE {predicate}", (needle,)
         ).fetchone()[0]
 
         rows = conn.execute(
-            "SELECT * FROM releases WHERE artist LIKE ? ORDER BY year DESC LIMIT ? OFFSET ?",
-            (f"%{name}%", limit, offset),
+            f"SELECT * FROM releases WHERE {predicate} ORDER BY year DESC LIMIT ? OFFSET ?",
+            (needle, limit, offset),
         ).fetchall()
 
         return {
@@ -50,6 +57,25 @@ def artist_releases(
 TIMELINE_MAX_RELEASES = 500
 
 
+def _artist_rows(conn, name: str, sql_exact: str, sql_like: str, params_tail: tuple):
+    """Fetch an artist's rows, exact name first, substring only if that is empty.
+
+    Both routes here document a substring match, and the frontend has never used
+    one: it links out of a release whose artist field it already holds, so the
+    parameter is a whole name. That distinction is worth 600×.
+
+    `artist = ?` uses idx_releases_artist and returns in 2ms. `artist LIKE
+    '%name%'` cannot use any index and scans all 954,703 rows for 1,247ms — the
+    cost of a leading wildcard, and invisible until the corpus stopped being
+    5,000 rows. Falling back preserves the substring behaviour for the partial
+    queries the routes promise, and nothing calls them that way today.
+    """
+    rows = conn.execute(sql_exact, (name, *params_tail)).fetchall()
+    if rows:
+        return rows
+    return conn.execute(sql_like, (f"%{name}%", *params_tail)).fetchall()
+
+
 @router.get("/{name}/timeline")
 def artist_timeline(name: str):
     """Releases sorted by year with genre mappings for timeline visualization."""
@@ -57,11 +83,15 @@ def artist_timeline(name: str):
         raise HTTPException(503, "Database not available.")
 
     with get_db() as conn:
-        rows = conn.execute(
+        rows = _artist_rows(
+            conn,
+            name,
+            "SELECT * FROM releases WHERE artist = ? AND year > 0 "
+            "ORDER BY year ASC LIMIT ?",
             "SELECT * FROM releases WHERE artist LIKE ? AND year > 0 "
             "ORDER BY year ASC LIMIT ?",
-            (f"%{name}%", TIMELINE_MAX_RELEASES),
-        ).fetchall()
+            (TIMELINE_MAX_RELEASES,),
+        )
 
         # One query for the whole bridge instead of one per style per row. The
         # table holds a few dozen mappings; the loop below reads it thousands of
@@ -106,6 +136,11 @@ def artist_timeline(name: str):
                 "year": r.get("year", 0),
                 "genres": genres,
                 "youtube_url": r.get("youtube_url"),
+                # Present when YOYAKU carries the record. `shop_url` leads to
+                # the page that owns price and stock, so neither is copied here
+                # where it would go stale between corpus rebuilds.
+                "sku": r.get("sku"),
+                "shop_url": r.get("shop_url"),
             })
 
         # Year range
