@@ -1,5 +1,40 @@
 # DiscoWorld Roadmap
 
+> **Current operational roadmap — August 2026.** The original v2.0 roadmap
+> below is retained as historical product context. The current YOYAKU,
+> DiscoWorld, and corpus integration state is maintained in
+> [`docs/2026-08-yoyaku-consolidation.md`](docs/2026-08-yoyaku-consolidation.md).
+> Read that document before starting new data, commerce, identity, or CORS work.
+
+## 2026-08 Consolidation
+
+### Shipped
+
+- [x] Replace the production `503` failure mode with a real corpus plus a
+  preview fallback.
+- [x] Build a 969,064-release SQLite corpus from `mcp` PostgreSQL masters,
+  retain the curated 5,000-release preview, and make the union idempotent.
+- [x] Carry YOYAKU `sku` and `shop_url` into the corpus using an exact pressing
+  match first, then a guarded catalogue-number discovery match.
+- [x] Add cached Discogs cover art to the genre panel.
+- [x] Fix the reported Three.js timer warning, stale YouTube-player
+  `postMessage` spam, and dead cross-origin password form.
+
+### Next
+
+- [ ] Make the corpus build and shop export reproducible and scheduled from a
+  versioned server checkout.
+- [ ] Investigate the two hanging `mcp` search routes independently of the
+  DiscoWorld API.
+- [ ] Decide whether the right-hand genre panel stays curated or becomes a
+  corpus surface. It currently reads the editorial 5,000-release preview by
+  design.
+- [ ] Design account linking before using YOYAKU purchase history for
+  Discogs-based personal recommendations; do not send shop passwords
+  cross-origin.
+- [ ] Consolidate WordPress CORS allowlists only in a dedicated, canaried
+  deployment if a browser-side integration needs it.
+
 ## Completed (v2.0)
 
 ### Phase 0: Data Foundation

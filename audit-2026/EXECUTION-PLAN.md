@@ -1,10 +1,16 @@
 # DiscoWorld Execution Plan
-**Last updated:** 2026-04-19 · **Owner:** Benjamin Belaga · **Repo:** `benjaminbelaga/discoworld` (private) · **Prod:** `world.yoyaku.io` on Contabo
+**Last updated:** 2026-08-12 · **Owner:** Benjamin Belaga · **Repo:** `benjaminbelaga/discoworld` (private) · **Prod:** `world.yoyaku.io`
 
 > **▶️ RESUMED 2026-08-06 — Ben's explicit go-ahead.** The pause below is lifted. DiscoWorld is back in scope as one of four surfaces in the consolidation mission, whose plan is the authority for what gets done here:
 > **`~/.claude/plans/reprends-i-i-exported-14-synthetic-turtle.md`**
 >
-> Scope resumed: kill the `503 Database not available` on every dynamic route by repointing at the `mcp-discogs` Postgres corpus (one corpus per host); add release artwork to the genre panel; add a YOYAKU commerce layer behind the `discoworld-yoyaku` adapter (this repo is AGPL — no private commerce logic lands here). The PR queue below was written 2026-04-19 and is **not** the current priority order; read the consolidation plan first.
+> **Current state (2026-08-12):** the `503` routes, cover-art delivery, and
+> corpus/YOYAKU catalogue bridge are delivered. The corpus is a 969,064-release
+> union of `mcp` masters, the curated preview, and the shop catalogue; the
+> right-hand panel remains curated by design. The current roadmap and operating
+> boundaries are in [`../docs/2026-08-yoyaku-consolidation.md`](../docs/2026-08-yoyaku-consolidation.md).
+> The PR queue below was written 2026-04-19 and is historical, **not** the
+> current priority order.
 >
 > Prod URL stays `world.yoyaku.io`. Prod runs PM2 `discoworld-api` → `python3 -m uvicorn packages.api.main:app --host 127.0.0.1 --port 8200`, cwd `/var/www/world.yoyaku.io`, logs `/root/.pm2/logs/discoworld-api-{out,error}.log`.
 
