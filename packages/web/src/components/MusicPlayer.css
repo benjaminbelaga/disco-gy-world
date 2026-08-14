@@ -331,6 +331,44 @@
   font-size: 18px;
 }
 
+/* Wantlist heart */
+.music-player-btn--want {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.45);
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+.music-player-btn--want:hover {
+  color: #ff5c7a;
+  background: rgba(255, 92, 122, 0.08);
+}
+.music-player-btn--want:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+.music-player-btn--wanted {
+  color: #ff5c7a;
+}
+.music-player-btn--wanted:hover {
+  color: #ff8ba0;
+}
+.music-player-btn--wanted:not(:disabled):active {
+  transform: scale(1.25);
+}
+.music-player-want-flash {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: #ff5c7a;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  animation: want-flash-fade 1.6s ease forwards;
+}
+@keyframes want-flash-fade {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 /* Active shuffle */
 .music-player-btn--active {
   color: #0ff;

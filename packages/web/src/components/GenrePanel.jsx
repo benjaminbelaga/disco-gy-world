@@ -145,7 +145,7 @@ export default function GenrePanel() {
       if (playable) {
         const queue = top10
           .filter(r => r.youtube)
-          .map(r => ({ artist: r.artist, title: r.title, year: r.year, genre: activeGenre.name, youtube: r.youtube }))
+          .map(r => ({ artist: r.artist, title: r.title, year: r.year, genre: activeGenre.name, youtube: r.youtube, discogsId: r.id || null }))
         if (queue.length > 0) {
           setPlayerQueue(queue, 0)
         }
@@ -306,9 +306,9 @@ export default function GenrePanel() {
               const active = isTrackPlaying(r)
               return (
                 <li key={i} className={active ? 'track-playing' : ''} role="button" tabIndex={0} aria-label={`${active ? 'Now playing: ' : 'Play '}${r.artist} — ${r.title}, ${r.year}`} onClick={() => {
-                  const queue = discogsForGenre.map(dr => ({ artist: dr.artist, title: dr.title, year: dr.year, genre: activeGenre.name, youtube: dr.youtube }))
+                  const queue = discogsForGenre.map(dr => ({ artist: dr.artist, title: dr.title, year: dr.year, genre: activeGenre.name, youtube: dr.youtube, discogsId: dr.id || null }))
                   setPlayerQueue(queue, i)
-                }} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); const queue = discogsForGenre.map(dr => ({ artist: dr.artist, title: dr.title, year: dr.year, genre: activeGenre.name, youtube: dr.youtube })); setPlayerQueue(queue, i) } }}>
+                }} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); const queue = discogsForGenre.map(dr => ({ artist: dr.artist, title: dr.title, year: dr.year, genre: activeGenre.name, youtube: dr.youtube, discogsId: dr.id || null })); setPlayerQueue(queue, i) } }}>
                   {active && <span className="playing-indicator" aria-hidden="true"><span /><span /><span /></span>}
                   {(() => {
                     const art = artwork[r.id]

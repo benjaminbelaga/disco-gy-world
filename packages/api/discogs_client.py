@@ -1,11 +1,13 @@
 """Discogs API client with rate limiting and OAuth 1.0a support."""
 
 import os
+import secrets as _secrets
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from threading import Lock
 from typing import Any
+from urllib.parse import parse_qsl, quote
 
 import httpx
 
@@ -187,6 +189,13 @@ def fetch_user_profile(username: str, token: str | None = None) -> dict:
 
 # ---------------------------------------------------------------------------
 # OAuth 1.0a helpers — requires DISCOGS_CONSUMER_KEY & DISCOGS_CONSUMER_SECRET
+#
+# Discogs officially supports the PLAINTEXT signature method over HTTPS
+# (oauth_signature = "consumer_secret&token_secret"), which lets us sign
+# requests with stdlib + httpx only. The previous implementation imported
+# requests_oauthlib lazily — a dependency that was absent from
+# requirements.txt AND from the production host, so every OAuth login
+# 502'd at import time.
 # ---------------------------------------------------------------------------
 
 
@@ -195,21 +204,62 @@ def oauth_configured() -> bool:
     return bool(DISCOGS_CONSUMER_KEY and DISCOGS_CONSUMER_SECRET)
 
 
+def _oauth_header(
+    token: str = "",
+    token_secret: str = "",
+    callback: str | None = None,
+    verifier: str | None = None,
+) -> str:
+    """Build a PLAINTEXT-signed OAuth 1.0a Authorization header."""
+    parts: dict[str, str] = {
+        "oauth_consumer_key": DISCOGS_CONSUMER_KEY,
+        "oauth_nonce": _secrets.token_hex(16),
+        "oauth_signature": f"{DISCOGS_CONSUMER_SECRET}&{token_secret}",
+        "oauth_signature_method": "PLAINTEXT",
+        "oauth_timestamp": str(int(time.time())),
+    }
+    if token:
+        parts["oauth_token"] = token
+    if callback:
+        parts["oauth_callback"] = callback
+    if verifier:
+        parts["oauth_verifier"] = verifier
+    return "OAuth " + ", ".join(
+        f'{k}="{quote(v, safe="")}"' for k, v in parts.items()
+    )
+
+
+def oauth_request(
+    method: str,
+    url: str,
+    access_token: str = "",
+    access_secret: str = "",
+    callback: str | None = None,
+    verifier: str | None = None,
+) -> httpx.Response:
+    """Perform an OAuth 1.0a signed request against Discogs."""
+    _limiter.wait()
+    headers = _headers()
+    headers["Authorization"] = _oauth_header(
+        token=access_token,
+        token_secret=access_secret,
+        callback=callback,
+        verifier=verifier,
+    )
+    resp = httpx.request(method, url, headers=headers, timeout=30.0)
+    resp.raise_for_status()
+    return resp
+
+
 def get_request_token(callback_url: str) -> tuple[str, str, str]:
     """Step 1: Get a request token from Discogs.
 
     Returns (request_token, request_secret, authorize_url).
     """
-    from requests_oauthlib import OAuth1Session
-
-    oauth = OAuth1Session(
-        DISCOGS_CONSUMER_KEY,
-        client_secret=DISCOGS_CONSUMER_SECRET,
-        callback_uri=callback_url,
-    )
-    resp = oauth.fetch_request_token(REQUEST_TOKEN_URL)
-    request_token = resp["oauth_token"]
-    request_secret = resp["oauth_token_secret"]
+    resp = oauth_request("GET", REQUEST_TOKEN_URL, callback=callback_url)
+    data = dict(parse_qsl(resp.text))
+    request_token = data["oauth_token"]
+    request_secret = data["oauth_token_secret"]
     authorize_url = f"{AUTHORIZE_URL}?oauth_token={request_token}"
     return request_token, request_secret, authorize_url
 
@@ -221,34 +271,22 @@ def get_access_token(
 
     Returns (access_token, access_secret).
     """
-    from requests_oauthlib import OAuth1Session
-
-    oauth = OAuth1Session(
-        DISCOGS_CONSUMER_KEY,
-        client_secret=DISCOGS_CONSUMER_SECRET,
-        resource_owner_key=request_token,
-        resource_owner_secret=request_secret,
+    resp = oauth_request(
+        "POST",
+        ACCESS_TOKEN_URL,
+        access_token=request_token,
+        access_secret=request_secret,
         verifier=oauth_verifier,
     )
-    resp = oauth.fetch_access_token(ACCESS_TOKEN_URL)
-    return resp["oauth_token"], resp["oauth_token_secret"]
+    data = dict(parse_qsl(resp.text))
+    return data["oauth_token"], data["oauth_token_secret"]
 
 
 def fetch_identity_oauth(access_token: str, access_secret: str) -> dict:
     """Fetch identity using OAuth 1.0a credentials (not personal token)."""
-    from requests_oauthlib import OAuth1Session
-
-    oauth = OAuth1Session(
-        DISCOGS_CONSUMER_KEY,
-        client_secret=DISCOGS_CONSUMER_SECRET,
-        resource_owner_key=access_token,
-        resource_owner_secret=access_secret,
+    resp = oauth_request(
+        "GET", f"{DISCOGS_API_URL}/oauth/identity", access_token, access_secret
     )
-    resp = oauth.get(
-        f"{DISCOGS_API_URL}/oauth/identity",
-        headers=_headers(),
-    )
-    resp.raise_for_status()
     return resp.json()
 
 
@@ -256,17 +294,50 @@ def fetch_user_profile_oauth(
     username: str, access_token: str, access_secret: str
 ) -> dict:
     """Fetch user profile using OAuth 1.0a credentials."""
-    from requests_oauthlib import OAuth1Session
-
-    oauth = OAuth1Session(
-        DISCOGS_CONSUMER_KEY,
-        client_secret=DISCOGS_CONSUMER_SECRET,
-        resource_owner_key=access_token,
-        resource_owner_secret=access_secret,
+    resp = oauth_request(
+        "GET", f"{DISCOGS_API_URL}/users/{username}", access_token, access_secret
     )
-    resp = oauth.get(
-        f"{DISCOGS_API_URL}/users/{username}",
-        headers=_headers(),
-    )
-    resp.raise_for_status()
     return resp.json()
+
+
+# ---------------------------------------------------------------------------
+# Wantlist writes — OAuth session or personal token
+# ---------------------------------------------------------------------------
+
+
+def _authed_request(
+    method: str, path: str, access_token: str, access_secret: str = ""
+) -> httpx.Response:
+    """Authenticated Discogs call. OAuth 1.0a when the user has an access
+    secret (OAuth login), personal-token auth otherwise (token login)."""
+    url = f"{DISCOGS_API_URL}{path}"
+    if access_secret:
+        return oauth_request(method, url, access_token, access_secret)
+    _limiter.wait()
+    headers = _headers()
+    headers["Authorization"] = f"Discogs token={access_token}"
+    resp = httpx.request(method, url, headers=headers, timeout=30.0)
+    resp.raise_for_status()
+    return resp
+
+
+def add_want(
+    username: str, release_id: int, access_token: str, access_secret: str = ""
+) -> dict:
+    """Add a release to the user's Discogs wantlist."""
+    resp = _authed_request(
+        "PUT", f"/users/{username}/wants/{release_id}", access_token, access_secret
+    )
+    try:
+        return resp.json()
+    except ValueError:
+        return {}
+
+
+def remove_want(
+    username: str, release_id: int, access_token: str, access_secret: str = ""
+) -> None:
+    """Remove a release from the user's Discogs wantlist (204 on success)."""
+    _authed_request(
+        "DELETE", f"/users/{username}/wants/{release_id}", access_token, access_secret
+    )

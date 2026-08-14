@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import useStore from '../stores/useStore'
 import useAudioStore from '../stores/useAudioStore'
+import { addWant, removeWant, fetchWantlistIds, getSessionToken } from '../lib/discogsApi'
 import './MusicPlayer.css'
 
 /**
@@ -48,6 +49,11 @@ export default function MusicPlayer() {
   const toggleShuffle = useStore(s => s.toggleShuffle)
   const setAudioPlaying = useAudioStore(s => s.setPlaying)
   const setPlayerCollapsedStore = useStore(s => s.setPlayerCollapsed)
+  const wantlistIds = useStore(s => s.wantlistIds)
+  const wantlistLoaded = useStore(s => s.wantlistLoaded)
+  const setWantlistIds = useStore(s => s.setWantlistIds)
+  const markWant = useStore(s => s.markWant)
+  const setShowYoyakuLogin = useStore(s => s.setShowYoyakuLogin)
 
   const playerRef = useRef(null)
   const progressInterval = useRef(null)
@@ -62,10 +68,45 @@ export default function MusicPlayer() {
   const [duration, setDuration] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
 
+  const [wantBusy, setWantBusy] = useState(false)
+  const [wantFlash, setWantFlash] = useState(null) // 'added' | 'removed' | null
+
   // Sync audio reactivity
   useEffect(() => {
     setAudioPlaying(!!currentTrack)
   }, [currentTrack, setAudioPlaying])
+
+  // Load the Discogs wantlist mirror once per session (only when logged in)
+  useEffect(() => {
+    if (wantlistLoaded || !getSessionToken()) return
+    let cancelled = false
+    fetchWantlistIds().then(ids => {
+      if (!cancelled && ids) setWantlistIds(ids)
+    })
+    return () => { cancelled = true }
+  }, [wantlistLoaded, setWantlistIds])
+
+  const trackDiscogsId = currentTrack?.discogsId || null
+  const isWanted = trackDiscogsId ? !!wantlistIds[String(trackDiscogsId)] : false
+
+  const handleToggleWant = useCallback(async () => {
+    if (!trackDiscogsId || wantBusy) return
+    if (!getSessionToken()) {
+      setShowYoyakuLogin(true)
+      return
+    }
+    const wanted = !!useStore.getState().wantlistIds[String(trackDiscogsId)]
+    markWant(trackDiscogsId, !wanted) // optimistic
+    setWantBusy(true)
+    const ok = wanted ? await removeWant(trackDiscogsId) : await addWant(trackDiscogsId)
+    setWantBusy(false)
+    if (!ok) {
+      markWant(trackDiscogsId, wanted) // revert
+      return
+    }
+    setWantFlash(wanted ? 'removed' : 'added')
+    setTimeout(() => setWantFlash(null), 1600)
+  }, [trackDiscogsId, wantBusy, markWant, setShowYoyakuLogin])
 
   // Sync collapsed state to store so Minimap/LayerControls can react
   useEffect(() => {
@@ -325,6 +366,17 @@ export default function MusicPlayer() {
             {currentTrack.artist} — {currentTrack.title}
           </span>
         </div>
+        {trackDiscogsId && (
+          <button
+            className={`music-player-btn music-player-btn--want${isWanted ? ' music-player-btn--wanted' : ''}`}
+            onClick={handleToggleWant}
+            disabled={wantBusy}
+            aria-label={isWanted ? 'Remove from Discogs wantlist' : 'Add to Discogs wantlist'}
+            title={isWanted ? 'In your Discogs wantlist' : 'Add to Discogs wantlist'}
+          >
+            {isWanted ? '♥' : '♡'}
+          </button>
+        )}
         {hasQueue && (
           <button className="music-player-btn" onClick={handlePrev} aria-label="Previous" disabled={!shuffleMode && playerIndex <= 0}>&#9198;</button>
         )}
@@ -443,6 +495,22 @@ export default function MusicPlayer() {
 
       {/* Right-side actions */}
       <div className="music-player-actions" role="group" aria-label="Player actions">
+        {trackDiscogsId && (
+          <button
+            className={`music-player-btn music-player-btn--sm music-player-btn--want${isWanted ? ' music-player-btn--wanted' : ''}`}
+            onClick={handleToggleWant}
+            disabled={wantBusy}
+            aria-label={isWanted ? 'Remove from Discogs wantlist' : 'Add to Discogs wantlist'}
+            title={isWanted ? 'In your Discogs wantlist — click to remove' : 'Add to Discogs wantlist'}
+          >
+            {isWanted ? '♥' : '♡'}
+          </button>
+        )}
+        {wantFlash && (
+          <span className="music-player-want-flash" role="status">
+            {wantFlash === 'added' ? 'Added to wantlist' : 'Removed'}
+          </span>
+        )}
         {hasQueue && (
           <button
             className={`music-player-btn music-player-btn--sm${shuffleMode ? ' music-player-btn--active' : ''}`}

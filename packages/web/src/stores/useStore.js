@@ -114,6 +114,21 @@ const useStore = create((set, get) => ({
     return JSON.stringify(get().favorites, null, 2)
   },
 
+  // Discogs wantlist mirror — { [discogsReleaseId]: true }. Loaded once per
+  // session from /api/wantlist/ids; mutated optimistically by the player heart.
+  wantlistIds: {},
+  wantlistLoaded: false,
+  setWantlistIds: (ids) => set({
+    wantlistIds: Object.fromEntries((ids || []).map(id => [String(id), true])),
+    wantlistLoaded: true,
+  }),
+  markWant: (id, wanted) => set((s) => {
+    const next = { ...s.wantlistIds }
+    if (wanted) next[String(id)] = true
+    else delete next[String(id)]
+    return { wantlistIds: next }
+  }),
+
   // UI
   sidebarOpen: false,
   setSidebarOpen: (open) => set({ sidebarOpen: open }),

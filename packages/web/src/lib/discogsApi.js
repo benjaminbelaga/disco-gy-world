@@ -390,6 +390,65 @@ export function getSessionToken() {
   return sessionStorage.getItem(SESSION_KEY)
 }
 
+// ---------------------------------------------------------------------------
+// Wantlist — server-signed writes to the user's Discogs wantlist
+// ---------------------------------------------------------------------------
+
+/**
+ * Fetch the Discogs release ids already in the user's wantlist mirror.
+ * @returns {Promise<number[]|null>} ids, or null when not authenticated / API down
+ */
+export async function fetchWantlistIds() {
+  const token = getSessionToken()
+  if (!token) return null
+  try {
+    const res = await fetch(`${API_BASE}/wantlist/ids?session_token=${encodeURIComponent(token)}`)
+    if (!res.ok) return null
+    const data = await res.json()
+    return Array.isArray(data.ids) ? data.ids : []
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Add a release to the user's Discogs wantlist.
+ * @param {number|string} releaseId
+ * @returns {Promise<boolean>} success
+ */
+export async function addWant(releaseId) {
+  const token = getSessionToken()
+  if (!token) return false
+  try {
+    const res = await fetch(
+      `${API_BASE}/wantlist/${encodeURIComponent(releaseId)}?session_token=${encodeURIComponent(token)}`,
+      { method: 'PUT' }
+    )
+    return res.ok
+  } catch {
+    return false
+  }
+}
+
+/**
+ * Remove a release from the user's Discogs wantlist.
+ * @param {number|string} releaseId
+ * @returns {Promise<boolean>} success
+ */
+export async function removeWant(releaseId) {
+  const token = getSessionToken()
+  if (!token) return false
+  try {
+    const res = await fetch(
+      `${API_BASE}/wantlist/${encodeURIComponent(releaseId)}?session_token=${encodeURIComponent(token)}`,
+      { method: 'DELETE' }
+    )
+    return res.ok
+  } catch {
+    return false
+  }
+}
+
 /**
  * Logout — clear session server-side and locally.
  */

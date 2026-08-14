@@ -22,6 +22,7 @@ from .routes.search import router as search_router
 from .routes.search import init_search_genres
 from .routes.shops import router as shops_router
 from .routes.taste_profile import router as taste_profile_router
+from .routes.wantlist import router as wantlist_router
 from .routes.contributors import router as contributors_router
 from .routes.genre_edits import router as genre_edits_router
 from .user_db import init_user_db
@@ -95,6 +96,7 @@ app.include_router(crate_neighbors_router)
 app.include_router(search_router)
 app.include_router(shops_router)
 app.include_router(taste_profile_router)
+app.include_router(wantlist_router)
 app.include_router(contributors_router)
 app.include_router(genre_edits_router)
 
